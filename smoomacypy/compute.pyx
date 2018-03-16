@@ -4,14 +4,15 @@
 #cython: nonecheck=False
 #cython: cdivision=True
 from libc.math cimport sin, cos, asin, sqrt, exp, pow as _pow
+from libc.stdlib cimport malloc, free
 import numpy as np
 cimport numpy as np
 
 
 DTYPE = np.double
 ctypedef np.double_t DTYPE_t
-ctypedef float (*DIST_FUNC)(float, float, float, float)
-ctypedef float (*SMOOTH_FUNC)(float, float, float)
+ctypedef float (*DIST_FUNC)(float, float, float, float) nogil
+ctypedef float (*SMOOTH_FUNC)(float, float, float) nogil
 
 
 cdef inline float pareto(float alpha, float beta, float dist) nogil:
@@ -68,29 +69,55 @@ cdef compute_1_var(
     cdef Py_ssize_t ix = 0
     cdef DTYPE_t dist
     cdef np.double_t[:] point
-    cdef np.ndarray res = np.zeros(nb_pot, dtype=DTYPE)
+    cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)
+    cdef DTYPE_t *x_knownpts
+    cdef DTYPE_t *y_knownpts
+    cdef DTYPE_t *z_knownpts
 
-    if lonlat:
-        dist_func = haversine
-    else:
-        dist_func = euclidian
 
-    if expfunc:
-        smooth = exponential
-    else:
-        smooth = pareto
+    x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+    if not x_knownpts:
+        raise MemoryError()
+    y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+    if not y_knownpts:
+        free(x_knownpts)
+        raise MemoryError()
+    z_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+    if not z_knownpts:
+        free(x_knownpts)
+        free(y_knownpts)
+        raise MemoryError()
 
-    for ix_x in range(len_xi):
-        x_cell = XI[ix_x]
-        for ix_y in range(len_yi):
-            y_cell= YI[ix_y]
-            _sum = 0.0
-            for j in range(nb_pts):
-                point = knownpts[j]
-                dist = dist_func(x_cell, y_cell, point[<Py_ssize_t>0], point[<Py_ssize_t>1])
-                _sum += point[<Py_ssize_t>2] * smooth(alpha, beta, dist)
-            res[ix] = _sum
-            ix += 1
+    with nogil:
+        for j in range(nb_pts):
+            point = knownpts[j]
+            x_knownpts[j] = point[<Py_ssize_t>0]
+            y_knownpts[j] = point[<Py_ssize_t>1]
+            z_knownpts[j] = point[<Py_ssize_t>2]
+    
+        if lonlat:
+            dist_func = haversine
+        else:
+            dist_func = euclidian
+    
+        if expfunc:
+            smooth = exponential
+        else:
+            smooth = pareto
+    
+        for ix_x in range(len_xi):
+            x_cell = XI[ix_x]
+            for ix_y in range(len_yi):
+                y_cell= YI[ix_y]
+                _sum = 0.0
+                for j in range(nb_pts):
+                    dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
+                    _sum += z_knownpts[j] * smooth(alpha, beta, dist)
+                res[ix] = _sum
+                ix += 1
+        free(x_knownpts)
+        free(y_knownpts)
+        free(z_knownpts)
     return res
 
 
@@ -113,30 +140,65 @@ cdef compute_2_var(
     cdef Py_ssize_t ix = 0
     cdef DTYPE_t dist
     cdef np.double_t[:] point
-    cdef np.ndarray res = np.zeros(nb_pot, dtype=DTYPE)
+    cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)
+    cdef DTYPE_t *x_knownpts
+    cdef DTYPE_t *y_knownpts
+    cdef DTYPE_t *z1_knownpts
+    cdef DTYPE_t *z2_knownpts
 
-    if lonlat:
-        dist_func = haversine
-    else:
-        dist_func = euclidian
 
-    if expfunc:
-        smooth = exponential
-    else:
-        smooth = pareto
+    x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+    if not x_knownpts:
+        raise MemoryError()
+    y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+    if not y_knownpts:
+        free(x_knownpts)
+        raise MemoryError()
+    z1_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+    if not z1_knownpts:
+        free(x_knownpts)
+        free(y_knownpts)
+        raise MemoryError()
+    z2_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+    if not z2_knownpts:
+        free(x_knownpts)
+        free(y_knownpts)
+        free(z1_knownpts)
+        raise MemoryError()
 
-    for ix_x in range(len_xi):
-        x_cell = XI[ix_x]
-        for ix_y in range(len_yi):
-            y_cell= YI[ix_y]
-            _sum1 = 0.0
-            _sum2 = 0.0
-            for j in range(nb_pts):
-                point = knownpts[j]
-                dist = dist_func(x_cell, y_cell, point[<Py_ssize_t>0], point[<Py_ssize_t>1])
-                t = smooth(alpha, beta, dist)
-                _sum1 += point[<Py_ssize_t>2] * t
-                _sum2 += point[<Py_ssize_t>3] * t
-            res[ix] = np.true_divide(_sum1, _sum2)  # _sum1 / _sum2
-            ix += 1
+    with nogil:
+        for j in range(nb_pts):
+            point = knownpts[j]
+            x_knownpts[j] = point[<Py_ssize_t>0]
+            y_knownpts[j] = point[<Py_ssize_t>1]
+            z1_knownpts[j] = point[<Py_ssize_t>2]
+            z2_knownpts[j] = point[<Py_ssize_t>3]
+
+        if lonlat:
+            dist_func = haversine
+        else:
+            dist_func = euclidian
+    
+        if expfunc:
+            smooth = exponential
+        else:
+            smooth = pareto
+    
+        for ix_x in range(len_xi):
+            x_cell = XI[ix_x]
+            for ix_y in range(len_yi):
+                y_cell= YI[ix_y]
+                _sum1 = 0.0
+                _sum2 = 0.0
+                for j in range(nb_pts):
+                    dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
+                    t = smooth(alpha, beta, dist)
+                    _sum1 += z1_knownpts[j] * t
+                    _sum2 += z2_knownpts[j] * t
+                res[ix] = _sum1 / _sum2
+                ix += 1
+        free(x_knownpts)
+        free(y_knownpts)
+        free(z1_knownpts)
+        free(z2_knownpts)
     return res

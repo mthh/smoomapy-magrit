@@ -522,11 +522,11 @@ static CYTHON_INLINE float __PYX_NAN() {
 #define __PYX_HAVE_API__smoomacypy__compute
 #include <math.h>
 #include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include "numpy/arrayobject.h"
 #include "numpy/ufuncobject.h"
 #include "pythread.h"
-#include <stdlib.h>
 #include "pystate.h"
 #ifdef _OPENMP
 #include <omp.h>
@@ -818,18 +818,6 @@ typedef volatile __pyx_atomic_int_type __pyx_atomic_int;
             __pyx_sub_acquisition_count_locked(__pyx_get_slice_count_pointer(memview), memview->lock)
 #endif
 
-/* ForceInitThreads.proto */
-#ifndef __PYX_FORCE_INIT_THREADS
-  #define __PYX_FORCE_INIT_THREADS 0
-#endif
-
-/* NoFastGil.proto */
-#define __Pyx_PyGILState_Ensure PyGILState_Ensure
-#define __Pyx_PyGILState_Release PyGILState_Release
-#define __Pyx_FastGIL_Remember()
-#define __Pyx_FastGIL_Forget()
-#define __Pyx_FastGilFuncInit()
-
 /* BufferFormatStructs.proto */
 #define IS_UNSIGNED(type) (((type) -1) > 0)
 struct __Pyx_StructField_;
@@ -865,6 +853,18 @@ typedef struct {
   char enc_packmode;
   char is_valid_array;
 } __Pyx_BufFmt_Context;
+
+/* NoFastGil.proto */
+#define __Pyx_PyGILState_Ensure PyGILState_Ensure
+#define __Pyx_PyGILState_Release PyGILState_Release
+#define __Pyx_FastGIL_Remember()
+#define __Pyx_FastGIL_Forget()
+#define __Pyx_FastGilFuncInit()
+
+/* ForceInitThreads.proto */
+#ifndef __PYX_FORCE_INIT_THREADS
+  #define __PYX_FORCE_INIT_THREADS 0
+#endif
 
 
 /* "../../../../usr/local/lib/python3.6/dist-packages/Cython/Includes/numpy/__init__.pxd":743
@@ -1056,12 +1056,12 @@ typedef npy_double __pyx_t_5numpy_double_t;
  */
 typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
 
-/* "smoomacypy/compute.pyx":12
+/* "smoomacypy/compute.pyx":13
  * 
  * DTYPE = np.double
  * ctypedef np.double_t DTYPE_t             # <<<<<<<<<<<<<<
- * ctypedef float (*DIST_FUNC)(float, float, float, float)
- * ctypedef DTYPE_t (*SMOOTH_FUNC)(DTYPE_t, DTYPE_t, DTYPE_t)
+ * ctypedef float (*DIST_FUNC)(float, float, float, float) nogil
+ * ctypedef float (*SMOOTH_FUNC)(float, float, float) nogil
  */
 typedef __pyx_t_5numpy_double_t __pyx_t_10smoomacypy_7compute_DTYPE_t;
 /* Declarations.proto */
@@ -1131,23 +1131,23 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
 
-/* "smoomacypy/compute.pyx":13
+/* "smoomacypy/compute.pyx":14
  * DTYPE = np.double
  * ctypedef np.double_t DTYPE_t
- * ctypedef float (*DIST_FUNC)(float, float, float, float)             # <<<<<<<<<<<<<<
- * ctypedef DTYPE_t (*SMOOTH_FUNC)(DTYPE_t, DTYPE_t, DTYPE_t)
+ * ctypedef float (*DIST_FUNC)(float, float, float, float) nogil             # <<<<<<<<<<<<<<
+ * ctypedef float (*SMOOTH_FUNC)(float, float, float) nogil
  * 
  */
 typedef float (*__pyx_t_10smoomacypy_7compute_DIST_FUNC)(float, float, float, float);
 
-/* "smoomacypy/compute.pyx":14
+/* "smoomacypy/compute.pyx":15
  * ctypedef np.double_t DTYPE_t
- * ctypedef float (*DIST_FUNC)(float, float, float, float)
- * ctypedef DTYPE_t (*SMOOTH_FUNC)(DTYPE_t, DTYPE_t, DTYPE_t)             # <<<<<<<<<<<<<<
+ * ctypedef float (*DIST_FUNC)(float, float, float, float) nogil
+ * ctypedef float (*SMOOTH_FUNC)(float, float, float) nogil             # <<<<<<<<<<<<<<
  * 
  * 
  */
-typedef __pyx_t_10smoomacypy_7compute_DTYPE_t (*__pyx_t_10smoomacypy_7compute_SMOOTH_FUNC)(__pyx_t_10smoomacypy_7compute_DTYPE_t, __pyx_t_10smoomacypy_7compute_DTYPE_t, __pyx_t_10smoomacypy_7compute_DTYPE_t);
+typedef float (*__pyx_t_10smoomacypy_7compute_SMOOTH_FUNC)(float, float, float);
 
 /* "View.MemoryView":103
  * 
@@ -1451,34 +1451,28 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg
 /* ExtTypeTest.proto */
 static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type);
 
-/* SetItemInt.proto */
-#define __Pyx_SetItemInt(o, i, v, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
-    (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
-    __Pyx_SetItemInt_Fast(o, (Py_ssize_t)i, v, is_list, wraparound, boundscheck) :\
-    (is_list ? (PyErr_SetString(PyExc_IndexError, "list assignment index out of range"), -1) :\
-               __Pyx_SetItemInt_Generic(o, to_py_func(i), v)))
-static int __Pyx_SetItemInt_Generic(PyObject *o, PyObject *j, PyObject *v);
-static CYTHON_INLINE int __Pyx_SetItemInt_Fast(PyObject *o, Py_ssize_t i, PyObject *v,
-                                               int is_list, int wraparound, int boundscheck);
+/* IsLittleEndian.proto */
+static CYTHON_INLINE int __Pyx_Is_Little_Endian(void);
 
-/* PyFunctionFastCall.proto */
-#if CYTHON_FAST_PYCALL
-#define __Pyx_PyFunction_FastCall(func, args, nargs)\
-    __Pyx_PyFunction_FastCallDict((func), (args), (nargs), NULL)
-#if 1 || PY_VERSION_HEX < 0x030600B1
-static PyObject *__Pyx_PyFunction_FastCallDict(PyObject *func, PyObject **args, int nargs, PyObject *kwargs);
-#else
-#define __Pyx_PyFunction_FastCallDict(func, args, nargs, kwargs) _PyFunction_FastCallDict(func, args, nargs, kwargs)
-#endif
-#endif
+/* BufferFormatCheck.proto */
+static const char* __Pyx_BufFmt_CheckString(__Pyx_BufFmt_Context* ctx, const char* ts);
+static void __Pyx_BufFmt_Init(__Pyx_BufFmt_Context* ctx,
+                              __Pyx_BufFmt_StackElem* stack,
+                              __Pyx_TypeInfo* type);
 
-/* PyCFunctionFastCall.proto */
-#if CYTHON_FAST_PYCCALL
-static CYTHON_INLINE PyObject *__Pyx_PyCFunction_FastCall(PyObject *func, PyObject **args, Py_ssize_t nargs);
-#else
-#define __Pyx_PyCFunction_FastCall(func, args, nargs)  (assert(0), NULL)
-#endif
+/* BufferGetAndValidate.proto */
+#define __Pyx_GetBufferAndValidate(buf, obj, dtype, flags, nd, cast, stack)\
+    ((obj == Py_None || obj == NULL) ?\
+    (__Pyx_ZeroBuffer(buf), 0) :\
+    __Pyx__GetBufferAndValidate(buf, obj, dtype, flags, nd, cast, stack))
+static int  __Pyx__GetBufferAndValidate(Py_buffer* buf, PyObject* obj,
+    __Pyx_TypeInfo* dtype, int flags, int nd, int cast, __Pyx_BufFmt_StackElem* stack);
+static void __Pyx_ZeroBuffer(Py_buffer* buf);
+static CYTHON_INLINE void __Pyx_SafeReleaseBuffer(Py_buffer* info);
+static Py_ssize_t __Pyx_minusones[] = { -1, -1, -1, -1, -1, -1, -1, -1 };
+static Py_ssize_t __Pyx_zeros[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
+#define __Pyx_BufPtrCContig1d(type, buf, i0, s0) ((type)buf + i0)
 /* PyThreadStateGet.proto */
 #if CYTHON_FAST_THREAD_STATE
 #define __Pyx_PyThreadState_declare  PyThreadState *__pyx_tstate;
@@ -1623,6 +1617,24 @@ static CYTHON_INLINE void __Pyx_ExceptionSwap(PyObject **type, PyObject **value,
 
 /* Import.proto */
 static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level);
+
+/* PyFunctionFastCall.proto */
+#if CYTHON_FAST_PYCALL
+#define __Pyx_PyFunction_FastCall(func, args, nargs)\
+    __Pyx_PyFunction_FastCallDict((func), (args), (nargs), NULL)
+#if 1 || PY_VERSION_HEX < 0x030600B1
+static PyObject *__Pyx_PyFunction_FastCallDict(PyObject *func, PyObject **args, int nargs, PyObject *kwargs);
+#else
+#define __Pyx_PyFunction_FastCallDict(func, args, nargs, kwargs) _PyFunction_FastCallDict(func, args, nargs, kwargs)
+#endif
+#endif
+
+/* PyCFunctionFastCall.proto */
+#if CYTHON_FAST_PYCCALL
+static CYTHON_INLINE PyObject *__Pyx_PyCFunction_FastCall(PyObject *func, PyObject **args, Py_ssize_t nargs);
+#else
+#define __Pyx_PyCFunction_FastCall(func, args, nargs)  (assert(0), NULL)
+#endif
 
 /* GetItemInt.proto */
 #define __Pyx_GetItemInt(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
@@ -1925,15 +1937,6 @@ static CYTHON_INLINE int __Pyx_PyErr_GivenExceptionMatches2(PyObject *err, PyObj
 #define __Pyx_PyErr_GivenExceptionMatches2(err, type1, type2) (PyErr_GivenExceptionMatches(err, type1) || PyErr_GivenExceptionMatches(err, type2))
 #endif
 
-/* IsLittleEndian.proto */
-static CYTHON_INLINE int __Pyx_Is_Little_Endian(void);
-
-/* BufferFormatCheck.proto */
-static const char* __Pyx_BufFmt_CheckString(__Pyx_BufFmt_Context* ctx, const char* ts);
-static void __Pyx_BufFmt_Init(__Pyx_BufFmt_Context* ctx,
-                              __Pyx_BufFmt_StackElem* stack,
-                              __Pyx_TypeInfo* type);
-
 /* TypeInfoCompare.proto */
 static int __pyx_typeinfo_cmp(__Pyx_TypeInfo *a, __Pyx_TypeInfo *b);
 
@@ -1988,9 +1991,11 @@ static PyObject *__pyx_memoryviewslice_assign_item_from_object(struct __pyx_memo
 
 /* Module declarations from 'libc.math' */
 
-/* Module declarations from 'cpython.buffer' */
-
 /* Module declarations from 'libc.string' */
+
+/* Module declarations from 'libc.stdlib' */
+
+/* Module declarations from 'cpython.buffer' */
 
 /* Module declarations from 'libc.stdio' */
 
@@ -2029,8 +2034,8 @@ static PyObject *contiguous = 0;
 static PyObject *indirect_contiguous = 0;
 static int __pyx_memoryview_thread_locks_used;
 static PyThread_type_lock __pyx_memoryview_thread_locks[8];
-static CYTHON_INLINE __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_f_10smoomacypy_7compute_pareto(__pyx_t_10smoomacypy_7compute_DTYPE_t, __pyx_t_10smoomacypy_7compute_DTYPE_t, __pyx_t_10smoomacypy_7compute_DTYPE_t); /*proto*/
-static CYTHON_INLINE __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_f_10smoomacypy_7compute_exponential(__pyx_t_10smoomacypy_7compute_DTYPE_t, __pyx_t_10smoomacypy_7compute_DTYPE_t, __pyx_t_10smoomacypy_7compute_DTYPE_t); /*proto*/
+static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_pareto(float, float, float); /*proto*/
+static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_exponential(float, float, float); /*proto*/
 static float __pyx_f_10smoomacypy_7compute_haversine(float, float, float, float); /*proto*/
 static float __pyx_f_10smoomacypy_7compute_euclidian(float, float, float, float); /*proto*/
 static PyObject *__pyx_f_10smoomacypy_7compute_compute_1_var(__Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, double, double, double, int, int); /*proto*/
@@ -2068,17 +2073,18 @@ static void __pyx_memoryview_refcount_objects_in_slice(char *, Py_ssize_t *, Py_
 static void __pyx_memoryview_slice_assign_scalar(__Pyx_memviewslice *, int, size_t, void *, int); /*proto*/
 static void __pyx_memoryview__slice_assign_scalar(char *, Py_ssize_t *, Py_ssize_t *, int, size_t, void *); /*proto*/
 static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *, PyObject *); /*proto*/
+static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_10smoomacypy_7compute_DTYPE_t = { "DTYPE_t", NULL, sizeof(__pyx_t_10smoomacypy_7compute_DTYPE_t), { 0 }, 0, 'R', 0, 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5numpy_double_t = { "double_t", NULL, sizeof(__pyx_t_5numpy_double_t), { 0 }, 0, 'R', 0, 0 };
 #define __Pyx_MODULE_NAME "smoomacypy.compute"
 extern int __pyx_module_is_main_smoomacypy__compute;
 int __pyx_module_is_main_smoomacypy__compute = 0;
 
 /* Implementation of 'smoomacypy.compute' */
+static PyObject *__pyx_builtin_MemoryError;
 static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_ValueError;
 static PyObject *__pyx_builtin_RuntimeError;
 static PyObject *__pyx_builtin_ImportError;
-static PyObject *__pyx_builtin_MemoryError;
 static PyObject *__pyx_builtin_enumerate;
 static PyObject *__pyx_builtin_TypeError;
 static PyObject *__pyx_builtin_Ellipsis;
@@ -2150,7 +2156,6 @@ static const char __pyx_k_ImportError[] = "ImportError";
 static const char __pyx_k_MemoryError[] = "MemoryError";
 static const char __pyx_k_PickleError[] = "PickleError";
 static const char __pyx_k_exponential[] = "exponential";
-static const char __pyx_k_true_divide[] = "true_divide";
 static const char __pyx_k_RuntimeError[] = "RuntimeError";
 static const char __pyx_k_pyx_checksum[] = "__pyx_checksum";
 static const char __pyx_k_stringsource[] = "stringsource";
@@ -2304,7 +2309,6 @@ static PyObject *__pyx_kp_s_strided_and_indirect;
 static PyObject *__pyx_kp_s_stringsource;
 static PyObject *__pyx_n_s_struct;
 static PyObject *__pyx_n_s_test;
-static PyObject *__pyx_n_s_true_divide;
 static PyObject *__pyx_n_s_type_function;
 static PyObject *__pyx_kp_s_unable_to_allocate_array_data;
 static PyObject *__pyx_kp_s_unable_to_allocate_shape_and_str;
@@ -2405,20 +2409,20 @@ static PyObject *__pyx_tuple__36;
 static PyObject *__pyx_codeobj__30;
 static PyObject *__pyx_codeobj__37;
 
-/* "smoomacypy/compute.pyx":17
+/* "smoomacypy/compute.pyx":18
  * 
  * 
- * cdef inline DTYPE_t pareto(DTYPE_t alpha, DTYPE_t beta, DTYPE_t dist) nogil:             # <<<<<<<<<<<<<<
+ * cdef inline float pareto(float alpha, float beta, float dist) nogil:             # <<<<<<<<<<<<<<
  *     return _pow((1.0 + alpha * dist), -beta)
  * 
  */
 
-static CYTHON_INLINE __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_f_10smoomacypy_7compute_pareto(__pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_alpha, __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_beta, __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_dist) {
-  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_r;
+static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_pareto(float __pyx_v_alpha, float __pyx_v_beta, float __pyx_v_dist) {
+  float __pyx_r;
 
-  /* "smoomacypy/compute.pyx":18
+  /* "smoomacypy/compute.pyx":19
  * 
- * cdef inline DTYPE_t pareto(DTYPE_t alpha, DTYPE_t beta, DTYPE_t dist) nogil:
+ * cdef inline float pareto(float alpha, float beta, float dist) nogil:
  *     return _pow((1.0 + alpha * dist), -beta)             # <<<<<<<<<<<<<<
  * 
  * 
@@ -2426,10 +2430,10 @@ static CYTHON_INLINE __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_f_10smoomacypy_
   __pyx_r = pow((1.0 + (__pyx_v_alpha * __pyx_v_dist)), (-__pyx_v_beta));
   goto __pyx_L0;
 
-  /* "smoomacypy/compute.pyx":17
+  /* "smoomacypy/compute.pyx":18
  * 
  * 
- * cdef inline DTYPE_t pareto(DTYPE_t alpha, DTYPE_t beta, DTYPE_t dist) nogil:             # <<<<<<<<<<<<<<
+ * cdef inline float pareto(float alpha, float beta, float dist) nogil:             # <<<<<<<<<<<<<<
  *     return _pow((1.0 + alpha * dist), -beta)
  * 
  */
@@ -2439,20 +2443,20 @@ static CYTHON_INLINE __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_f_10smoomacypy_
   return __pyx_r;
 }
 
-/* "smoomacypy/compute.pyx":21
+/* "smoomacypy/compute.pyx":22
  * 
  * 
- * cdef inline DTYPE_t exponential(DTYPE_t alpha, DTYPE_t beta, DTYPE_t dist) nogil:             # <<<<<<<<<<<<<<
+ * cdef inline float exponential(float alpha, float beta, float dist) nogil:             # <<<<<<<<<<<<<<
  *     return exp(-alpha * _pow(dist, beta))
  * 
  */
 
-static CYTHON_INLINE __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_f_10smoomacypy_7compute_exponential(__pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_alpha, __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_beta, __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_dist) {
-  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_r;
+static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_exponential(float __pyx_v_alpha, float __pyx_v_beta, float __pyx_v_dist) {
+  float __pyx_r;
 
-  /* "smoomacypy/compute.pyx":22
+  /* "smoomacypy/compute.pyx":23
  * 
- * cdef inline DTYPE_t exponential(DTYPE_t alpha, DTYPE_t beta, DTYPE_t dist) nogil:
+ * cdef inline float exponential(float alpha, float beta, float dist) nogil:
  *     return exp(-alpha * _pow(dist, beta))             # <<<<<<<<<<<<<<
  * 
  * 
@@ -2460,10 +2464,10 @@ static CYTHON_INLINE __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_f_10smoomacypy_
   __pyx_r = exp(((-__pyx_v_alpha) * pow(__pyx_v_dist, __pyx_v_beta)));
   goto __pyx_L0;
 
-  /* "smoomacypy/compute.pyx":21
+  /* "smoomacypy/compute.pyx":22
  * 
  * 
- * cdef inline DTYPE_t exponential(DTYPE_t alpha, DTYPE_t beta, DTYPE_t dist) nogil:             # <<<<<<<<<<<<<<
+ * cdef inline float exponential(float alpha, float beta, float dist) nogil:             # <<<<<<<<<<<<<<
  *     return exp(-alpha * _pow(dist, beta))
  * 
  */
@@ -2473,7 +2477,7 @@ static CYTHON_INLINE __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_f_10smoomacypy_
   return __pyx_r;
 }
 
-/* "smoomacypy/compute.pyx":25
+/* "smoomacypy/compute.pyx":26
  * 
  * 
  * cdef float haversine(float lon1, float lat1, float lon2, float lat2) nogil:             # <<<<<<<<<<<<<<
@@ -2487,7 +2491,7 @@ static float __pyx_f_10smoomacypy_7compute_haversine(float __pyx_v_lon1, float _
   float __pyx_v_a;
   float __pyx_r;
 
-  /* "smoomacypy/compute.pyx":26
+  /* "smoomacypy/compute.pyx":27
  * 
  * cdef float haversine(float lon1, float lat1, float lon2, float lat2) nogil:
  *     cdef float dlon = lon2 - lon1             # <<<<<<<<<<<<<<
@@ -2496,7 +2500,7 @@ static float __pyx_f_10smoomacypy_7compute_haversine(float __pyx_v_lon1, float _
  */
   __pyx_v_dlon = (__pyx_v_lon2 - __pyx_v_lon1);
 
-  /* "smoomacypy/compute.pyx":27
+  /* "smoomacypy/compute.pyx":28
  * cdef float haversine(float lon1, float lat1, float lon2, float lat2) nogil:
  *     cdef float dlon = lon2 - lon1
  *     cdef float dlat = lat2 - lat1             # <<<<<<<<<<<<<<
@@ -2505,7 +2509,7 @@ static float __pyx_f_10smoomacypy_7compute_haversine(float __pyx_v_lon1, float _
  */
   __pyx_v_dlat = (__pyx_v_lat2 - __pyx_v_lat1);
 
-  /* "smoomacypy/compute.pyx":28
+  /* "smoomacypy/compute.pyx":29
  *     cdef float dlon = lon2 - lon1
  *     cdef float dlat = lat2 - lat1
  *     cdef float a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2             # <<<<<<<<<<<<<<
@@ -2514,7 +2518,7 @@ static float __pyx_f_10smoomacypy_7compute_haversine(float __pyx_v_lon1, float _
  */
   __pyx_v_a = (pow(sin((__pyx_v_dlat / 2.0)), 2.0) + ((cos(__pyx_v_lat1) * cos(__pyx_v_lat2)) * pow(sin((__pyx_v_dlon / 2.0)), 2.0)));
 
-  /* "smoomacypy/compute.pyx":30
+  /* "smoomacypy/compute.pyx":31
  *     cdef float a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
  * 
  *     return 6371000 * 2 * asin(sqrt(a))             # <<<<<<<<<<<<<<
@@ -2524,7 +2528,7 @@ static float __pyx_f_10smoomacypy_7compute_haversine(float __pyx_v_lon1, float _
   __pyx_r = (12742000.0 * asin(sqrt(__pyx_v_a)));
   goto __pyx_L0;
 
-  /* "smoomacypy/compute.pyx":25
+  /* "smoomacypy/compute.pyx":26
  * 
  * 
  * cdef float haversine(float lon1, float lat1, float lon2, float lat2) nogil:             # <<<<<<<<<<<<<<
@@ -2537,7 +2541,7 @@ static float __pyx_f_10smoomacypy_7compute_haversine(float __pyx_v_lon1, float _
   return __pyx_r;
 }
 
-/* "smoomacypy/compute.pyx":33
+/* "smoomacypy/compute.pyx":34
  * 
  * 
  * cdef float euclidian(float x1, float y1, float x2, float y2) nogil:             # <<<<<<<<<<<<<<
@@ -2550,7 +2554,7 @@ static float __pyx_f_10smoomacypy_7compute_euclidian(float __pyx_v_x1, float __p
   float __pyx_v_b;
   float __pyx_r;
 
-  /* "smoomacypy/compute.pyx":34
+  /* "smoomacypy/compute.pyx":35
  * 
  * cdef float euclidian(float x1, float y1, float x2, float y2) nogil:
  *     cdef float a = x1 - x2             # <<<<<<<<<<<<<<
@@ -2559,7 +2563,7 @@ static float __pyx_f_10smoomacypy_7compute_euclidian(float __pyx_v_x1, float __p
  */
   __pyx_v_a = (__pyx_v_x1 - __pyx_v_x2);
 
-  /* "smoomacypy/compute.pyx":35
+  /* "smoomacypy/compute.pyx":36
  * cdef float euclidian(float x1, float y1, float x2, float y2) nogil:
  *     cdef float a = x1 - x2
  *     cdef float b = y1 - y2             # <<<<<<<<<<<<<<
@@ -2568,7 +2572,7 @@ static float __pyx_f_10smoomacypy_7compute_euclidian(float __pyx_v_x1, float __p
  */
   __pyx_v_b = (__pyx_v_y1 - __pyx_v_y2);
 
-  /* "smoomacypy/compute.pyx":36
+  /* "smoomacypy/compute.pyx":37
  *     cdef float a = x1 - x2
  *     cdef float b = y1 - y2
  *     return sqrt(a * a + b * b)             # <<<<<<<<<<<<<<
@@ -2578,7 +2582,7 @@ static float __pyx_f_10smoomacypy_7compute_euclidian(float __pyx_v_x1, float __p
   __pyx_r = sqrt(((__pyx_v_a * __pyx_v_a) + (__pyx_v_b * __pyx_v_b)));
   goto __pyx_L0;
 
-  /* "smoomacypy/compute.pyx":33
+  /* "smoomacypy/compute.pyx":34
  * 
  * 
  * cdef float euclidian(float x1, float y1, float x2, float y2) nogil:             # <<<<<<<<<<<<<<
@@ -2591,7 +2595,7 @@ static float __pyx_f_10smoomacypy_7compute_euclidian(float __pyx_v_x1, float __p
   return __pyx_r;
 }
 
-/* "smoomacypy/compute.pyx":39
+/* "smoomacypy/compute.pyx":40
  * 
  * 
  * def _compute_stewart(knownpts, XI, YI, nb_var, type_function, span, beta, lonlat):             # <<<<<<<<<<<<<<
@@ -2649,47 +2653,47 @@ static PyObject *__pyx_pw_10smoomacypy_7compute_1_compute_stewart(PyObject *__py
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_XI)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 1); __PYX_ERR(0, 39, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 1); __PYX_ERR(0, 40, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_YI)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 2); __PYX_ERR(0, 39, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 2); __PYX_ERR(0, 40, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_nb_var)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 3); __PYX_ERR(0, 39, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 3); __PYX_ERR(0, 40, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_type_function)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 4); __PYX_ERR(0, 39, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 4); __PYX_ERR(0, 40, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_span)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 5); __PYX_ERR(0, 39, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 5); __PYX_ERR(0, 40, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_beta)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 6); __PYX_ERR(0, 39, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 6); __PYX_ERR(0, 40, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
         if (likely((values[7] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_lonlat)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 7); __PYX_ERR(0, 39, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 7); __PYX_ERR(0, 40, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_compute_stewart") < 0)) __PYX_ERR(0, 39, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_compute_stewart") < 0)) __PYX_ERR(0, 40, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 8) {
       goto __pyx_L5_argtuple_error;
@@ -2714,7 +2718,7 @@ static PyObject *__pyx_pw_10smoomacypy_7compute_1_compute_stewart(PyObject *__py
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 39, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 40, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("smoomacypy.compute._compute_stewart", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2743,32 +2747,32 @@ static PyObject *__pyx_pf_10smoomacypy_7compute__compute_stewart(CYTHON_UNUSED P
   double __pyx_t_9;
   __Pyx_RefNannySetupContext("_compute_stewart", 0);
 
-  /* "smoomacypy/compute.pyx":40
+  /* "smoomacypy/compute.pyx":41
  * 
  * def _compute_stewart(knownpts, XI, YI, nb_var, type_function, span, beta, lonlat):
  *     if type_function == 'exponential':             # <<<<<<<<<<<<<<
  *         alpha = 0.6931471805 / pow(span, beta)
  *         expfunc = True
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_type_function, __pyx_n_s_exponential, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_type_function, __pyx_n_s_exponential, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 41, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "smoomacypy/compute.pyx":41
+    /* "smoomacypy/compute.pyx":42
  * def _compute_stewart(knownpts, XI, YI, nb_var, type_function, span, beta, lonlat):
  *     if type_function == 'exponential':
  *         alpha = 0.6931471805 / pow(span, beta)             # <<<<<<<<<<<<<<
  *         expfunc = True
  *     else:
  */
-    __pyx_t_2 = __Pyx_PyNumber_Power2(__pyx_v_span, __pyx_v_beta); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 41, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyNumber_Power2(__pyx_v_span, __pyx_v_beta); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 42, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyFloat_DivideCObj(__pyx_float_0_6931471805, __pyx_t_2, 0.6931471805, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 41, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyFloat_DivideCObj(__pyx_float_0_6931471805, __pyx_t_2, 0.6931471805, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 42, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_v_alpha = __pyx_t_3;
     __pyx_t_3 = 0;
 
-    /* "smoomacypy/compute.pyx":42
+    /* "smoomacypy/compute.pyx":43
  *     if type_function == 'exponential':
  *         alpha = 0.6931471805 / pow(span, beta)
  *         expfunc = True             # <<<<<<<<<<<<<<
@@ -2777,7 +2781,7 @@ static PyObject *__pyx_pf_10smoomacypy_7compute__compute_stewart(CYTHON_UNUSED P
  */
     __pyx_v_expfunc = 1;
 
-    /* "smoomacypy/compute.pyx":40
+    /* "smoomacypy/compute.pyx":41
  * 
  * def _compute_stewart(knownpts, XI, YI, nb_var, type_function, span, beta, lonlat):
  *     if type_function == 'exponential':             # <<<<<<<<<<<<<<
@@ -2787,7 +2791,7 @@ static PyObject *__pyx_pf_10smoomacypy_7compute__compute_stewart(CYTHON_UNUSED P
     goto __pyx_L3;
   }
 
-  /* "smoomacypy/compute.pyx":44
+  /* "smoomacypy/compute.pyx":45
  *         expfunc = True
  *     else:
  *         alpha = (pow(2, 1/beta) - 1) / span             # <<<<<<<<<<<<<<
@@ -2795,21 +2799,21 @@ static PyObject *__pyx_pf_10smoomacypy_7compute__compute_stewart(CYTHON_UNUSED P
  * 
  */
   /*else*/ {
-    __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_int_1, __pyx_v_beta); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 44, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_int_1, __pyx_v_beta); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 45, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = __Pyx_PyNumber_Power2(__pyx_int_2, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 44, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyNumber_Power2(__pyx_int_2, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 45, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyInt_SubtractObjC(__pyx_t_2, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 44, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_SubtractObjC(__pyx_t_2, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 45, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyNumber_Divide(__pyx_t_3, __pyx_v_span); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 44, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyNumber_Divide(__pyx_t_3, __pyx_v_span); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 45, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_v_alpha = __pyx_t_2;
     __pyx_t_2 = 0;
 
-    /* "smoomacypy/compute.pyx":45
+    /* "smoomacypy/compute.pyx":46
  *     else:
  *         alpha = (pow(2, 1/beta) - 1) / span
  *         expfunc = False             # <<<<<<<<<<<<<<
@@ -2820,20 +2824,20 @@ static PyObject *__pyx_pf_10smoomacypy_7compute__compute_stewart(CYTHON_UNUSED P
   }
   __pyx_L3:;
 
-  /* "smoomacypy/compute.pyx":47
+  /* "smoomacypy/compute.pyx":48
  *         expfunc = False
  * 
  *     if nb_var == 1:             # <<<<<<<<<<<<<<
  *         return compute_1_var(knownpts, XI, YI, span, alpha, beta, lonlat, expfunc)
  *     else:
  */
-  __pyx_t_2 = __Pyx_PyInt_EqObjC(__pyx_v_nb_var, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_EqObjC(__pyx_v_nb_var, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 48, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 48, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (__pyx_t_1) {
 
-    /* "smoomacypy/compute.pyx":48
+    /* "smoomacypy/compute.pyx":49
  * 
  *     if nb_var == 1:
  *         return compute_1_var(knownpts, XI, YI, span, alpha, beta, lonlat, expfunc)             # <<<<<<<<<<<<<<
@@ -2842,16 +2846,16 @@ static PyObject *__pyx_pf_10smoomacypy_7compute__compute_stewart(CYTHON_UNUSED P
  */
     __Pyx_XDECREF(__pyx_r);
     __pyx_t_4 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_nn___pyx_t_5numpy_double_t(__pyx_v_knownpts);
-    if (unlikely(!__pyx_t_4.memview)) __PYX_ERR(0, 48, __pyx_L1_error)
+    if (unlikely(!__pyx_t_4.memview)) __PYX_ERR(0, 49, __pyx_L1_error)
     __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_XI);
-    if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 48, __pyx_L1_error)
+    if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 49, __pyx_L1_error)
     __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_YI);
-    if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 48, __pyx_L1_error)
-    __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_span); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 48, __pyx_L1_error)
-    __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_alpha); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 48, __pyx_L1_error)
-    __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_v_beta); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 48, __pyx_L1_error)
-    __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_lonlat); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 48, __pyx_L1_error)
-    __pyx_t_2 = __pyx_f_10smoomacypy_7compute_compute_1_var(__pyx_t_4, __pyx_t_5, __pyx_t_6, __pyx_t_7, __pyx_t_8, __pyx_t_9, __pyx_t_1, __pyx_v_expfunc); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 48, __pyx_L1_error)
+    if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_span); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_alpha); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_v_beta); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_lonlat); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L1_error)
+    __pyx_t_2 = __pyx_f_10smoomacypy_7compute_compute_1_var(__pyx_t_4, __pyx_t_5, __pyx_t_6, __pyx_t_7, __pyx_t_8, __pyx_t_9, __pyx_t_1, __pyx_v_expfunc); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 49, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __PYX_XDEC_MEMVIEW(&__pyx_t_4, 1);
     __pyx_t_4.memview = NULL;
@@ -2866,7 +2870,7 @@ static PyObject *__pyx_pf_10smoomacypy_7compute__compute_stewart(CYTHON_UNUSED P
     __pyx_t_2 = 0;
     goto __pyx_L0;
 
-    /* "smoomacypy/compute.pyx":47
+    /* "smoomacypy/compute.pyx":48
  *         expfunc = False
  * 
  *     if nb_var == 1:             # <<<<<<<<<<<<<<
@@ -2875,26 +2879,26 @@ static PyObject *__pyx_pf_10smoomacypy_7compute__compute_stewart(CYTHON_UNUSED P
  */
   }
 
-  /* "smoomacypy/compute.pyx":50
+  /* "smoomacypy/compute.pyx":51
  *         return compute_1_var(knownpts, XI, YI, span, alpha, beta, lonlat, expfunc)
  *     else:
  *         return compute_2_var(knownpts, XI, YI, span, alpha, beta, lonlat, expfunc)             # <<<<<<<<<<<<<<
  * 
- * #def _compute_stewart(knownpts, unknownpts, nb_var, type_function, span, beta, lonlat):
+ * 
  */
   /*else*/ {
     __Pyx_XDECREF(__pyx_r);
     __pyx_t_4 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_nn___pyx_t_5numpy_double_t(__pyx_v_knownpts);
-    if (unlikely(!__pyx_t_4.memview)) __PYX_ERR(0, 50, __pyx_L1_error)
+    if (unlikely(!__pyx_t_4.memview)) __PYX_ERR(0, 51, __pyx_L1_error)
     __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_XI);
-    if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 50, __pyx_L1_error)
+    if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 51, __pyx_L1_error)
     __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_YI);
-    if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 50, __pyx_L1_error)
-    __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_v_span); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L1_error)
-    __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_alpha); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L1_error)
-    __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_beta); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L1_error)
-    __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_lonlat); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L1_error)
-    __pyx_t_2 = __pyx_f_10smoomacypy_7compute_compute_2_var(__pyx_t_4, __pyx_t_6, __pyx_t_5, __pyx_t_9, __pyx_t_8, __pyx_t_7, __pyx_t_1, __pyx_v_expfunc); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 50, __pyx_L1_error)
+    if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 51, __pyx_L1_error)
+    __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_v_span); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L1_error)
+    __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_alpha); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L1_error)
+    __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_beta); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_lonlat); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L1_error)
+    __pyx_t_2 = __pyx_f_10smoomacypy_7compute_compute_2_var(__pyx_t_4, __pyx_t_6, __pyx_t_5, __pyx_t_9, __pyx_t_8, __pyx_t_7, __pyx_t_1, __pyx_v_expfunc); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 51, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __PYX_XDEC_MEMVIEW(&__pyx_t_4, 1);
     __pyx_t_4.memview = NULL;
@@ -2910,7 +2914,7 @@ static PyObject *__pyx_pf_10smoomacypy_7compute__compute_stewart(CYTHON_UNUSED P
     goto __pyx_L0;
   }
 
-  /* "smoomacypy/compute.pyx":39
+  /* "smoomacypy/compute.pyx":40
  * 
  * 
  * def _compute_stewart(knownpts, XI, YI, nb_var, type_function, span, beta, lonlat):             # <<<<<<<<<<<<<<
@@ -2934,8 +2938,8 @@ static PyObject *__pyx_pf_10smoomacypy_7compute__compute_stewart(CYTHON_UNUSED P
   return __pyx_r;
 }
 
-/* "smoomacypy/compute.pyx":65
- * #        return compute_2_var(knownpts, unknownpts, span, alpha, beta, lonlat, expfunc)
+/* "smoomacypy/compute.pyx":54
+ * 
  * 
  * cdef compute_1_var(             # <<<<<<<<<<<<<<
  *         np.double_t[:,::1] knownpts, np.double_t[::1] XI, np.double_t[::1] YI,
@@ -2959,28 +2963,39 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_1_var(__Pyx_memviewslice 
   __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_dist;
   __Pyx_memviewslice __pyx_v_point = { 0, 0, { 0 }, { 0 }, { 0 } };
   PyArrayObject *__pyx_v_res = 0;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t *__pyx_v_x_knownpts;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t *__pyx_v_y_knownpts;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t *__pyx_v_z_knownpts;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_res;
+  __Pyx_Buffer __pyx_pybuffer_res;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
-  int __pyx_t_5;
-  Py_ssize_t __pyx_t_6;
+  PyArrayObject *__pyx_t_5 = NULL;
+  int __pyx_t_6;
   Py_ssize_t __pyx_t_7;
   Py_ssize_t __pyx_t_8;
-  Py_ssize_t __pyx_t_9;
+  __Pyx_memviewslice __pyx_t_9 = { 0, 0, { 0 }, { 0 }, { 0 } };
   Py_ssize_t __pyx_t_10;
   Py_ssize_t __pyx_t_11;
   Py_ssize_t __pyx_t_12;
   Py_ssize_t __pyx_t_13;
-  __Pyx_memviewslice __pyx_t_14 = { 0, 0, { 0 }, { 0 }, { 0 } };
+  Py_ssize_t __pyx_t_14;
   Py_ssize_t __pyx_t_15;
   Py_ssize_t __pyx_t_16;
   Py_ssize_t __pyx_t_17;
+  Py_ssize_t __pyx_t_18;
+  Py_ssize_t __pyx_t_19;
   __Pyx_RefNannySetupContext("compute_1_var", 0);
+  __pyx_pybuffer_res.pybuffer.buf = NULL;
+  __pyx_pybuffer_res.refcount = 0;
+  __pyx_pybuffernd_res.data = NULL;
+  __pyx_pybuffernd_res.rcbuffer = &__pyx_pybuffer_res;
 
-  /* "smoomacypy/compute.pyx":70
+  /* "smoomacypy/compute.pyx":59
  *     cdef DIST_FUNC dist_func
  *     cdef SMOOTH_FUNC smooth
  *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]             # <<<<<<<<<<<<<<
@@ -2989,7 +3004,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_1_var(__Pyx_memviewslice 
  */
   __pyx_v_len_xi = ((Py_ssize_t)(__pyx_v_XI.shape[0]));
 
-  /* "smoomacypy/compute.pyx":71
+  /* "smoomacypy/compute.pyx":60
  *     cdef SMOOTH_FUNC smooth
  *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]
  *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]             # <<<<<<<<<<<<<<
@@ -2998,7 +3013,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_1_var(__Pyx_memviewslice 
  */
   __pyx_v_len_yi = ((Py_ssize_t)(__pyx_v_YI.shape[0]));
 
-  /* "smoomacypy/compute.pyx":72
+  /* "smoomacypy/compute.pyx":61
  *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]
  *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
  *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi             # <<<<<<<<<<<<<<
@@ -3007,7 +3022,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_1_var(__Pyx_memviewslice 
  */
   __pyx_v_nb_pot = (((Py_ssize_t)__pyx_v_len_xi) * __pyx_v_len_yi);
 
-  /* "smoomacypy/compute.pyx":73
+  /* "smoomacypy/compute.pyx":62
  *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
  *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi
  *     cdef Py_ssize_t nb_pts = knownpts.shape[0]             # <<<<<<<<<<<<<<
@@ -3016,7 +3031,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_1_var(__Pyx_memviewslice 
  */
   __pyx_v_nb_pts = (__pyx_v_knownpts.shape[0]);
 
-  /* "smoomacypy/compute.pyx":79
+  /* "smoomacypy/compute.pyx":68
  *     cdef DTYPE_t y_cell
  *     cdef Py_ssize_t j
  *     cdef DTYPE_t _sum = 0.0             # <<<<<<<<<<<<<<
@@ -3025,7 +3040,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_1_var(__Pyx_memviewslice 
  */
   __pyx_v__sum = 0.0;
 
-  /* "smoomacypy/compute.pyx":80
+  /* "smoomacypy/compute.pyx":69
  *     cdef Py_ssize_t j
  *     cdef DTYPE_t _sum = 0.0
  *     cdef Py_ssize_t ix = 0             # <<<<<<<<<<<<<<
@@ -3034,264 +3049,524 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_1_var(__Pyx_memviewslice 
  */
   __pyx_v_ix = 0;
 
-  /* "smoomacypy/compute.pyx":83
+  /* "smoomacypy/compute.pyx":72
  *     cdef DTYPE_t dist
  *     cdef np.double_t[:] point
- *     cdef np.ndarray res = np.zeros(nb_pot, dtype=DTYPE)             # <<<<<<<<<<<<<<
- * 
- *     if lonlat:
+ *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)             # <<<<<<<<<<<<<<
+ *     cdef DTYPE_t *x_knownpts
+ *     cdef DTYPE_t *y_knownpts
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyInt_FromSsize_t(__pyx_v_nb_pot); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_t_1 = PyInt_FromSsize_t(__pyx_v_nb_pot); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_4) < 0) __PYX_ERR(0, 83, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_4) < 0) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 83, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 83, __pyx_L1_error)
+  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 72, __pyx_L1_error)
+  __pyx_t_5 = ((PyArrayObject *)__pyx_t_4);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_res.rcbuffer->pybuffer, (PyObject*)__pyx_t_5, &__Pyx_TypeInfo_nn___pyx_t_10smoomacypy_7compute_DTYPE_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
+      __pyx_v_res = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_res.rcbuffer->pybuffer.buf = NULL;
+      __PYX_ERR(0, 72, __pyx_L1_error)
+    } else {__pyx_pybuffernd_res.diminfo[0].strides = __pyx_pybuffernd_res.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_res.diminfo[0].shape = __pyx_pybuffernd_res.rcbuffer->pybuffer.shape[0];
+    }
+  }
+  __pyx_t_5 = 0;
   __pyx_v_res = ((PyArrayObject *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "smoomacypy/compute.pyx":85
- *     cdef np.ndarray res = np.zeros(nb_pot, dtype=DTYPE)
+  /* "smoomacypy/compute.pyx":78
  * 
- *     if lonlat:             # <<<<<<<<<<<<<<
- *         dist_func = haversine
- *     else:
+ * 
+ *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))             # <<<<<<<<<<<<<<
+ *     if not x_knownpts:
+ *         raise MemoryError()
  */
-  __pyx_t_5 = (__pyx_v_lonlat != 0);
-  if (__pyx_t_5) {
+  __pyx_v_x_knownpts = ((__pyx_t_10smoomacypy_7compute_DTYPE_t *)malloc((__pyx_v_nb_pts * (sizeof(__pyx_t_10smoomacypy_7compute_DTYPE_t)))));
+
+  /* "smoomacypy/compute.pyx":79
+ * 
+ *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not x_knownpts:             # <<<<<<<<<<<<<<
+ *         raise MemoryError()
+ *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ */
+  __pyx_t_6 = ((!(__pyx_v_x_knownpts != 0)) != 0);
+  if (__pyx_t_6) {
+
+    /* "smoomacypy/compute.pyx":80
+ *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not x_knownpts:
+ *         raise MemoryError()             # <<<<<<<<<<<<<<
+ *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not y_knownpts:
+ */
+    PyErr_NoMemory(); __PYX_ERR(0, 80, __pyx_L1_error)
+
+    /* "smoomacypy/compute.pyx":79
+ * 
+ *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not x_knownpts:             # <<<<<<<<<<<<<<
+ *         raise MemoryError()
+ *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ */
+  }
+
+  /* "smoomacypy/compute.pyx":81
+ *     if not x_knownpts:
+ *         raise MemoryError()
+ *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))             # <<<<<<<<<<<<<<
+ *     if not y_knownpts:
+ *         free(x_knownpts)
+ */
+  __pyx_v_y_knownpts = ((__pyx_t_10smoomacypy_7compute_DTYPE_t *)malloc((__pyx_v_nb_pts * (sizeof(__pyx_t_10smoomacypy_7compute_DTYPE_t)))));
+
+  /* "smoomacypy/compute.pyx":82
+ *         raise MemoryError()
+ *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not y_knownpts:             # <<<<<<<<<<<<<<
+ *         free(x_knownpts)
+ *         raise MemoryError()
+ */
+  __pyx_t_6 = ((!(__pyx_v_y_knownpts != 0)) != 0);
+  if (__pyx_t_6) {
+
+    /* "smoomacypy/compute.pyx":83
+ *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not y_knownpts:
+ *         free(x_knownpts)             # <<<<<<<<<<<<<<
+ *         raise MemoryError()
+ *     z_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ */
+    free(__pyx_v_x_knownpts);
+
+    /* "smoomacypy/compute.pyx":84
+ *     if not y_knownpts:
+ *         free(x_knownpts)
+ *         raise MemoryError()             # <<<<<<<<<<<<<<
+ *     z_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not z_knownpts:
+ */
+    PyErr_NoMemory(); __PYX_ERR(0, 84, __pyx_L1_error)
+
+    /* "smoomacypy/compute.pyx":82
+ *         raise MemoryError()
+ *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not y_knownpts:             # <<<<<<<<<<<<<<
+ *         free(x_knownpts)
+ *         raise MemoryError()
+ */
+  }
+
+  /* "smoomacypy/compute.pyx":85
+ *         free(x_knownpts)
+ *         raise MemoryError()
+ *     z_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))             # <<<<<<<<<<<<<<
+ *     if not z_knownpts:
+ *         free(x_knownpts)
+ */
+  __pyx_v_z_knownpts = ((__pyx_t_10smoomacypy_7compute_DTYPE_t *)malloc((__pyx_v_nb_pts * (sizeof(__pyx_t_10smoomacypy_7compute_DTYPE_t)))));
+
+  /* "smoomacypy/compute.pyx":86
+ *         raise MemoryError()
+ *     z_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not z_knownpts:             # <<<<<<<<<<<<<<
+ *         free(x_knownpts)
+ *         free(y_knownpts)
+ */
+  __pyx_t_6 = ((!(__pyx_v_z_knownpts != 0)) != 0);
+  if (__pyx_t_6) {
+
+    /* "smoomacypy/compute.pyx":87
+ *     z_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not z_knownpts:
+ *         free(x_knownpts)             # <<<<<<<<<<<<<<
+ *         free(y_knownpts)
+ *         raise MemoryError()
+ */
+    free(__pyx_v_x_knownpts);
+
+    /* "smoomacypy/compute.pyx":88
+ *     if not z_knownpts:
+ *         free(x_knownpts)
+ *         free(y_knownpts)             # <<<<<<<<<<<<<<
+ *         raise MemoryError()
+ * 
+ */
+    free(__pyx_v_y_knownpts);
+
+    /* "smoomacypy/compute.pyx":89
+ *         free(x_knownpts)
+ *         free(y_knownpts)
+ *         raise MemoryError()             # <<<<<<<<<<<<<<
+ * 
+ *     with nogil:
+ */
+    PyErr_NoMemory(); __PYX_ERR(0, 89, __pyx_L1_error)
 
     /* "smoomacypy/compute.pyx":86
- * 
- *     if lonlat:
- *         dist_func = haversine             # <<<<<<<<<<<<<<
- *     else:
- *         dist_func = euclidian
+ *         raise MemoryError()
+ *     z_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not z_knownpts:             # <<<<<<<<<<<<<<
+ *         free(x_knownpts)
+ *         free(y_knownpts)
  */
-    __pyx_v_dist_func = __pyx_f_10smoomacypy_7compute_haversine;
-
-    /* "smoomacypy/compute.pyx":85
- *     cdef np.ndarray res = np.zeros(nb_pot, dtype=DTYPE)
- * 
- *     if lonlat:             # <<<<<<<<<<<<<<
- *         dist_func = haversine
- *     else:
- */
-    goto __pyx_L3;
   }
 
-  /* "smoomacypy/compute.pyx":88
- *         dist_func = haversine
- *     else:
- *         dist_func = euclidian             # <<<<<<<<<<<<<<
+  /* "smoomacypy/compute.pyx":91
+ *         raise MemoryError()
  * 
- *     if expfunc:
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]
  */
-  /*else*/ {
-    __pyx_v_dist_func = __pyx_f_10smoomacypy_7compute_euclidian;
-  }
-  __pyx_L3:;
+  {
+      #ifdef WITH_THREAD
+      PyThreadState *_save;
+      Py_UNBLOCK_THREADS
+      __Pyx_FastGIL_Remember();
+      #endif
+      /*try:*/ {
 
-  /* "smoomacypy/compute.pyx":90
- *         dist_func = euclidian
+        /* "smoomacypy/compute.pyx":92
  * 
- *     if expfunc:             # <<<<<<<<<<<<<<
- *         smooth = exponential
- *     else:
+ *     with nogil:
+ *         for j in range(nb_pts):             # <<<<<<<<<<<<<<
+ *             point = knownpts[j]
+ *             x_knownpts[j] = point[<Py_ssize_t>0]
  */
-  __pyx_t_5 = (__pyx_v_expfunc != 0);
-  if (__pyx_t_5) {
+        __pyx_t_7 = __pyx_v_nb_pts;
+        for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+          __pyx_v_j = __pyx_t_8;
 
-    /* "smoomacypy/compute.pyx":91
- * 
- *     if expfunc:
- *         smooth = exponential             # <<<<<<<<<<<<<<
- *     else:
- *         smooth = pareto
+          /* "smoomacypy/compute.pyx":93
+ *     with nogil:
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]             # <<<<<<<<<<<<<<
+ *             x_knownpts[j] = point[<Py_ssize_t>0]
+ *             y_knownpts[j] = point[<Py_ssize_t>1]
  */
-    __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_exponential;
-
-    /* "smoomacypy/compute.pyx":90
- *         dist_func = euclidian
- * 
- *     if expfunc:             # <<<<<<<<<<<<<<
- *         smooth = exponential
- *     else:
- */
-    goto __pyx_L4;
-  }
-
-  /* "smoomacypy/compute.pyx":93
- *         smooth = exponential
- *     else:
- *         smooth = pareto             # <<<<<<<<<<<<<<
- * 
- *     for ix_x in range(len_xi):
- */
-  /*else*/ {
-    __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_pareto;
-  }
-  __pyx_L4:;
-
-  /* "smoomacypy/compute.pyx":95
- *         smooth = pareto
- * 
- *     for ix_x in range(len_xi):             # <<<<<<<<<<<<<<
- *         x_cell = XI[ix_x]
- *         for ix_y in range(len_yi):
- */
-  __pyx_t_6 = __pyx_v_len_xi;
-  for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
-    __pyx_v_ix_x = __pyx_t_7;
-
-    /* "smoomacypy/compute.pyx":96
- * 
- *     for ix_x in range(len_xi):
- *         x_cell = XI[ix_x]             # <<<<<<<<<<<<<<
- *         for ix_y in range(len_yi):
- *             y_cell= YI[ix_y]
- */
-    __pyx_t_8 = __pyx_v_ix_x;
-    __pyx_v_x_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_XI.data) + __pyx_t_8)) )));
-
-    /* "smoomacypy/compute.pyx":97
- *     for ix_x in range(len_xi):
- *         x_cell = XI[ix_x]
- *         for ix_y in range(len_yi):             # <<<<<<<<<<<<<<
- *             y_cell= YI[ix_y]
- *             _sum = 0.0
- */
-    __pyx_t_9 = __pyx_v_len_yi;
-    for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
-      __pyx_v_ix_y = __pyx_t_10;
-
-      /* "smoomacypy/compute.pyx":98
- *         x_cell = XI[ix_x]
- *         for ix_y in range(len_yi):
- *             y_cell= YI[ix_y]             # <<<<<<<<<<<<<<
- *             _sum = 0.0
- *             for j in range(nb_pts):
- */
-      __pyx_t_11 = __pyx_v_ix_y;
-      __pyx_v_y_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_YI.data) + __pyx_t_11)) )));
-
-      /* "smoomacypy/compute.pyx":99
- *         for ix_y in range(len_yi):
- *             y_cell= YI[ix_y]
- *             _sum = 0.0             # <<<<<<<<<<<<<<
- *             for j in range(nb_pts):
- *                 point = knownpts[j]
- */
-      __pyx_v__sum = 0.0;
-
-      /* "smoomacypy/compute.pyx":100
- *             y_cell= YI[ix_y]
- *             _sum = 0.0
- *             for j in range(nb_pts):             # <<<<<<<<<<<<<<
- *                 point = knownpts[j]
- *                 dist = dist_func(x_cell, y_cell, point[<Py_ssize_t>0], point[<Py_ssize_t>1])
- */
-      __pyx_t_12 = __pyx_v_nb_pts;
-      for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
-        __pyx_v_j = __pyx_t_13;
-
-        /* "smoomacypy/compute.pyx":101
- *             _sum = 0.0
- *             for j in range(nb_pts):
- *                 point = knownpts[j]             # <<<<<<<<<<<<<<
- *                 dist = dist_func(x_cell, y_cell, point[<Py_ssize_t>0], point[<Py_ssize_t>1])
- *                 _sum += point[<Py_ssize_t>2] * smooth(alpha, beta, dist)
- */
-        __pyx_t_14.data = __pyx_v_knownpts.data;
-        __pyx_t_14.memview = __pyx_v_knownpts.memview;
-        __PYX_INC_MEMVIEW(&__pyx_t_14, 0);
-        {
+          __pyx_t_9.data = __pyx_v_knownpts.data;
+          __pyx_t_9.memview = __pyx_v_knownpts.memview;
+          __PYX_INC_MEMVIEW(&__pyx_t_9, 0);
+          {
     Py_ssize_t __pyx_tmp_idx = __pyx_v_j;
     Py_ssize_t __pyx_tmp_shape = __pyx_v_knownpts.shape[0];
     Py_ssize_t __pyx_tmp_stride = __pyx_v_knownpts.strides[0];
     if (0 && (__pyx_tmp_idx < 0))
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
+            #ifdef WITH_THREAD
+            PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+            #endif
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        __PYX_ERR(0, 101, __pyx_L1_error)
+            #ifdef WITH_THREAD
+            PyGILState_Release(__pyx_gilstate_save);
+            #endif
+        __PYX_ERR(0, 93, __pyx_L7_error)
     }
-        __pyx_t_14.data += __pyx_tmp_idx * __pyx_tmp_stride;
+        __pyx_t_9.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
 
-__pyx_t_14.shape[0] = __pyx_v_knownpts.shape[1];
-__pyx_t_14.strides[0] = __pyx_v_knownpts.strides[1];
-    __pyx_t_14.suboffsets[0] = -1;
+__pyx_t_9.shape[0] = __pyx_v_knownpts.shape[1];
+__pyx_t_9.strides[0] = __pyx_v_knownpts.strides[1];
+    __pyx_t_9.suboffsets[0] = -1;
 
-__PYX_XDEC_MEMVIEW(&__pyx_v_point, 1);
-        __pyx_v_point = __pyx_t_14;
-        __pyx_t_14.memview = NULL;
-        __pyx_t_14.data = NULL;
+__PYX_XDEC_MEMVIEW(&__pyx_v_point, 0);
+          __pyx_v_point = __pyx_t_9;
+          __pyx_t_9.memview = NULL;
+          __pyx_t_9.data = NULL;
 
-        /* "smoomacypy/compute.pyx":102
- *             for j in range(nb_pts):
- *                 point = knownpts[j]
- *                 dist = dist_func(x_cell, y_cell, point[<Py_ssize_t>0], point[<Py_ssize_t>1])             # <<<<<<<<<<<<<<
- *                 _sum += point[<Py_ssize_t>2] * smooth(alpha, beta, dist)
- *             res[ix] = _sum
+          /* "smoomacypy/compute.pyx":94
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]
+ *             x_knownpts[j] = point[<Py_ssize_t>0]             # <<<<<<<<<<<<<<
+ *             y_knownpts[j] = point[<Py_ssize_t>1]
+ *             z_knownpts[j] = point[<Py_ssize_t>2]
  */
-        __pyx_t_15 = ((Py_ssize_t)0);
-        __pyx_t_16 = ((Py_ssize_t)1);
-        __pyx_v_dist = __pyx_v_dist_func(__pyx_v_x_cell, __pyx_v_y_cell, (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_15 * __pyx_v_point.strides[0]) ))), (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_16 * __pyx_v_point.strides[0]) ))));
+          __pyx_t_10 = ((Py_ssize_t)0);
+          (__pyx_v_x_knownpts[__pyx_v_j]) = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_10 * __pyx_v_point.strides[0]) )));
+
+          /* "smoomacypy/compute.pyx":95
+ *             point = knownpts[j]
+ *             x_knownpts[j] = point[<Py_ssize_t>0]
+ *             y_knownpts[j] = point[<Py_ssize_t>1]             # <<<<<<<<<<<<<<
+ *             z_knownpts[j] = point[<Py_ssize_t>2]
+ * 
+ */
+          __pyx_t_11 = ((Py_ssize_t)1);
+          (__pyx_v_y_knownpts[__pyx_v_j]) = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_11 * __pyx_v_point.strides[0]) )));
+
+          /* "smoomacypy/compute.pyx":96
+ *             x_knownpts[j] = point[<Py_ssize_t>0]
+ *             y_knownpts[j] = point[<Py_ssize_t>1]
+ *             z_knownpts[j] = point[<Py_ssize_t>2]             # <<<<<<<<<<<<<<
+ * 
+ *         if lonlat:
+ */
+          __pyx_t_12 = ((Py_ssize_t)2);
+          (__pyx_v_z_knownpts[__pyx_v_j]) = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_12 * __pyx_v_point.strides[0]) )));
+        }
+
+        /* "smoomacypy/compute.pyx":98
+ *             z_knownpts[j] = point[<Py_ssize_t>2]
+ * 
+ *         if lonlat:             # <<<<<<<<<<<<<<
+ *             dist_func = haversine
+ *         else:
+ */
+        __pyx_t_6 = (__pyx_v_lonlat != 0);
+        if (__pyx_t_6) {
+
+          /* "smoomacypy/compute.pyx":99
+ * 
+ *         if lonlat:
+ *             dist_func = haversine             # <<<<<<<<<<<<<<
+ *         else:
+ *             dist_func = euclidian
+ */
+          __pyx_v_dist_func = __pyx_f_10smoomacypy_7compute_haversine;
+
+          /* "smoomacypy/compute.pyx":98
+ *             z_knownpts[j] = point[<Py_ssize_t>2]
+ * 
+ *         if lonlat:             # <<<<<<<<<<<<<<
+ *             dist_func = haversine
+ *         else:
+ */
+          goto __pyx_L11;
+        }
+
+        /* "smoomacypy/compute.pyx":101
+ *             dist_func = haversine
+ *         else:
+ *             dist_func = euclidian             # <<<<<<<<<<<<<<
+ * 
+ *         if expfunc:
+ */
+        /*else*/ {
+          __pyx_v_dist_func = __pyx_f_10smoomacypy_7compute_euclidian;
+        }
+        __pyx_L11:;
 
         /* "smoomacypy/compute.pyx":103
- *                 point = knownpts[j]
- *                 dist = dist_func(x_cell, y_cell, point[<Py_ssize_t>0], point[<Py_ssize_t>1])
- *                 _sum += point[<Py_ssize_t>2] * smooth(alpha, beta, dist)             # <<<<<<<<<<<<<<
- *             res[ix] = _sum
- *             ix += 1
+ *             dist_func = euclidian
+ * 
+ *         if expfunc:             # <<<<<<<<<<<<<<
+ *             smooth = exponential
+ *         else:
  */
-        __pyx_t_17 = ((Py_ssize_t)2);
-        __pyx_v__sum = (__pyx_v__sum + ((*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_17 * __pyx_v_point.strides[0]) ))) * __pyx_v_smooth(__pyx_v_alpha, __pyx_v_beta, __pyx_v_dist)));
-      }
+        __pyx_t_6 = (__pyx_v_expfunc != 0);
+        if (__pyx_t_6) {
 
-      /* "smoomacypy/compute.pyx":104
- *                 dist = dist_func(x_cell, y_cell, point[<Py_ssize_t>0], point[<Py_ssize_t>1])
- *                 _sum += point[<Py_ssize_t>2] * smooth(alpha, beta, dist)
- *             res[ix] = _sum             # <<<<<<<<<<<<<<
- *             ix += 1
+          /* "smoomacypy/compute.pyx":104
+ * 
+ *         if expfunc:
+ *             smooth = exponential             # <<<<<<<<<<<<<<
+ *         else:
+ *             smooth = pareto
+ */
+          __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_exponential;
+
+          /* "smoomacypy/compute.pyx":103
+ *             dist_func = euclidian
+ * 
+ *         if expfunc:             # <<<<<<<<<<<<<<
+ *             smooth = exponential
+ *         else:
+ */
+          goto __pyx_L12;
+        }
+
+        /* "smoomacypy/compute.pyx":106
+ *             smooth = exponential
+ *         else:
+ *             smooth = pareto             # <<<<<<<<<<<<<<
+ * 
+ *         for ix_x in range(len_xi):
+ */
+        /*else*/ {
+          __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_pareto;
+        }
+        __pyx_L12:;
+
+        /* "smoomacypy/compute.pyx":108
+ *             smooth = pareto
+ * 
+ *         for ix_x in range(len_xi):             # <<<<<<<<<<<<<<
+ *             x_cell = XI[ix_x]
+ *             for ix_y in range(len_yi):
+ */
+        __pyx_t_7 = __pyx_v_len_xi;
+        for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+          __pyx_v_ix_x = __pyx_t_8;
+
+          /* "smoomacypy/compute.pyx":109
+ * 
+ *         for ix_x in range(len_xi):
+ *             x_cell = XI[ix_x]             # <<<<<<<<<<<<<<
+ *             for ix_y in range(len_yi):
+ *                 y_cell= YI[ix_y]
+ */
+          __pyx_t_13 = __pyx_v_ix_x;
+          __pyx_v_x_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_XI.data) + __pyx_t_13)) )));
+
+          /* "smoomacypy/compute.pyx":110
+ *         for ix_x in range(len_xi):
+ *             x_cell = XI[ix_x]
+ *             for ix_y in range(len_yi):             # <<<<<<<<<<<<<<
+ *                 y_cell= YI[ix_y]
+ *                 _sum = 0.0
+ */
+          __pyx_t_14 = __pyx_v_len_yi;
+          for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_14; __pyx_t_15+=1) {
+            __pyx_v_ix_y = __pyx_t_15;
+
+            /* "smoomacypy/compute.pyx":111
+ *             x_cell = XI[ix_x]
+ *             for ix_y in range(len_yi):
+ *                 y_cell= YI[ix_y]             # <<<<<<<<<<<<<<
+ *                 _sum = 0.0
+ *                 for j in range(nb_pts):
+ */
+            __pyx_t_16 = __pyx_v_ix_y;
+            __pyx_v_y_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_YI.data) + __pyx_t_16)) )));
+
+            /* "smoomacypy/compute.pyx":112
+ *             for ix_y in range(len_yi):
+ *                 y_cell= YI[ix_y]
+ *                 _sum = 0.0             # <<<<<<<<<<<<<<
+ *                 for j in range(nb_pts):
+ *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
+ */
+            __pyx_v__sum = 0.0;
+
+            /* "smoomacypy/compute.pyx":113
+ *                 y_cell= YI[ix_y]
+ *                 _sum = 0.0
+ *                 for j in range(nb_pts):             # <<<<<<<<<<<<<<
+ *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
+ *                     _sum += z_knownpts[j] * smooth(alpha, beta, dist)
+ */
+            __pyx_t_17 = __pyx_v_nb_pts;
+            for (__pyx_t_18 = 0; __pyx_t_18 < __pyx_t_17; __pyx_t_18+=1) {
+              __pyx_v_j = __pyx_t_18;
+
+              /* "smoomacypy/compute.pyx":114
+ *                 _sum = 0.0
+ *                 for j in range(nb_pts):
+ *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])             # <<<<<<<<<<<<<<
+ *                     _sum += z_knownpts[j] * smooth(alpha, beta, dist)
+ *                 res[ix] = _sum
+ */
+              __pyx_v_dist = __pyx_v_dist_func(__pyx_v_x_cell, __pyx_v_y_cell, (__pyx_v_x_knownpts[__pyx_v_j]), (__pyx_v_y_knownpts[__pyx_v_j]));
+
+              /* "smoomacypy/compute.pyx":115
+ *                 for j in range(nb_pts):
+ *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
+ *                     _sum += z_knownpts[j] * smooth(alpha, beta, dist)             # <<<<<<<<<<<<<<
+ *                 res[ix] = _sum
+ *                 ix += 1
+ */
+              __pyx_v__sum = (__pyx_v__sum + ((__pyx_v_z_knownpts[__pyx_v_j]) * __pyx_v_smooth(__pyx_v_alpha, __pyx_v_beta, __pyx_v_dist)));
+            }
+
+            /* "smoomacypy/compute.pyx":116
+ *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
+ *                     _sum += z_knownpts[j] * smooth(alpha, beta, dist)
+ *                 res[ix] = _sum             # <<<<<<<<<<<<<<
+ *                 ix += 1
+ *         free(x_knownpts)
+ */
+            __pyx_t_19 = __pyx_v_ix;
+            *__Pyx_BufPtrCContig1d(__pyx_t_10smoomacypy_7compute_DTYPE_t *, __pyx_pybuffernd_res.rcbuffer->pybuffer.buf, __pyx_t_19, __pyx_pybuffernd_res.diminfo[0].strides) = __pyx_v__sum;
+
+            /* "smoomacypy/compute.pyx":117
+ *                     _sum += z_knownpts[j] * smooth(alpha, beta, dist)
+ *                 res[ix] = _sum
+ *                 ix += 1             # <<<<<<<<<<<<<<
+ *         free(x_knownpts)
+ *         free(y_knownpts)
+ */
+            __pyx_v_ix = (__pyx_v_ix + 1);
+          }
+        }
+
+        /* "smoomacypy/compute.pyx":118
+ *                 res[ix] = _sum
+ *                 ix += 1
+ *         free(x_knownpts)             # <<<<<<<<<<<<<<
+ *         free(y_knownpts)
+ *         free(z_knownpts)
+ */
+        free(__pyx_v_x_knownpts);
+
+        /* "smoomacypy/compute.pyx":119
+ *                 ix += 1
+ *         free(x_knownpts)
+ *         free(y_knownpts)             # <<<<<<<<<<<<<<
+ *         free(z_knownpts)
  *     return res
  */
-      __pyx_t_4 = PyFloat_FromDouble(__pyx_v__sum); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 104, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_res), __pyx_v_ix, __pyx_t_4, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 0, 0) < 0)) __PYX_ERR(0, 104, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        free(__pyx_v_y_knownpts);
 
-      /* "smoomacypy/compute.pyx":105
- *                 _sum += point[<Py_ssize_t>2] * smooth(alpha, beta, dist)
- *             res[ix] = _sum
- *             ix += 1             # <<<<<<<<<<<<<<
+        /* "smoomacypy/compute.pyx":120
+ *         free(x_knownpts)
+ *         free(y_knownpts)
+ *         free(z_knownpts)             # <<<<<<<<<<<<<<
  *     return res
  * 
  */
-      __pyx_v_ix = (__pyx_v_ix + 1);
-    }
+        free(__pyx_v_z_knownpts);
+      }
+
+      /* "smoomacypy/compute.pyx":91
+ *         raise MemoryError()
+ * 
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]
+ */
+      /*finally:*/ {
+        /*normal exit:*/{
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L8;
+        }
+        __pyx_L7_error: {
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L1_error;
+        }
+        __pyx_L8:;
+      }
   }
 
-  /* "smoomacypy/compute.pyx":106
- *             res[ix] = _sum
- *             ix += 1
+  /* "smoomacypy/compute.pyx":121
+ *         free(y_knownpts)
+ *         free(z_knownpts)
  *     return res             # <<<<<<<<<<<<<<
  * 
  * 
@@ -3301,8 +3576,8 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_point, 1);
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "smoomacypy/compute.pyx":65
- * #        return compute_2_var(knownpts, unknownpts, span, alpha, beta, lonlat, expfunc)
+  /* "smoomacypy/compute.pyx":54
+ * 
  * 
  * cdef compute_1_var(             # <<<<<<<<<<<<<<
  *         np.double_t[:,::1] knownpts, np.double_t[::1] XI, np.double_t[::1] YI,
@@ -3315,10 +3590,19 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_point, 1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __PYX_XDEC_MEMVIEW(&__pyx_t_14, 1);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_9, 1);
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
   __Pyx_AddTraceback("smoomacypy.compute.compute_1_var", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
+  goto __pyx_L2;
   __pyx_L0:;
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
+  __pyx_L2:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_point, 1);
   __Pyx_XDECREF((PyObject *)__pyx_v_res);
   __Pyx_XGIVEREF(__pyx_r);
@@ -3326,7 +3610,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_point, 1);
   return __pyx_r;
 }
 
-/* "smoomacypy/compute.pyx":109
+/* "smoomacypy/compute.pyx":124
  * 
  * 
  * cdef compute_2_var(             # <<<<<<<<<<<<<<
@@ -3352,33 +3636,42 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
   __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_dist;
   __Pyx_memviewslice __pyx_v_point = { 0, 0, { 0 }, { 0 }, { 0 } };
   PyArrayObject *__pyx_v_res = 0;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t *__pyx_v_x_knownpts;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t *__pyx_v_y_knownpts;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t *__pyx_v_z1_knownpts;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t *__pyx_v_z2_knownpts;
   Py_ssize_t __pyx_v_j;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_res;
+  __Pyx_Buffer __pyx_pybuffer_res;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
-  int __pyx_t_5;
-  Py_ssize_t __pyx_t_6;
+  PyArrayObject *__pyx_t_5 = NULL;
+  int __pyx_t_6;
   Py_ssize_t __pyx_t_7;
   Py_ssize_t __pyx_t_8;
-  Py_ssize_t __pyx_t_9;
+  __Pyx_memviewslice __pyx_t_9 = { 0, 0, { 0 }, { 0 }, { 0 } };
   Py_ssize_t __pyx_t_10;
   Py_ssize_t __pyx_t_11;
   Py_ssize_t __pyx_t_12;
   Py_ssize_t __pyx_t_13;
-  __Pyx_memviewslice __pyx_t_14 = { 0, 0, { 0 }, { 0 }, { 0 } };
+  Py_ssize_t __pyx_t_14;
   Py_ssize_t __pyx_t_15;
   Py_ssize_t __pyx_t_16;
   Py_ssize_t __pyx_t_17;
   Py_ssize_t __pyx_t_18;
-  PyObject *__pyx_t_19 = NULL;
-  int __pyx_t_20;
-  PyObject *__pyx_t_21 = NULL;
+  Py_ssize_t __pyx_t_19;
+  Py_ssize_t __pyx_t_20;
   __Pyx_RefNannySetupContext("compute_2_var", 0);
+  __pyx_pybuffer_res.pybuffer.buf = NULL;
+  __pyx_pybuffer_res.refcount = 0;
+  __pyx_pybuffernd_res.data = NULL;
+  __pyx_pybuffernd_res.rcbuffer = &__pyx_pybuffer_res;
 
-  /* "smoomacypy/compute.pyx":114
+  /* "smoomacypy/compute.pyx":129
  *     cdef DIST_FUNC dist_func
  *     cdef SMOOTH_FUNC smooth
  *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]             # <<<<<<<<<<<<<<
@@ -3387,7 +3680,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
  */
   __pyx_v_len_xi = ((Py_ssize_t)(__pyx_v_XI.shape[0]));
 
-  /* "smoomacypy/compute.pyx":115
+  /* "smoomacypy/compute.pyx":130
  *     cdef SMOOTH_FUNC smooth
  *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]
  *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]             # <<<<<<<<<<<<<<
@@ -3396,7 +3689,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
  */
   __pyx_v_len_yi = ((Py_ssize_t)(__pyx_v_YI.shape[0]));
 
-  /* "smoomacypy/compute.pyx":116
+  /* "smoomacypy/compute.pyx":131
  *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]
  *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
  *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi             # <<<<<<<<<<<<<<
@@ -3405,7 +3698,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
  */
   __pyx_v_nb_pot = (((Py_ssize_t)__pyx_v_len_xi) * __pyx_v_len_yi);
 
-  /* "smoomacypy/compute.pyx":117
+  /* "smoomacypy/compute.pyx":132
  *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
  *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi
  *     cdef Py_ssize_t nb_pts = knownpts.shape[0]             # <<<<<<<<<<<<<<
@@ -3414,7 +3707,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
  */
   __pyx_v_nb_pts = (__pyx_v_knownpts.shape[0]);
 
-  /* "smoomacypy/compute.pyx":122
+  /* "smoomacypy/compute.pyx":137
  *     cdef DTYPE_t x_cell
  *     cdef DTYPE_t y_cell
  *     cdef DTYPE_t _sum1 = 0.0             # <<<<<<<<<<<<<<
@@ -3423,7 +3716,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
  */
   __pyx_v__sum1 = 0.0;
 
-  /* "smoomacypy/compute.pyx":123
+  /* "smoomacypy/compute.pyx":138
  *     cdef DTYPE_t y_cell
  *     cdef DTYPE_t _sum1 = 0.0
  *     cdef DTYPE_t _sum2 = 0.0             # <<<<<<<<<<<<<<
@@ -3432,7 +3725,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
  */
   __pyx_v__sum2 = 0.0;
 
-  /* "smoomacypy/compute.pyx":124
+  /* "smoomacypy/compute.pyx":139
  *     cdef DTYPE_t _sum1 = 0.0
  *     cdef DTYPE_t _sum2 = 0.0
  *     cdef DTYPE_t t = 0.0             # <<<<<<<<<<<<<<
@@ -3441,7 +3734,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
  */
   __pyx_v_t = 0.0;
 
-  /* "smoomacypy/compute.pyx":125
+  /* "smoomacypy/compute.pyx":140
  *     cdef DTYPE_t _sum2 = 0.0
  *     cdef DTYPE_t t = 0.0
  *     cdef Py_ssize_t ix = 0             # <<<<<<<<<<<<<<
@@ -3450,358 +3743,641 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
  */
   __pyx_v_ix = 0;
 
-  /* "smoomacypy/compute.pyx":128
+  /* "smoomacypy/compute.pyx":143
  *     cdef DTYPE_t dist
  *     cdef np.double_t[:] point
- *     cdef np.ndarray res = np.zeros(nb_pot, dtype=DTYPE)             # <<<<<<<<<<<<<<
- * 
- *     if lonlat:
+ *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)             # <<<<<<<<<<<<<<
+ *     cdef DTYPE_t *x_knownpts
+ *     cdef DTYPE_t *y_knownpts
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 128, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 143, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyInt_FromSsize_t(__pyx_v_nb_pot); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
+  __pyx_t_1 = PyInt_FromSsize_t(__pyx_v_nb_pot); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 128, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 143, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 128, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 143, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_4) < 0) __PYX_ERR(0, 128, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_4) < 0) __PYX_ERR(0, 143, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 128, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 143, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 128, __pyx_L1_error)
+  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_5 = ((PyArrayObject *)__pyx_t_4);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_res.rcbuffer->pybuffer, (PyObject*)__pyx_t_5, &__Pyx_TypeInfo_nn___pyx_t_10smoomacypy_7compute_DTYPE_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
+      __pyx_v_res = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_res.rcbuffer->pybuffer.buf = NULL;
+      __PYX_ERR(0, 143, __pyx_L1_error)
+    } else {__pyx_pybuffernd_res.diminfo[0].strides = __pyx_pybuffernd_res.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_res.diminfo[0].shape = __pyx_pybuffernd_res.rcbuffer->pybuffer.shape[0];
+    }
+  }
+  __pyx_t_5 = 0;
   __pyx_v_res = ((PyArrayObject *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "smoomacypy/compute.pyx":130
- *     cdef np.ndarray res = np.zeros(nb_pot, dtype=DTYPE)
+  /* "smoomacypy/compute.pyx":150
  * 
- *     if lonlat:             # <<<<<<<<<<<<<<
- *         dist_func = haversine
- *     else:
+ * 
+ *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))             # <<<<<<<<<<<<<<
+ *     if not x_knownpts:
+ *         raise MemoryError()
  */
-  __pyx_t_5 = (__pyx_v_lonlat != 0);
-  if (__pyx_t_5) {
+  __pyx_v_x_knownpts = ((__pyx_t_10smoomacypy_7compute_DTYPE_t *)malloc((__pyx_v_nb_pts * (sizeof(__pyx_t_10smoomacypy_7compute_DTYPE_t)))));
 
-    /* "smoomacypy/compute.pyx":131
+  /* "smoomacypy/compute.pyx":151
  * 
- *     if lonlat:
- *         dist_func = haversine             # <<<<<<<<<<<<<<
- *     else:
- *         dist_func = euclidian
+ *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not x_knownpts:             # <<<<<<<<<<<<<<
+ *         raise MemoryError()
+ *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
  */
-    __pyx_v_dist_func = __pyx_f_10smoomacypy_7compute_haversine;
+  __pyx_t_6 = ((!(__pyx_v_x_knownpts != 0)) != 0);
+  if (__pyx_t_6) {
 
-    /* "smoomacypy/compute.pyx":130
- *     cdef np.ndarray res = np.zeros(nb_pot, dtype=DTYPE)
- * 
- *     if lonlat:             # <<<<<<<<<<<<<<
- *         dist_func = haversine
- *     else:
+    /* "smoomacypy/compute.pyx":152
+ *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not x_knownpts:
+ *         raise MemoryError()             # <<<<<<<<<<<<<<
+ *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not y_knownpts:
  */
-    goto __pyx_L3;
+    PyErr_NoMemory(); __PYX_ERR(0, 152, __pyx_L1_error)
+
+    /* "smoomacypy/compute.pyx":151
+ * 
+ *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not x_knownpts:             # <<<<<<<<<<<<<<
+ *         raise MemoryError()
+ *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ */
   }
 
-  /* "smoomacypy/compute.pyx":133
- *         dist_func = haversine
- *     else:
- *         dist_func = euclidian             # <<<<<<<<<<<<<<
- * 
- *     if expfunc:
+  /* "smoomacypy/compute.pyx":153
+ *     if not x_knownpts:
+ *         raise MemoryError()
+ *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))             # <<<<<<<<<<<<<<
+ *     if not y_knownpts:
+ *         free(x_knownpts)
  */
-  /*else*/ {
-    __pyx_v_dist_func = __pyx_f_10smoomacypy_7compute_euclidian;
+  __pyx_v_y_knownpts = ((__pyx_t_10smoomacypy_7compute_DTYPE_t *)malloc((__pyx_v_nb_pts * (sizeof(__pyx_t_10smoomacypy_7compute_DTYPE_t)))));
+
+  /* "smoomacypy/compute.pyx":154
+ *         raise MemoryError()
+ *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not y_knownpts:             # <<<<<<<<<<<<<<
+ *         free(x_knownpts)
+ *         raise MemoryError()
+ */
+  __pyx_t_6 = ((!(__pyx_v_y_knownpts != 0)) != 0);
+  if (__pyx_t_6) {
+
+    /* "smoomacypy/compute.pyx":155
+ *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not y_knownpts:
+ *         free(x_knownpts)             # <<<<<<<<<<<<<<
+ *         raise MemoryError()
+ *     z1_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ */
+    free(__pyx_v_x_knownpts);
+
+    /* "smoomacypy/compute.pyx":156
+ *     if not y_knownpts:
+ *         free(x_knownpts)
+ *         raise MemoryError()             # <<<<<<<<<<<<<<
+ *     z1_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not z1_knownpts:
+ */
+    PyErr_NoMemory(); __PYX_ERR(0, 156, __pyx_L1_error)
+
+    /* "smoomacypy/compute.pyx":154
+ *         raise MemoryError()
+ *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not y_knownpts:             # <<<<<<<<<<<<<<
+ *         free(x_knownpts)
+ *         raise MemoryError()
+ */
   }
-  __pyx_L3:;
 
-  /* "smoomacypy/compute.pyx":135
- *         dist_func = euclidian
- * 
- *     if expfunc:             # <<<<<<<<<<<<<<
- *         smooth = exponential
- *     else:
+  /* "smoomacypy/compute.pyx":157
+ *         free(x_knownpts)
+ *         raise MemoryError()
+ *     z1_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))             # <<<<<<<<<<<<<<
+ *     if not z1_knownpts:
+ *         free(x_knownpts)
  */
-  __pyx_t_5 = (__pyx_v_expfunc != 0);
-  if (__pyx_t_5) {
+  __pyx_v_z1_knownpts = ((__pyx_t_10smoomacypy_7compute_DTYPE_t *)malloc((__pyx_v_nb_pts * (sizeof(__pyx_t_10smoomacypy_7compute_DTYPE_t)))));
 
-    /* "smoomacypy/compute.pyx":136
- * 
- *     if expfunc:
- *         smooth = exponential             # <<<<<<<<<<<<<<
- *     else:
- *         smooth = pareto
+  /* "smoomacypy/compute.pyx":158
+ *         raise MemoryError()
+ *     z1_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not z1_knownpts:             # <<<<<<<<<<<<<<
+ *         free(x_knownpts)
+ *         free(y_knownpts)
  */
-    __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_exponential;
+  __pyx_t_6 = ((!(__pyx_v_z1_knownpts != 0)) != 0);
+  if (__pyx_t_6) {
 
-    /* "smoomacypy/compute.pyx":135
- *         dist_func = euclidian
- * 
- *     if expfunc:             # <<<<<<<<<<<<<<
- *         smooth = exponential
- *     else:
+    /* "smoomacypy/compute.pyx":159
+ *     z1_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not z1_knownpts:
+ *         free(x_knownpts)             # <<<<<<<<<<<<<<
+ *         free(y_knownpts)
+ *         raise MemoryError()
  */
-    goto __pyx_L4;
+    free(__pyx_v_x_knownpts);
+
+    /* "smoomacypy/compute.pyx":160
+ *     if not z1_knownpts:
+ *         free(x_knownpts)
+ *         free(y_knownpts)             # <<<<<<<<<<<<<<
+ *         raise MemoryError()
+ *     z2_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ */
+    free(__pyx_v_y_knownpts);
+
+    /* "smoomacypy/compute.pyx":161
+ *         free(x_knownpts)
+ *         free(y_knownpts)
+ *         raise MemoryError()             # <<<<<<<<<<<<<<
+ *     z2_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not z2_knownpts:
+ */
+    PyErr_NoMemory(); __PYX_ERR(0, 161, __pyx_L1_error)
+
+    /* "smoomacypy/compute.pyx":158
+ *         raise MemoryError()
+ *     z1_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not z1_knownpts:             # <<<<<<<<<<<<<<
+ *         free(x_knownpts)
+ *         free(y_knownpts)
+ */
   }
 
-  /* "smoomacypy/compute.pyx":138
- *         smooth = exponential
- *     else:
- *         smooth = pareto             # <<<<<<<<<<<<<<
- * 
- *     for ix_x in range(len_xi):
+  /* "smoomacypy/compute.pyx":162
+ *         free(y_knownpts)
+ *         raise MemoryError()
+ *     z2_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))             # <<<<<<<<<<<<<<
+ *     if not z2_knownpts:
+ *         free(x_knownpts)
  */
-  /*else*/ {
-    __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_pareto;
+  __pyx_v_z2_knownpts = ((__pyx_t_10smoomacypy_7compute_DTYPE_t *)malloc((__pyx_v_nb_pts * (sizeof(__pyx_t_10smoomacypy_7compute_DTYPE_t)))));
+
+  /* "smoomacypy/compute.pyx":163
+ *         raise MemoryError()
+ *     z2_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not z2_knownpts:             # <<<<<<<<<<<<<<
+ *         free(x_knownpts)
+ *         free(y_knownpts)
+ */
+  __pyx_t_6 = ((!(__pyx_v_z2_knownpts != 0)) != 0);
+  if (__pyx_t_6) {
+
+    /* "smoomacypy/compute.pyx":164
+ *     z2_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not z2_knownpts:
+ *         free(x_knownpts)             # <<<<<<<<<<<<<<
+ *         free(y_knownpts)
+ *         free(z1_knownpts)
+ */
+    free(__pyx_v_x_knownpts);
+
+    /* "smoomacypy/compute.pyx":165
+ *     if not z2_knownpts:
+ *         free(x_knownpts)
+ *         free(y_knownpts)             # <<<<<<<<<<<<<<
+ *         free(z1_knownpts)
+ *         raise MemoryError()
+ */
+    free(__pyx_v_y_knownpts);
+
+    /* "smoomacypy/compute.pyx":166
+ *         free(x_knownpts)
+ *         free(y_knownpts)
+ *         free(z1_knownpts)             # <<<<<<<<<<<<<<
+ *         raise MemoryError()
+ * 
+ */
+    free(__pyx_v_z1_knownpts);
+
+    /* "smoomacypy/compute.pyx":167
+ *         free(y_knownpts)
+ *         free(z1_knownpts)
+ *         raise MemoryError()             # <<<<<<<<<<<<<<
+ * 
+ *     with nogil:
+ */
+    PyErr_NoMemory(); __PYX_ERR(0, 167, __pyx_L1_error)
+
+    /* "smoomacypy/compute.pyx":163
+ *         raise MemoryError()
+ *     z2_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ *     if not z2_knownpts:             # <<<<<<<<<<<<<<
+ *         free(x_knownpts)
+ *         free(y_knownpts)
+ */
   }
-  __pyx_L4:;
 
-  /* "smoomacypy/compute.pyx":140
- *         smooth = pareto
+  /* "smoomacypy/compute.pyx":169
+ *         raise MemoryError()
  * 
- *     for ix_x in range(len_xi):             # <<<<<<<<<<<<<<
- *         x_cell = XI[ix_x]
- *         for ix_y in range(len_yi):
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]
  */
-  __pyx_t_6 = __pyx_v_len_xi;
-  for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
-    __pyx_v_ix_x = __pyx_t_7;
+  {
+      #ifdef WITH_THREAD
+      PyThreadState *_save;
+      Py_UNBLOCK_THREADS
+      __Pyx_FastGIL_Remember();
+      #endif
+      /*try:*/ {
 
-    /* "smoomacypy/compute.pyx":141
+        /* "smoomacypy/compute.pyx":170
  * 
- *     for ix_x in range(len_xi):
- *         x_cell = XI[ix_x]             # <<<<<<<<<<<<<<
- *         for ix_y in range(len_yi):
- *             y_cell= YI[ix_y]
+ *     with nogil:
+ *         for j in range(nb_pts):             # <<<<<<<<<<<<<<
+ *             point = knownpts[j]
+ *             x_knownpts[j] = point[<Py_ssize_t>0]
  */
-    __pyx_t_8 = __pyx_v_ix_x;
-    __pyx_v_x_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_XI.data) + __pyx_t_8)) )));
+        __pyx_t_7 = __pyx_v_nb_pts;
+        for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+          __pyx_v_j = __pyx_t_8;
 
-    /* "smoomacypy/compute.pyx":142
- *     for ix_x in range(len_xi):
- *         x_cell = XI[ix_x]
- *         for ix_y in range(len_yi):             # <<<<<<<<<<<<<<
- *             y_cell= YI[ix_y]
- *             _sum1 = 0.0
+          /* "smoomacypy/compute.pyx":171
+ *     with nogil:
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]             # <<<<<<<<<<<<<<
+ *             x_knownpts[j] = point[<Py_ssize_t>0]
+ *             y_knownpts[j] = point[<Py_ssize_t>1]
  */
-    __pyx_t_9 = __pyx_v_len_yi;
-    for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
-      __pyx_v_ix_y = __pyx_t_10;
-
-      /* "smoomacypy/compute.pyx":143
- *         x_cell = XI[ix_x]
- *         for ix_y in range(len_yi):
- *             y_cell= YI[ix_y]             # <<<<<<<<<<<<<<
- *             _sum1 = 0.0
- *             _sum2 = 0.0
- */
-      __pyx_t_11 = __pyx_v_ix_y;
-      __pyx_v_y_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_YI.data) + __pyx_t_11)) )));
-
-      /* "smoomacypy/compute.pyx":144
- *         for ix_y in range(len_yi):
- *             y_cell= YI[ix_y]
- *             _sum1 = 0.0             # <<<<<<<<<<<<<<
- *             _sum2 = 0.0
- *             for j in range(nb_pts):
- */
-      __pyx_v__sum1 = 0.0;
-
-      /* "smoomacypy/compute.pyx":145
- *             y_cell= YI[ix_y]
- *             _sum1 = 0.0
- *             _sum2 = 0.0             # <<<<<<<<<<<<<<
- *             for j in range(nb_pts):
- *                 point = knownpts[j]
- */
-      __pyx_v__sum2 = 0.0;
-
-      /* "smoomacypy/compute.pyx":146
- *             _sum1 = 0.0
- *             _sum2 = 0.0
- *             for j in range(nb_pts):             # <<<<<<<<<<<<<<
- *                 point = knownpts[j]
- *                 dist = dist_func(x_cell, y_cell, point[<Py_ssize_t>0], point[<Py_ssize_t>1])
- */
-      __pyx_t_12 = __pyx_v_nb_pts;
-      for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
-        __pyx_v_j = __pyx_t_13;
-
-        /* "smoomacypy/compute.pyx":147
- *             _sum2 = 0.0
- *             for j in range(nb_pts):
- *                 point = knownpts[j]             # <<<<<<<<<<<<<<
- *                 dist = dist_func(x_cell, y_cell, point[<Py_ssize_t>0], point[<Py_ssize_t>1])
- *                 t = smooth(alpha, beta, dist)
- */
-        __pyx_t_14.data = __pyx_v_knownpts.data;
-        __pyx_t_14.memview = __pyx_v_knownpts.memview;
-        __PYX_INC_MEMVIEW(&__pyx_t_14, 0);
-        {
+          __pyx_t_9.data = __pyx_v_knownpts.data;
+          __pyx_t_9.memview = __pyx_v_knownpts.memview;
+          __PYX_INC_MEMVIEW(&__pyx_t_9, 0);
+          {
     Py_ssize_t __pyx_tmp_idx = __pyx_v_j;
     Py_ssize_t __pyx_tmp_shape = __pyx_v_knownpts.shape[0];
     Py_ssize_t __pyx_tmp_stride = __pyx_v_knownpts.strides[0];
     if (0 && (__pyx_tmp_idx < 0))
         __pyx_tmp_idx += __pyx_tmp_shape;
     if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
+            #ifdef WITH_THREAD
+            PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+            #endif
         PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-        __PYX_ERR(0, 147, __pyx_L1_error)
+            #ifdef WITH_THREAD
+            PyGILState_Release(__pyx_gilstate_save);
+            #endif
+        __PYX_ERR(0, 171, __pyx_L8_error)
     }
-        __pyx_t_14.data += __pyx_tmp_idx * __pyx_tmp_stride;
+        __pyx_t_9.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
 
-__pyx_t_14.shape[0] = __pyx_v_knownpts.shape[1];
-__pyx_t_14.strides[0] = __pyx_v_knownpts.strides[1];
-    __pyx_t_14.suboffsets[0] = -1;
+__pyx_t_9.shape[0] = __pyx_v_knownpts.shape[1];
+__pyx_t_9.strides[0] = __pyx_v_knownpts.strides[1];
+    __pyx_t_9.suboffsets[0] = -1;
 
-__PYX_XDEC_MEMVIEW(&__pyx_v_point, 1);
-        __pyx_v_point = __pyx_t_14;
-        __pyx_t_14.memview = NULL;
-        __pyx_t_14.data = NULL;
+__PYX_XDEC_MEMVIEW(&__pyx_v_point, 0);
+          __pyx_v_point = __pyx_t_9;
+          __pyx_t_9.memview = NULL;
+          __pyx_t_9.data = NULL;
 
-        /* "smoomacypy/compute.pyx":148
- *             for j in range(nb_pts):
- *                 point = knownpts[j]
- *                 dist = dist_func(x_cell, y_cell, point[<Py_ssize_t>0], point[<Py_ssize_t>1])             # <<<<<<<<<<<<<<
- *                 t = smooth(alpha, beta, dist)
- *                 _sum1 += point[<Py_ssize_t>2] * t
+          /* "smoomacypy/compute.pyx":172
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]
+ *             x_knownpts[j] = point[<Py_ssize_t>0]             # <<<<<<<<<<<<<<
+ *             y_knownpts[j] = point[<Py_ssize_t>1]
+ *             z1_knownpts[j] = point[<Py_ssize_t>2]
  */
-        __pyx_t_15 = ((Py_ssize_t)0);
-        __pyx_t_16 = ((Py_ssize_t)1);
-        __pyx_v_dist = __pyx_v_dist_func(__pyx_v_x_cell, __pyx_v_y_cell, (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_15 * __pyx_v_point.strides[0]) ))), (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_16 * __pyx_v_point.strides[0]) ))));
+          __pyx_t_10 = ((Py_ssize_t)0);
+          (__pyx_v_x_knownpts[__pyx_v_j]) = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_10 * __pyx_v_point.strides[0]) )));
 
-        /* "smoomacypy/compute.pyx":149
- *                 point = knownpts[j]
- *                 dist = dist_func(x_cell, y_cell, point[<Py_ssize_t>0], point[<Py_ssize_t>1])
- *                 t = smooth(alpha, beta, dist)             # <<<<<<<<<<<<<<
- *                 _sum1 += point[<Py_ssize_t>2] * t
- *                 _sum2 += point[<Py_ssize_t>3] * t
+          /* "smoomacypy/compute.pyx":173
+ *             point = knownpts[j]
+ *             x_knownpts[j] = point[<Py_ssize_t>0]
+ *             y_knownpts[j] = point[<Py_ssize_t>1]             # <<<<<<<<<<<<<<
+ *             z1_knownpts[j] = point[<Py_ssize_t>2]
+ *             z2_knownpts[j] = point[<Py_ssize_t>3]
  */
-        __pyx_v_t = __pyx_v_smooth(__pyx_v_alpha, __pyx_v_beta, __pyx_v_dist);
+          __pyx_t_11 = ((Py_ssize_t)1);
+          (__pyx_v_y_knownpts[__pyx_v_j]) = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_11 * __pyx_v_point.strides[0]) )));
 
-        /* "smoomacypy/compute.pyx":150
- *                 dist = dist_func(x_cell, y_cell, point[<Py_ssize_t>0], point[<Py_ssize_t>1])
- *                 t = smooth(alpha, beta, dist)
- *                 _sum1 += point[<Py_ssize_t>2] * t             # <<<<<<<<<<<<<<
- *                 _sum2 += point[<Py_ssize_t>3] * t
- *             res[ix] = np.true_divide(_sum1, _sum2)  # _sum1 / _sum2
- */
-        __pyx_t_17 = ((Py_ssize_t)2);
-        __pyx_v__sum1 = (__pyx_v__sum1 + ((*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_17 * __pyx_v_point.strides[0]) ))) * __pyx_v_t));
-
-        /* "smoomacypy/compute.pyx":151
- *                 t = smooth(alpha, beta, dist)
- *                 _sum1 += point[<Py_ssize_t>2] * t
- *                 _sum2 += point[<Py_ssize_t>3] * t             # <<<<<<<<<<<<<<
- *             res[ix] = np.true_divide(_sum1, _sum2)  # _sum1 / _sum2
- *             ix += 1
- */
-        __pyx_t_18 = ((Py_ssize_t)3);
-        __pyx_v__sum2 = (__pyx_v__sum2 + ((*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_18 * __pyx_v_point.strides[0]) ))) * __pyx_v_t));
-      }
-
-      /* "smoomacypy/compute.pyx":152
- *                 _sum1 += point[<Py_ssize_t>2] * t
- *                 _sum2 += point[<Py_ssize_t>3] * t
- *             res[ix] = np.true_divide(_sum1, _sum2)  # _sum1 / _sum2             # <<<<<<<<<<<<<<
- *             ix += 1
- *     return res
- */
-      __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 152, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_true_divide); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 152, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = PyFloat_FromDouble(__pyx_v__sum1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 152, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_2 = PyFloat_FromDouble(__pyx_v__sum2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 152, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_19 = NULL;
-      __pyx_t_20 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-        __pyx_t_19 = PyMethod_GET_SELF(__pyx_t_3);
-        if (likely(__pyx_t_19)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-          __Pyx_INCREF(__pyx_t_19);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_3, function);
-          __pyx_t_20 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_3)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_19, __pyx_t_1, __pyx_t_2};
-        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_20, 2+__pyx_t_20); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 152, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_19); __pyx_t_19 = 0;
-        __Pyx_GOTREF(__pyx_t_4);
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_19, __pyx_t_1, __pyx_t_2};
-        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_20, 2+__pyx_t_20); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 152, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_19); __pyx_t_19 = 0;
-        __Pyx_GOTREF(__pyx_t_4);
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_21 = PyTuple_New(2+__pyx_t_20); if (unlikely(!__pyx_t_21)) __PYX_ERR(0, 152, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_21);
-        if (__pyx_t_19) {
-          __Pyx_GIVEREF(__pyx_t_19); PyTuple_SET_ITEM(__pyx_t_21, 0, __pyx_t_19); __pyx_t_19 = NULL;
-        }
-        __Pyx_GIVEREF(__pyx_t_1);
-        PyTuple_SET_ITEM(__pyx_t_21, 0+__pyx_t_20, __pyx_t_1);
-        __Pyx_GIVEREF(__pyx_t_2);
-        PyTuple_SET_ITEM(__pyx_t_21, 1+__pyx_t_20, __pyx_t_2);
-        __pyx_t_1 = 0;
-        __pyx_t_2 = 0;
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_21, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 152, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __Pyx_DECREF(__pyx_t_21); __pyx_t_21 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_res), __pyx_v_ix, __pyx_t_4, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 0, 0) < 0)) __PYX_ERR(0, 152, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-      /* "smoomacypy/compute.pyx":153
- *                 _sum2 += point[<Py_ssize_t>3] * t
- *             res[ix] = np.true_divide(_sum1, _sum2)  # _sum1 / _sum2
- *             ix += 1             # <<<<<<<<<<<<<<
- *     return res
+          /* "smoomacypy/compute.pyx":174
+ *             x_knownpts[j] = point[<Py_ssize_t>0]
+ *             y_knownpts[j] = point[<Py_ssize_t>1]
+ *             z1_knownpts[j] = point[<Py_ssize_t>2]             # <<<<<<<<<<<<<<
+ *             z2_knownpts[j] = point[<Py_ssize_t>3]
  * 
  */
-      __pyx_v_ix = (__pyx_v_ix + 1);
-    }
+          __pyx_t_12 = ((Py_ssize_t)2);
+          (__pyx_v_z1_knownpts[__pyx_v_j]) = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_12 * __pyx_v_point.strides[0]) )));
+
+          /* "smoomacypy/compute.pyx":175
+ *             y_knownpts[j] = point[<Py_ssize_t>1]
+ *             z1_knownpts[j] = point[<Py_ssize_t>2]
+ *             z2_knownpts[j] = point[<Py_ssize_t>3]             # <<<<<<<<<<<<<<
+ * 
+ *         if lonlat:
+ */
+          __pyx_t_13 = ((Py_ssize_t)3);
+          (__pyx_v_z2_knownpts[__pyx_v_j]) = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_13 * __pyx_v_point.strides[0]) )));
+        }
+
+        /* "smoomacypy/compute.pyx":177
+ *             z2_knownpts[j] = point[<Py_ssize_t>3]
+ * 
+ *         if lonlat:             # <<<<<<<<<<<<<<
+ *             dist_func = haversine
+ *         else:
+ */
+        __pyx_t_6 = (__pyx_v_lonlat != 0);
+        if (__pyx_t_6) {
+
+          /* "smoomacypy/compute.pyx":178
+ * 
+ *         if lonlat:
+ *             dist_func = haversine             # <<<<<<<<<<<<<<
+ *         else:
+ *             dist_func = euclidian
+ */
+          __pyx_v_dist_func = __pyx_f_10smoomacypy_7compute_haversine;
+
+          /* "smoomacypy/compute.pyx":177
+ *             z2_knownpts[j] = point[<Py_ssize_t>3]
+ * 
+ *         if lonlat:             # <<<<<<<<<<<<<<
+ *             dist_func = haversine
+ *         else:
+ */
+          goto __pyx_L12;
+        }
+
+        /* "smoomacypy/compute.pyx":180
+ *             dist_func = haversine
+ *         else:
+ *             dist_func = euclidian             # <<<<<<<<<<<<<<
+ * 
+ *         if expfunc:
+ */
+        /*else*/ {
+          __pyx_v_dist_func = __pyx_f_10smoomacypy_7compute_euclidian;
+        }
+        __pyx_L12:;
+
+        /* "smoomacypy/compute.pyx":182
+ *             dist_func = euclidian
+ * 
+ *         if expfunc:             # <<<<<<<<<<<<<<
+ *             smooth = exponential
+ *         else:
+ */
+        __pyx_t_6 = (__pyx_v_expfunc != 0);
+        if (__pyx_t_6) {
+
+          /* "smoomacypy/compute.pyx":183
+ * 
+ *         if expfunc:
+ *             smooth = exponential             # <<<<<<<<<<<<<<
+ *         else:
+ *             smooth = pareto
+ */
+          __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_exponential;
+
+          /* "smoomacypy/compute.pyx":182
+ *             dist_func = euclidian
+ * 
+ *         if expfunc:             # <<<<<<<<<<<<<<
+ *             smooth = exponential
+ *         else:
+ */
+          goto __pyx_L13;
+        }
+
+        /* "smoomacypy/compute.pyx":185
+ *             smooth = exponential
+ *         else:
+ *             smooth = pareto             # <<<<<<<<<<<<<<
+ * 
+ *         for ix_x in range(len_xi):
+ */
+        /*else*/ {
+          __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_pareto;
+        }
+        __pyx_L13:;
+
+        /* "smoomacypy/compute.pyx":187
+ *             smooth = pareto
+ * 
+ *         for ix_x in range(len_xi):             # <<<<<<<<<<<<<<
+ *             x_cell = XI[ix_x]
+ *             for ix_y in range(len_yi):
+ */
+        __pyx_t_7 = __pyx_v_len_xi;
+        for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+          __pyx_v_ix_x = __pyx_t_8;
+
+          /* "smoomacypy/compute.pyx":188
+ * 
+ *         for ix_x in range(len_xi):
+ *             x_cell = XI[ix_x]             # <<<<<<<<<<<<<<
+ *             for ix_y in range(len_yi):
+ *                 y_cell= YI[ix_y]
+ */
+          __pyx_t_14 = __pyx_v_ix_x;
+          __pyx_v_x_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_XI.data) + __pyx_t_14)) )));
+
+          /* "smoomacypy/compute.pyx":189
+ *         for ix_x in range(len_xi):
+ *             x_cell = XI[ix_x]
+ *             for ix_y in range(len_yi):             # <<<<<<<<<<<<<<
+ *                 y_cell= YI[ix_y]
+ *                 _sum1 = 0.0
+ */
+          __pyx_t_15 = __pyx_v_len_yi;
+          for (__pyx_t_16 = 0; __pyx_t_16 < __pyx_t_15; __pyx_t_16+=1) {
+            __pyx_v_ix_y = __pyx_t_16;
+
+            /* "smoomacypy/compute.pyx":190
+ *             x_cell = XI[ix_x]
+ *             for ix_y in range(len_yi):
+ *                 y_cell= YI[ix_y]             # <<<<<<<<<<<<<<
+ *                 _sum1 = 0.0
+ *                 _sum2 = 0.0
+ */
+            __pyx_t_17 = __pyx_v_ix_y;
+            __pyx_v_y_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_YI.data) + __pyx_t_17)) )));
+
+            /* "smoomacypy/compute.pyx":191
+ *             for ix_y in range(len_yi):
+ *                 y_cell= YI[ix_y]
+ *                 _sum1 = 0.0             # <<<<<<<<<<<<<<
+ *                 _sum2 = 0.0
+ *                 for j in range(nb_pts):
+ */
+            __pyx_v__sum1 = 0.0;
+
+            /* "smoomacypy/compute.pyx":192
+ *                 y_cell= YI[ix_y]
+ *                 _sum1 = 0.0
+ *                 _sum2 = 0.0             # <<<<<<<<<<<<<<
+ *                 for j in range(nb_pts):
+ *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
+ */
+            __pyx_v__sum2 = 0.0;
+
+            /* "smoomacypy/compute.pyx":193
+ *                 _sum1 = 0.0
+ *                 _sum2 = 0.0
+ *                 for j in range(nb_pts):             # <<<<<<<<<<<<<<
+ *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
+ *                     t = smooth(alpha, beta, dist)
+ */
+            __pyx_t_18 = __pyx_v_nb_pts;
+            for (__pyx_t_19 = 0; __pyx_t_19 < __pyx_t_18; __pyx_t_19+=1) {
+              __pyx_v_j = __pyx_t_19;
+
+              /* "smoomacypy/compute.pyx":194
+ *                 _sum2 = 0.0
+ *                 for j in range(nb_pts):
+ *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])             # <<<<<<<<<<<<<<
+ *                     t = smooth(alpha, beta, dist)
+ *                     _sum1 += z1_knownpts[j] * t
+ */
+              __pyx_v_dist = __pyx_v_dist_func(__pyx_v_x_cell, __pyx_v_y_cell, (__pyx_v_x_knownpts[__pyx_v_j]), (__pyx_v_y_knownpts[__pyx_v_j]));
+
+              /* "smoomacypy/compute.pyx":195
+ *                 for j in range(nb_pts):
+ *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
+ *                     t = smooth(alpha, beta, dist)             # <<<<<<<<<<<<<<
+ *                     _sum1 += z1_knownpts[j] * t
+ *                     _sum2 += z2_knownpts[j] * t
+ */
+              __pyx_v_t = __pyx_v_smooth(__pyx_v_alpha, __pyx_v_beta, __pyx_v_dist);
+
+              /* "smoomacypy/compute.pyx":196
+ *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
+ *                     t = smooth(alpha, beta, dist)
+ *                     _sum1 += z1_knownpts[j] * t             # <<<<<<<<<<<<<<
+ *                     _sum2 += z2_knownpts[j] * t
+ *                 res[ix] = _sum1 / _sum2
+ */
+              __pyx_v__sum1 = (__pyx_v__sum1 + ((__pyx_v_z1_knownpts[__pyx_v_j]) * __pyx_v_t));
+
+              /* "smoomacypy/compute.pyx":197
+ *                     t = smooth(alpha, beta, dist)
+ *                     _sum1 += z1_knownpts[j] * t
+ *                     _sum2 += z2_knownpts[j] * t             # <<<<<<<<<<<<<<
+ *                 res[ix] = _sum1 / _sum2
+ *                 ix += 1
+ */
+              __pyx_v__sum2 = (__pyx_v__sum2 + ((__pyx_v_z2_knownpts[__pyx_v_j]) * __pyx_v_t));
+            }
+
+            /* "smoomacypy/compute.pyx":198
+ *                     _sum1 += z1_knownpts[j] * t
+ *                     _sum2 += z2_knownpts[j] * t
+ *                 res[ix] = _sum1 / _sum2             # <<<<<<<<<<<<<<
+ *                 ix += 1
+ *         free(x_knownpts)
+ */
+            __pyx_t_20 = __pyx_v_ix;
+            *__Pyx_BufPtrCContig1d(__pyx_t_10smoomacypy_7compute_DTYPE_t *, __pyx_pybuffernd_res.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_res.diminfo[0].strides) = (__pyx_v__sum1 / __pyx_v__sum2);
+
+            /* "smoomacypy/compute.pyx":199
+ *                     _sum2 += z2_knownpts[j] * t
+ *                 res[ix] = _sum1 / _sum2
+ *                 ix += 1             # <<<<<<<<<<<<<<
+ *         free(x_knownpts)
+ *         free(y_knownpts)
+ */
+            __pyx_v_ix = (__pyx_v_ix + 1);
+          }
+        }
+
+        /* "smoomacypy/compute.pyx":200
+ *                 res[ix] = _sum1 / _sum2
+ *                 ix += 1
+ *         free(x_knownpts)             # <<<<<<<<<<<<<<
+ *         free(y_knownpts)
+ *         free(z1_knownpts)
+ */
+        free(__pyx_v_x_knownpts);
+
+        /* "smoomacypy/compute.pyx":201
+ *                 ix += 1
+ *         free(x_knownpts)
+ *         free(y_knownpts)             # <<<<<<<<<<<<<<
+ *         free(z1_knownpts)
+ *         free(z2_knownpts)
+ */
+        free(__pyx_v_y_knownpts);
+
+        /* "smoomacypy/compute.pyx":202
+ *         free(x_knownpts)
+ *         free(y_knownpts)
+ *         free(z1_knownpts)             # <<<<<<<<<<<<<<
+ *         free(z2_knownpts)
+ *     return res
+ */
+        free(__pyx_v_z1_knownpts);
+
+        /* "smoomacypy/compute.pyx":203
+ *         free(y_knownpts)
+ *         free(z1_knownpts)
+ *         free(z2_knownpts)             # <<<<<<<<<<<<<<
+ *     return res
+ */
+        free(__pyx_v_z2_knownpts);
+      }
+
+      /* "smoomacypy/compute.pyx":169
+ *         raise MemoryError()
+ * 
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]
+ */
+      /*finally:*/ {
+        /*normal exit:*/{
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L9;
+        }
+        __pyx_L8_error: {
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L1_error;
+        }
+        __pyx_L9:;
+      }
   }
 
-  /* "smoomacypy/compute.pyx":154
- *             res[ix] = np.true_divide(_sum1, _sum2)  # _sum1 / _sum2
- *             ix += 1
+  /* "smoomacypy/compute.pyx":204
+ *         free(z1_knownpts)
+ *         free(z2_knownpts)
  *     return res             # <<<<<<<<<<<<<<
- * 
- * 
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(((PyObject *)__pyx_v_res));
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "smoomacypy/compute.pyx":109
+  /* "smoomacypy/compute.pyx":124
  * 
  * 
  * cdef compute_2_var(             # <<<<<<<<<<<<<<
@@ -3815,12 +4391,19 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_point, 1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
-  __PYX_XDEC_MEMVIEW(&__pyx_t_14, 1);
-  __Pyx_XDECREF(__pyx_t_19);
-  __Pyx_XDECREF(__pyx_t_21);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_9, 1);
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
   __Pyx_AddTraceback("smoomacypy.compute.compute_2_var", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
+  goto __pyx_L2;
   __pyx_L0:;
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
+  __pyx_L2:;
   __PYX_XDEC_MEMVIEW(&__pyx_v_point, 1);
   __Pyx_XDECREF((PyObject *)__pyx_v_res);
   __Pyx_XGIVEREF(__pyx_r);
@@ -20032,7 +20615,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_stringsource, __pyx_k_stringsource, sizeof(__pyx_k_stringsource), 0, 0, 1, 0},
   {&__pyx_n_s_struct, __pyx_k_struct, sizeof(__pyx_k_struct), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
-  {&__pyx_n_s_true_divide, __pyx_k_true_divide, sizeof(__pyx_k_true_divide), 0, 0, 1, 1},
   {&__pyx_n_s_type_function, __pyx_k_type_function, sizeof(__pyx_k_type_function), 0, 0, 1, 1},
   {&__pyx_kp_s_unable_to_allocate_array_data, __pyx_k_unable_to_allocate_array_data, sizeof(__pyx_k_unable_to_allocate_array_data), 0, 0, 1, 0},
   {&__pyx_kp_s_unable_to_allocate_shape_and_str, __pyx_k_unable_to_allocate_shape_and_str, sizeof(__pyx_k_unable_to_allocate_shape_and_str), 0, 0, 1, 0},
@@ -20043,11 +20625,11 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 95, __pyx_L1_error)
+  __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(0, 80, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 92, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 235, __pyx_L1_error)
   __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(1, 823, __pyx_L1_error)
   __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(1, 1013, __pyx_L1_error)
-  __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(2, 146, __pyx_L1_error)
   __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) __PYX_ERR(2, 149, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(2, 2, __pyx_L1_error)
   __pyx_builtin_Ellipsis = __Pyx_GetBuiltinName(__pyx_n_s_Ellipsis); if (!__pyx_builtin_Ellipsis) __PYX_ERR(2, 398, __pyx_L1_error)
@@ -20362,17 +20944,17 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__28);
   __Pyx_GIVEREF(__pyx_tuple__28);
 
-  /* "smoomacypy/compute.pyx":39
+  /* "smoomacypy/compute.pyx":40
  * 
  * 
  * def _compute_stewart(knownpts, XI, YI, nb_var, type_function, span, beta, lonlat):             # <<<<<<<<<<<<<<
  *     if type_function == 'exponential':
  *         alpha = 0.6931471805 / pow(span, beta)
  */
-  __pyx_tuple__29 = PyTuple_Pack(10, __pyx_n_s_knownpts, __pyx_n_s_XI, __pyx_n_s_YI, __pyx_n_s_nb_var, __pyx_n_s_type_function, __pyx_n_s_span, __pyx_n_s_beta, __pyx_n_s_lonlat, __pyx_n_s_alpha, __pyx_n_s_expfunc); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_tuple__29 = PyTuple_Pack(10, __pyx_n_s_knownpts, __pyx_n_s_XI, __pyx_n_s_YI, __pyx_n_s_nb_var, __pyx_n_s_type_function, __pyx_n_s_span, __pyx_n_s_beta, __pyx_n_s_lonlat, __pyx_n_s_alpha, __pyx_n_s_expfunc); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__29);
   __Pyx_GIVEREF(__pyx_tuple__29);
-  __pyx_codeobj__30 = (PyObject*)__Pyx_PyCode_New(8, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__29, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_smoomacypy_compute_pyx, __pyx_n_s_compute_stewart, 39, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__30)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_codeobj__30 = (PyObject*)__Pyx_PyCode_New(8, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__29, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_smoomacypy_compute_pyx, __pyx_n_s_compute_stewart, 40, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__30)) __PYX_ERR(0, 40, __pyx_L1_error)
 
   /* "View.MemoryView":284
  *         return self.name
@@ -20656,43 +21238,43 @@ static int __pyx_pymod_exec_compute(PyObject *__pyx_pyinit_module)
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "smoomacypy/compute.pyx":7
- * #cython: cdivision=True
+  /* "smoomacypy/compute.pyx":8
  * from libc.math cimport sin, cos, asin, sqrt, exp, pow as _pow
+ * from libc.stdlib cimport malloc, free
  * import numpy as np             # <<<<<<<<<<<<<<
  * cimport numpy as np
  * 
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 7, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 8, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 7, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 8, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "smoomacypy/compute.pyx":11
+  /* "smoomacypy/compute.pyx":12
  * 
  * 
  * DTYPE = np.double             # <<<<<<<<<<<<<<
  * ctypedef np.double_t DTYPE_t
- * ctypedef float (*DIST_FUNC)(float, float, float, float)
+ * ctypedef float (*DIST_FUNC)(float, float, float, float) nogil
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 11, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_double); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 11, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_double); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DTYPE, __pyx_t_2) < 0) __PYX_ERR(0, 11, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DTYPE, __pyx_t_2) < 0) __PYX_ERR(0, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "smoomacypy/compute.pyx":39
+  /* "smoomacypy/compute.pyx":40
  * 
  * 
  * def _compute_stewart(knownpts, XI, YI, nb_var, type_function, span, beta, lonlat):             # <<<<<<<<<<<<<<
  *     if type_function == 'exponential':
  *         alpha = 0.6931471805 / pow(span, beta)
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_10smoomacypy_7compute_1_compute_stewart, NULL, __pyx_n_s_smoomacypy_compute); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_10smoomacypy_7compute_1_compute_stewart, NULL, __pyx_n_s_smoomacypy_compute); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_compute_stewart, __pyx_t_2) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_compute_stewart, __pyx_t_2) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "smoomacypy/compute.pyx":1
@@ -21661,196 +22243,563 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg
     return 0;
 }
 
-/* SetItemInt */
-    static int __Pyx_SetItemInt_Generic(PyObject *o, PyObject *j, PyObject *v) {
-    int r;
-    if (!j) return -1;
-    r = PyObject_SetItem(o, j, v);
-    Py_DECREF(j);
-    return r;
-}
-static CYTHON_INLINE int __Pyx_SetItemInt_Fast(PyObject *o, Py_ssize_t i, PyObject *v, int is_list,
-                                               CYTHON_NCP_UNUSED int wraparound, CYTHON_NCP_UNUSED int boundscheck) {
-#if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS && CYTHON_USE_TYPE_SLOTS
-    if (is_list || PyList_CheckExact(o)) {
-        Py_ssize_t n = (!wraparound) ? i : ((likely(i >= 0)) ? i : i + PyList_GET_SIZE(o));
-        if ((!boundscheck) || likely((n >= 0) & (n < PyList_GET_SIZE(o)))) {
-            PyObject* old = PyList_GET_ITEM(o, n);
-            Py_INCREF(v);
-            PyList_SET_ITEM(o, n, v);
-            Py_DECREF(old);
-            return 1;
-        }
-    } else {
-        PySequenceMethods *m = Py_TYPE(o)->tp_as_sequence;
-        if (likely(m && m->sq_ass_item)) {
-            if (wraparound && unlikely(i < 0) && likely(m->sq_length)) {
-                Py_ssize_t l = m->sq_length(o);
-                if (likely(l >= 0)) {
-                    i += l;
-                } else {
-                    if (!PyErr_ExceptionMatches(PyExc_OverflowError))
-                        return -1;
-                    PyErr_Clear();
-                }
-            }
-            return m->sq_ass_item(o, i, v);
-        }
-    }
-#else
-#if CYTHON_COMPILING_IN_PYPY
-    if (is_list || (PySequence_Check(o) && !PyDict_Check(o))) {
-#else
-    if (is_list || PySequence_Check(o)) {
-#endif
-        return PySequence_SetItem(o, i, v);
-    }
-#endif
-    return __Pyx_SetItemInt_Generic(o, PyInt_FromSsize_t(i), v);
+/* IsLittleEndian */
+    static CYTHON_INLINE int __Pyx_Is_Little_Endian(void)
+{
+  union {
+    uint32_t u32;
+    uint8_t u8[4];
+  } S;
+  S.u32 = 0x01020304;
+  return S.u8[0] == 4;
 }
 
-/* PyFunctionFastCall */
-      #if CYTHON_FAST_PYCALL
-#include "frameobject.h"
-static PyObject* __Pyx_PyFunction_FastCallNoKw(PyCodeObject *co, PyObject **args, Py_ssize_t na,
-                                               PyObject *globals) {
-    PyFrameObject *f;
-    PyThreadState *tstate = __Pyx_PyThreadState_Current;
-    PyObject **fastlocals;
-    Py_ssize_t i;
-    PyObject *result;
-    assert(globals != NULL);
-    /* XXX Perhaps we should create a specialized
-       PyFrame_New() that doesn't take locals, but does
-       take builtins without sanity checking them.
-       */
-    assert(tstate != NULL);
-    f = PyFrame_New(tstate, co, globals, NULL);
-    if (f == NULL) {
-        return NULL;
-    }
-    fastlocals = f->f_localsplus;
-    for (i = 0; i < na; i++) {
-        Py_INCREF(*args);
-        fastlocals[i] = *args++;
-    }
-    result = PyEval_EvalFrameEx(f,0);
-    ++tstate->recursion_depth;
-    Py_DECREF(f);
-    --tstate->recursion_depth;
-    return result;
+/* BufferFormatCheck */
+    static void __Pyx_BufFmt_Init(__Pyx_BufFmt_Context* ctx,
+                              __Pyx_BufFmt_StackElem* stack,
+                              __Pyx_TypeInfo* type) {
+  stack[0].field = &ctx->root;
+  stack[0].parent_offset = 0;
+  ctx->root.type = type;
+  ctx->root.name = "buffer dtype";
+  ctx->root.offset = 0;
+  ctx->head = stack;
+  ctx->head->field = &ctx->root;
+  ctx->fmt_offset = 0;
+  ctx->head->parent_offset = 0;
+  ctx->new_packmode = '@';
+  ctx->enc_packmode = '@';
+  ctx->new_count = 1;
+  ctx->enc_count = 0;
+  ctx->enc_type = 0;
+  ctx->is_complex = 0;
+  ctx->is_valid_array = 0;
+  ctx->struct_alignment = 0;
+  while (type->typegroup == 'S') {
+    ++ctx->head;
+    ctx->head->field = type->fields;
+    ctx->head->parent_offset = 0;
+    type = type->fields->type;
+  }
 }
-#if 1 || PY_VERSION_HEX < 0x030600B1
-static PyObject *__Pyx_PyFunction_FastCallDict(PyObject *func, PyObject **args, int nargs, PyObject *kwargs) {
-    PyCodeObject *co = (PyCodeObject *)PyFunction_GET_CODE(func);
-    PyObject *globals = PyFunction_GET_GLOBALS(func);
-    PyObject *argdefs = PyFunction_GET_DEFAULTS(func);
-    PyObject *closure;
-#if PY_MAJOR_VERSION >= 3
-    PyObject *kwdefs;
-#endif
-    PyObject *kwtuple, **k;
-    PyObject **d;
-    Py_ssize_t nd;
-    Py_ssize_t nk;
-    PyObject *result;
-    assert(kwargs == NULL || PyDict_Check(kwargs));
-    nk = kwargs ? PyDict_Size(kwargs) : 0;
-    if (Py_EnterRecursiveCall((char*)" while calling a Python object")) {
-        return NULL;
-    }
-    if (
-#if PY_MAJOR_VERSION >= 3
-            co->co_kwonlyargcount == 0 &&
-#endif
-            likely(kwargs == NULL || nk == 0) &&
-            co->co_flags == (CO_OPTIMIZED | CO_NEWLOCALS | CO_NOFREE)) {
-        if (argdefs == NULL && co->co_argcount == nargs) {
-            result = __Pyx_PyFunction_FastCallNoKw(co, args, nargs, globals);
-            goto done;
-        }
-        else if (nargs == 0 && argdefs != NULL
-                 && co->co_argcount == Py_SIZE(argdefs)) {
-            /* function called with no arguments, but all parameters have
-               a default value: use default values as arguments .*/
-            args = &PyTuple_GET_ITEM(argdefs, 0);
-            result =__Pyx_PyFunction_FastCallNoKw(co, args, Py_SIZE(argdefs), globals);
-            goto done;
-        }
-    }
-    if (kwargs != NULL) {
-        Py_ssize_t pos, i;
-        kwtuple = PyTuple_New(2 * nk);
-        if (kwtuple == NULL) {
-            result = NULL;
-            goto done;
-        }
-        k = &PyTuple_GET_ITEM(kwtuple, 0);
-        pos = i = 0;
-        while (PyDict_Next(kwargs, &pos, &k[i], &k[i+1])) {
-            Py_INCREF(k[i]);
-            Py_INCREF(k[i+1]);
-            i += 2;
-        }
-        nk = i / 2;
-    }
-    else {
-        kwtuple = NULL;
-        k = NULL;
-    }
-    closure = PyFunction_GET_CLOSURE(func);
-#if PY_MAJOR_VERSION >= 3
-    kwdefs = PyFunction_GET_KW_DEFAULTS(func);
-#endif
-    if (argdefs != NULL) {
-        d = &PyTuple_GET_ITEM(argdefs, 0);
-        nd = Py_SIZE(argdefs);
-    }
-    else {
-        d = NULL;
-        nd = 0;
-    }
-#if PY_MAJOR_VERSION >= 3
-    result = PyEval_EvalCodeEx((PyObject*)co, globals, (PyObject *)NULL,
-                               args, nargs,
-                               k, (int)nk,
-                               d, (int)nd, kwdefs, closure);
-#else
-    result = PyEval_EvalCodeEx(co, globals, (PyObject *)NULL,
-                               args, nargs,
-                               k, (int)nk,
-                               d, (int)nd, closure);
-#endif
-    Py_XDECREF(kwtuple);
-done:
-    Py_LeaveRecursiveCall();
-    return result;
-}
-#endif
-#endif
-
-/* PyCFunctionFastCall */
-      #if CYTHON_FAST_PYCCALL
-static CYTHON_INLINE PyObject * __Pyx_PyCFunction_FastCall(PyObject *func_obj, PyObject **args, Py_ssize_t nargs) {
-    PyCFunctionObject *func = (PyCFunctionObject*)func_obj;
-    PyCFunction meth = PyCFunction_GET_FUNCTION(func);
-    PyObject *self = PyCFunction_GET_SELF(func);
-    int flags = PyCFunction_GET_FLAGS(func);
-    assert(PyCFunction_Check(func));
-    assert(METH_FASTCALL == (flags & ~(METH_CLASS | METH_STATIC | METH_COEXIST | METH_KEYWORDS)));
-    assert(nargs >= 0);
-    assert(nargs == 0 || args != NULL);
-    /* _PyCFunction_FastCallDict() must not be called with an exception set,
-       because it may clear it (directly or indirectly) and so the
-       caller loses its exception */
-    assert(!PyErr_Occurred());
-    if ((PY_VERSION_HEX < 0x030700A0) || unlikely(flags & METH_KEYWORDS)) {
-        return (*((__Pyx_PyCFunctionFastWithKeywords)meth)) (self, args, nargs, NULL);
+static int __Pyx_BufFmt_ParseNumber(const char** ts) {
+    int count;
+    const char* t = *ts;
+    if (*t < '0' || *t > '9') {
+      return -1;
     } else {
-        return (*((__Pyx_PyCFunctionFast)meth)) (self, args, nargs);
+        count = *t++ - '0';
+        while (*t >= '0' && *t < '9') {
+            count *= 10;
+            count += *t++ - '0';
+        }
+    }
+    *ts = t;
+    return count;
+}
+static int __Pyx_BufFmt_ExpectNumber(const char **ts) {
+    int number = __Pyx_BufFmt_ParseNumber(ts);
+    if (number == -1)
+        PyErr_Format(PyExc_ValueError,\
+                     "Does not understand character buffer dtype format string ('%c')", **ts);
+    return number;
+}
+static void __Pyx_BufFmt_RaiseUnexpectedChar(char ch) {
+  PyErr_Format(PyExc_ValueError,
+               "Unexpected format string character: '%c'", ch);
+}
+static const char* __Pyx_BufFmt_DescribeTypeChar(char ch, int is_complex) {
+  switch (ch) {
+    case 'c': return "'char'";
+    case 'b': return "'signed char'";
+    case 'B': return "'unsigned char'";
+    case 'h': return "'short'";
+    case 'H': return "'unsigned short'";
+    case 'i': return "'int'";
+    case 'I': return "'unsigned int'";
+    case 'l': return "'long'";
+    case 'L': return "'unsigned long'";
+    case 'q': return "'long long'";
+    case 'Q': return "'unsigned long long'";
+    case 'f': return (is_complex ? "'complex float'" : "'float'");
+    case 'd': return (is_complex ? "'complex double'" : "'double'");
+    case 'g': return (is_complex ? "'complex long double'" : "'long double'");
+    case 'T': return "a struct";
+    case 'O': return "Python object";
+    case 'P': return "a pointer";
+    case 's': case 'p': return "a string";
+    case 0: return "end";
+    default: return "unparseable format string";
+  }
+}
+static size_t __Pyx_BufFmt_TypeCharToStandardSize(char ch, int is_complex) {
+  switch (ch) {
+    case '?': case 'c': case 'b': case 'B': case 's': case 'p': return 1;
+    case 'h': case 'H': return 2;
+    case 'i': case 'I': case 'l': case 'L': return 4;
+    case 'q': case 'Q': return 8;
+    case 'f': return (is_complex ? 8 : 4);
+    case 'd': return (is_complex ? 16 : 8);
+    case 'g': {
+      PyErr_SetString(PyExc_ValueError, "Python does not define a standard format string size for long double ('g')..");
+      return 0;
+    }
+    case 'O': case 'P': return sizeof(void*);
+    default:
+      __Pyx_BufFmt_RaiseUnexpectedChar(ch);
+      return 0;
     }
 }
+static size_t __Pyx_BufFmt_TypeCharToNativeSize(char ch, int is_complex) {
+  switch (ch) {
+    case 'c': case 'b': case 'B': case 's': case 'p': return 1;
+    case 'h': case 'H': return sizeof(short);
+    case 'i': case 'I': return sizeof(int);
+    case 'l': case 'L': return sizeof(long);
+    #ifdef HAVE_LONG_LONG
+    case 'q': case 'Q': return sizeof(PY_LONG_LONG);
+    #endif
+    case 'f': return sizeof(float) * (is_complex ? 2 : 1);
+    case 'd': return sizeof(double) * (is_complex ? 2 : 1);
+    case 'g': return sizeof(long double) * (is_complex ? 2 : 1);
+    case 'O': case 'P': return sizeof(void*);
+    default: {
+      __Pyx_BufFmt_RaiseUnexpectedChar(ch);
+      return 0;
+    }
+  }
+}
+typedef struct { char c; short x; } __Pyx_st_short;
+typedef struct { char c; int x; } __Pyx_st_int;
+typedef struct { char c; long x; } __Pyx_st_long;
+typedef struct { char c; float x; } __Pyx_st_float;
+typedef struct { char c; double x; } __Pyx_st_double;
+typedef struct { char c; long double x; } __Pyx_st_longdouble;
+typedef struct { char c; void *x; } __Pyx_st_void_p;
+#ifdef HAVE_LONG_LONG
+typedef struct { char c; PY_LONG_LONG x; } __Pyx_st_longlong;
 #endif
+static size_t __Pyx_BufFmt_TypeCharToAlignment(char ch, CYTHON_UNUSED int is_complex) {
+  switch (ch) {
+    case '?': case 'c': case 'b': case 'B': case 's': case 'p': return 1;
+    case 'h': case 'H': return sizeof(__Pyx_st_short) - sizeof(short);
+    case 'i': case 'I': return sizeof(__Pyx_st_int) - sizeof(int);
+    case 'l': case 'L': return sizeof(__Pyx_st_long) - sizeof(long);
+#ifdef HAVE_LONG_LONG
+    case 'q': case 'Q': return sizeof(__Pyx_st_longlong) - sizeof(PY_LONG_LONG);
+#endif
+    case 'f': return sizeof(__Pyx_st_float) - sizeof(float);
+    case 'd': return sizeof(__Pyx_st_double) - sizeof(double);
+    case 'g': return sizeof(__Pyx_st_longdouble) - sizeof(long double);
+    case 'P': case 'O': return sizeof(__Pyx_st_void_p) - sizeof(void*);
+    default:
+      __Pyx_BufFmt_RaiseUnexpectedChar(ch);
+      return 0;
+    }
+}
+/* These are for computing the padding at the end of the struct to align
+   on the first member of the struct. This will probably the same as above,
+   but we don't have any guarantees.
+ */
+typedef struct { short x; char c; } __Pyx_pad_short;
+typedef struct { int x; char c; } __Pyx_pad_int;
+typedef struct { long x; char c; } __Pyx_pad_long;
+typedef struct { float x; char c; } __Pyx_pad_float;
+typedef struct { double x; char c; } __Pyx_pad_double;
+typedef struct { long double x; char c; } __Pyx_pad_longdouble;
+typedef struct { void *x; char c; } __Pyx_pad_void_p;
+#ifdef HAVE_LONG_LONG
+typedef struct { PY_LONG_LONG x; char c; } __Pyx_pad_longlong;
+#endif
+static size_t __Pyx_BufFmt_TypeCharToPadding(char ch, CYTHON_UNUSED int is_complex) {
+  switch (ch) {
+    case '?': case 'c': case 'b': case 'B': case 's': case 'p': return 1;
+    case 'h': case 'H': return sizeof(__Pyx_pad_short) - sizeof(short);
+    case 'i': case 'I': return sizeof(__Pyx_pad_int) - sizeof(int);
+    case 'l': case 'L': return sizeof(__Pyx_pad_long) - sizeof(long);
+#ifdef HAVE_LONG_LONG
+    case 'q': case 'Q': return sizeof(__Pyx_pad_longlong) - sizeof(PY_LONG_LONG);
+#endif
+    case 'f': return sizeof(__Pyx_pad_float) - sizeof(float);
+    case 'd': return sizeof(__Pyx_pad_double) - sizeof(double);
+    case 'g': return sizeof(__Pyx_pad_longdouble) - sizeof(long double);
+    case 'P': case 'O': return sizeof(__Pyx_pad_void_p) - sizeof(void*);
+    default:
+      __Pyx_BufFmt_RaiseUnexpectedChar(ch);
+      return 0;
+    }
+}
+static char __Pyx_BufFmt_TypeCharToGroup(char ch, int is_complex) {
+  switch (ch) {
+    case 'c':
+        return 'H';
+    case 'b': case 'h': case 'i':
+    case 'l': case 'q': case 's': case 'p':
+        return 'I';
+    case 'B': case 'H': case 'I': case 'L': case 'Q':
+        return 'U';
+    case 'f': case 'd': case 'g':
+        return (is_complex ? 'C' : 'R');
+    case 'O':
+        return 'O';
+    case 'P':
+        return 'P';
+    default: {
+      __Pyx_BufFmt_RaiseUnexpectedChar(ch);
+      return 0;
+    }
+  }
+}
+static void __Pyx_BufFmt_RaiseExpected(__Pyx_BufFmt_Context* ctx) {
+  if (ctx->head == NULL || ctx->head->field == &ctx->root) {
+    const char* expected;
+    const char* quote;
+    if (ctx->head == NULL) {
+      expected = "end";
+      quote = "";
+    } else {
+      expected = ctx->head->field->type->name;
+      quote = "'";
+    }
+    PyErr_Format(PyExc_ValueError,
+                 "Buffer dtype mismatch, expected %s%s%s but got %s",
+                 quote, expected, quote,
+                 __Pyx_BufFmt_DescribeTypeChar(ctx->enc_type, ctx->is_complex));
+  } else {
+    __Pyx_StructField* field = ctx->head->field;
+    __Pyx_StructField* parent = (ctx->head - 1)->field;
+    PyErr_Format(PyExc_ValueError,
+                 "Buffer dtype mismatch, expected '%s' but got %s in '%s.%s'",
+                 field->type->name, __Pyx_BufFmt_DescribeTypeChar(ctx->enc_type, ctx->is_complex),
+                 parent->type->name, field->name);
+  }
+}
+static int __Pyx_BufFmt_ProcessTypeChunk(__Pyx_BufFmt_Context* ctx) {
+  char group;
+  size_t size, offset, arraysize = 1;
+  if (ctx->enc_type == 0) return 0;
+  if (ctx->head->field->type->arraysize[0]) {
+    int i, ndim = 0;
+    if (ctx->enc_type == 's' || ctx->enc_type == 'p') {
+        ctx->is_valid_array = ctx->head->field->type->ndim == 1;
+        ndim = 1;
+        if (ctx->enc_count != ctx->head->field->type->arraysize[0]) {
+            PyErr_Format(PyExc_ValueError,
+                         "Expected a dimension of size %zu, got %zu",
+                         ctx->head->field->type->arraysize[0], ctx->enc_count);
+            return -1;
+        }
+    }
+    if (!ctx->is_valid_array) {
+      PyErr_Format(PyExc_ValueError, "Expected %d dimensions, got %d",
+                   ctx->head->field->type->ndim, ndim);
+      return -1;
+    }
+    for (i = 0; i < ctx->head->field->type->ndim; i++) {
+      arraysize *= ctx->head->field->type->arraysize[i];
+    }
+    ctx->is_valid_array = 0;
+    ctx->enc_count = 1;
+  }
+  group = __Pyx_BufFmt_TypeCharToGroup(ctx->enc_type, ctx->is_complex);
+  do {
+    __Pyx_StructField* field = ctx->head->field;
+    __Pyx_TypeInfo* type = field->type;
+    if (ctx->enc_packmode == '@' || ctx->enc_packmode == '^') {
+      size = __Pyx_BufFmt_TypeCharToNativeSize(ctx->enc_type, ctx->is_complex);
+    } else {
+      size = __Pyx_BufFmt_TypeCharToStandardSize(ctx->enc_type, ctx->is_complex);
+    }
+    if (ctx->enc_packmode == '@') {
+      size_t align_at = __Pyx_BufFmt_TypeCharToAlignment(ctx->enc_type, ctx->is_complex);
+      size_t align_mod_offset;
+      if (align_at == 0) return -1;
+      align_mod_offset = ctx->fmt_offset % align_at;
+      if (align_mod_offset > 0) ctx->fmt_offset += align_at - align_mod_offset;
+      if (ctx->struct_alignment == 0)
+          ctx->struct_alignment = __Pyx_BufFmt_TypeCharToPadding(ctx->enc_type,
+                                                                 ctx->is_complex);
+    }
+    if (type->size != size || type->typegroup != group) {
+      if (type->typegroup == 'C' && type->fields != NULL) {
+        size_t parent_offset = ctx->head->parent_offset + field->offset;
+        ++ctx->head;
+        ctx->head->field = type->fields;
+        ctx->head->parent_offset = parent_offset;
+        continue;
+      }
+      if ((type->typegroup == 'H' || group == 'H') && type->size == size) {
+      } else {
+          __Pyx_BufFmt_RaiseExpected(ctx);
+          return -1;
+      }
+    }
+    offset = ctx->head->parent_offset + field->offset;
+    if (ctx->fmt_offset != offset) {
+      PyErr_Format(PyExc_ValueError,
+                   "Buffer dtype mismatch; next field is at offset %" CYTHON_FORMAT_SSIZE_T "d but %" CYTHON_FORMAT_SSIZE_T "d expected",
+                   (Py_ssize_t)ctx->fmt_offset, (Py_ssize_t)offset);
+      return -1;
+    }
+    ctx->fmt_offset += size;
+    if (arraysize)
+      ctx->fmt_offset += (arraysize - 1) * size;
+    --ctx->enc_count;
+    while (1) {
+      if (field == &ctx->root) {
+        ctx->head = NULL;
+        if (ctx->enc_count != 0) {
+          __Pyx_BufFmt_RaiseExpected(ctx);
+          return -1;
+        }
+        break;
+      }
+      ctx->head->field = ++field;
+      if (field->type == NULL) {
+        --ctx->head;
+        field = ctx->head->field;
+        continue;
+      } else if (field->type->typegroup == 'S') {
+        size_t parent_offset = ctx->head->parent_offset + field->offset;
+        if (field->type->fields->type == NULL) continue;
+        field = field->type->fields;
+        ++ctx->head;
+        ctx->head->field = field;
+        ctx->head->parent_offset = parent_offset;
+        break;
+      } else {
+        break;
+      }
+    }
+  } while (ctx->enc_count);
+  ctx->enc_type = 0;
+  ctx->is_complex = 0;
+  return 0;
+}
+static PyObject *
+__pyx_buffmt_parse_array(__Pyx_BufFmt_Context* ctx, const char** tsp)
+{
+    const char *ts = *tsp;
+    int i = 0, number;
+    int ndim = ctx->head->field->type->ndim;
+;
+    ++ts;
+    if (ctx->new_count != 1) {
+        PyErr_SetString(PyExc_ValueError,
+                        "Cannot handle repeated arrays in format string");
+        return NULL;
+    }
+    if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
+    while (*ts && *ts != ')') {
+        switch (*ts) {
+            case ' ': case '\f': case '\r': case '\n': case '\t': case '\v':  continue;
+            default:  break;
+        }
+        number = __Pyx_BufFmt_ExpectNumber(&ts);
+        if (number == -1) return NULL;
+        if (i < ndim && (size_t) number != ctx->head->field->type->arraysize[i])
+            return PyErr_Format(PyExc_ValueError,
+                        "Expected a dimension of size %zu, got %d",
+                        ctx->head->field->type->arraysize[i], number);
+        if (*ts != ',' && *ts != ')')
+            return PyErr_Format(PyExc_ValueError,
+                                "Expected a comma in format string, got '%c'", *ts);
+        if (*ts == ',') ts++;
+        i++;
+    }
+    if (i != ndim)
+        return PyErr_Format(PyExc_ValueError, "Expected %d dimension(s), got %d",
+                            ctx->head->field->type->ndim, i);
+    if (!*ts) {
+        PyErr_SetString(PyExc_ValueError,
+                        "Unexpected end of format string, expected ')'");
+        return NULL;
+    }
+    ctx->is_valid_array = 1;
+    ctx->new_count = 1;
+    *tsp = ++ts;
+    return Py_None;
+}
+static const char* __Pyx_BufFmt_CheckString(__Pyx_BufFmt_Context* ctx, const char* ts) {
+  int got_Z = 0;
+  while (1) {
+    switch(*ts) {
+      case 0:
+        if (ctx->enc_type != 0 && ctx->head == NULL) {
+          __Pyx_BufFmt_RaiseExpected(ctx);
+          return NULL;
+        }
+        if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
+        if (ctx->head != NULL) {
+          __Pyx_BufFmt_RaiseExpected(ctx);
+          return NULL;
+        }
+        return ts;
+      case ' ':
+      case '\r':
+      case '\n':
+        ++ts;
+        break;
+      case '<':
+        if (!__Pyx_Is_Little_Endian()) {
+          PyErr_SetString(PyExc_ValueError, "Little-endian buffer not supported on big-endian compiler");
+          return NULL;
+        }
+        ctx->new_packmode = '=';
+        ++ts;
+        break;
+      case '>':
+      case '!':
+        if (__Pyx_Is_Little_Endian()) {
+          PyErr_SetString(PyExc_ValueError, "Big-endian buffer not supported on little-endian compiler");
+          return NULL;
+        }
+        ctx->new_packmode = '=';
+        ++ts;
+        break;
+      case '=':
+      case '@':
+      case '^':
+        ctx->new_packmode = *ts++;
+        break;
+      case 'T':
+        {
+          const char* ts_after_sub;
+          size_t i, struct_count = ctx->new_count;
+          size_t struct_alignment = ctx->struct_alignment;
+          ctx->new_count = 1;
+          ++ts;
+          if (*ts != '{') {
+            PyErr_SetString(PyExc_ValueError, "Buffer acquisition: Expected '{' after 'T'");
+            return NULL;
+          }
+          if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
+          ctx->enc_type = 0;
+          ctx->enc_count = 0;
+          ctx->struct_alignment = 0;
+          ++ts;
+          ts_after_sub = ts;
+          for (i = 0; i != struct_count; ++i) {
+            ts_after_sub = __Pyx_BufFmt_CheckString(ctx, ts);
+            if (!ts_after_sub) return NULL;
+          }
+          ts = ts_after_sub;
+          if (struct_alignment) ctx->struct_alignment = struct_alignment;
+        }
+        break;
+      case '}':
+        {
+          size_t alignment = ctx->struct_alignment;
+          ++ts;
+          if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
+          ctx->enc_type = 0;
+          if (alignment && ctx->fmt_offset % alignment) {
+            ctx->fmt_offset += alignment - (ctx->fmt_offset % alignment);
+          }
+        }
+        return ts;
+      case 'x':
+        if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
+        ctx->fmt_offset += ctx->new_count;
+        ctx->new_count = 1;
+        ctx->enc_count = 0;
+        ctx->enc_type = 0;
+        ctx->enc_packmode = ctx->new_packmode;
+        ++ts;
+        break;
+      case 'Z':
+        got_Z = 1;
+        ++ts;
+        if (*ts != 'f' && *ts != 'd' && *ts != 'g') {
+          __Pyx_BufFmt_RaiseUnexpectedChar('Z');
+          return NULL;
+        }
+      case 'c': case 'b': case 'B': case 'h': case 'H': case 'i': case 'I':
+      case 'l': case 'L': case 'q': case 'Q':
+      case 'f': case 'd': case 'g':
+      case 'O': case 'p':
+        if (ctx->enc_type == *ts && got_Z == ctx->is_complex &&
+            ctx->enc_packmode == ctx->new_packmode) {
+          ctx->enc_count += ctx->new_count;
+          ctx->new_count = 1;
+          got_Z = 0;
+          ++ts;
+          break;
+        }
+      case 's':
+        if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
+        ctx->enc_count = ctx->new_count;
+        ctx->enc_packmode = ctx->new_packmode;
+        ctx->enc_type = *ts;
+        ctx->is_complex = got_Z;
+        ++ts;
+        ctx->new_count = 1;
+        got_Z = 0;
+        break;
+      case ':':
+        ++ts;
+        while(*ts != ':') ++ts;
+        ++ts;
+        break;
+      case '(':
+        if (!__pyx_buffmt_parse_array(ctx, &ts)) return NULL;
+        break;
+      default:
+        {
+          int number = __Pyx_BufFmt_ExpectNumber(&ts);
+          if (number == -1) return NULL;
+          ctx->new_count = (size_t)number;
+        }
+    }
+  }
+}
+
+/* BufferGetAndValidate */
+      static CYTHON_INLINE void __Pyx_SafeReleaseBuffer(Py_buffer* info) {
+  if (unlikely(info->buf == NULL)) return;
+  if (info->suboffsets == __Pyx_minusones) info->suboffsets = NULL;
+  __Pyx_ReleaseBuffer(info);
+}
+static void __Pyx_ZeroBuffer(Py_buffer* buf) {
+  buf->buf = NULL;
+  buf->obj = NULL;
+  buf->strides = __Pyx_zeros;
+  buf->shape = __Pyx_zeros;
+  buf->suboffsets = __Pyx_minusones;
+}
+static int __Pyx__GetBufferAndValidate(
+        Py_buffer* buf, PyObject* obj,  __Pyx_TypeInfo* dtype, int flags,
+        int nd, int cast, __Pyx_BufFmt_StackElem* stack)
+{
+  buf->buf = NULL;
+  if (unlikely(__Pyx_GetBuffer(obj, buf, flags) == -1)) {
+    __Pyx_ZeroBuffer(buf);
+    return -1;
+  }
+  if (unlikely(buf->ndim != nd)) {
+    PyErr_Format(PyExc_ValueError,
+                 "Buffer has wrong number of dimensions (expected %d, got %d)",
+                 nd, buf->ndim);
+    goto fail;
+  }
+  if (!cast) {
+    __Pyx_BufFmt_Context ctx;
+    __Pyx_BufFmt_Init(&ctx, stack, dtype);
+    if (!__Pyx_BufFmt_CheckString(&ctx, buf->format)) goto fail;
+  }
+  if (unlikely((unsigned)buf->itemsize != dtype->size)) {
+    PyErr_Format(PyExc_ValueError,
+      "Item size of buffer (%" CYTHON_FORMAT_SSIZE_T "d byte%s) does not match size of '%s' (%" CYTHON_FORMAT_SSIZE_T "d byte%s)",
+      buf->itemsize, (buf->itemsize > 1) ? "s" : "",
+      dtype->name, (Py_ssize_t)dtype->size, (dtype->size > 1) ? "s" : "");
+    goto fail;
+  }
+  if (buf->suboffsets == NULL) buf->suboffsets = __Pyx_minusones;
+  return 0;
+fail:;
+  __Pyx_SafeReleaseBuffer(buf);
+  return -1;
+}
 
 /* PyErrFetchRestore */
       #if CYTHON_FAST_THREAD_STATE
@@ -22367,6 +23316,149 @@ bad:
     Py_XDECREF(empty_dict);
     return module;
 }
+
+/* PyFunctionFastCall */
+        #if CYTHON_FAST_PYCALL
+#include "frameobject.h"
+static PyObject* __Pyx_PyFunction_FastCallNoKw(PyCodeObject *co, PyObject **args, Py_ssize_t na,
+                                               PyObject *globals) {
+    PyFrameObject *f;
+    PyThreadState *tstate = __Pyx_PyThreadState_Current;
+    PyObject **fastlocals;
+    Py_ssize_t i;
+    PyObject *result;
+    assert(globals != NULL);
+    /* XXX Perhaps we should create a specialized
+       PyFrame_New() that doesn't take locals, but does
+       take builtins without sanity checking them.
+       */
+    assert(tstate != NULL);
+    f = PyFrame_New(tstate, co, globals, NULL);
+    if (f == NULL) {
+        return NULL;
+    }
+    fastlocals = f->f_localsplus;
+    for (i = 0; i < na; i++) {
+        Py_INCREF(*args);
+        fastlocals[i] = *args++;
+    }
+    result = PyEval_EvalFrameEx(f,0);
+    ++tstate->recursion_depth;
+    Py_DECREF(f);
+    --tstate->recursion_depth;
+    return result;
+}
+#if 1 || PY_VERSION_HEX < 0x030600B1
+static PyObject *__Pyx_PyFunction_FastCallDict(PyObject *func, PyObject **args, int nargs, PyObject *kwargs) {
+    PyCodeObject *co = (PyCodeObject *)PyFunction_GET_CODE(func);
+    PyObject *globals = PyFunction_GET_GLOBALS(func);
+    PyObject *argdefs = PyFunction_GET_DEFAULTS(func);
+    PyObject *closure;
+#if PY_MAJOR_VERSION >= 3
+    PyObject *kwdefs;
+#endif
+    PyObject *kwtuple, **k;
+    PyObject **d;
+    Py_ssize_t nd;
+    Py_ssize_t nk;
+    PyObject *result;
+    assert(kwargs == NULL || PyDict_Check(kwargs));
+    nk = kwargs ? PyDict_Size(kwargs) : 0;
+    if (Py_EnterRecursiveCall((char*)" while calling a Python object")) {
+        return NULL;
+    }
+    if (
+#if PY_MAJOR_VERSION >= 3
+            co->co_kwonlyargcount == 0 &&
+#endif
+            likely(kwargs == NULL || nk == 0) &&
+            co->co_flags == (CO_OPTIMIZED | CO_NEWLOCALS | CO_NOFREE)) {
+        if (argdefs == NULL && co->co_argcount == nargs) {
+            result = __Pyx_PyFunction_FastCallNoKw(co, args, nargs, globals);
+            goto done;
+        }
+        else if (nargs == 0 && argdefs != NULL
+                 && co->co_argcount == Py_SIZE(argdefs)) {
+            /* function called with no arguments, but all parameters have
+               a default value: use default values as arguments .*/
+            args = &PyTuple_GET_ITEM(argdefs, 0);
+            result =__Pyx_PyFunction_FastCallNoKw(co, args, Py_SIZE(argdefs), globals);
+            goto done;
+        }
+    }
+    if (kwargs != NULL) {
+        Py_ssize_t pos, i;
+        kwtuple = PyTuple_New(2 * nk);
+        if (kwtuple == NULL) {
+            result = NULL;
+            goto done;
+        }
+        k = &PyTuple_GET_ITEM(kwtuple, 0);
+        pos = i = 0;
+        while (PyDict_Next(kwargs, &pos, &k[i], &k[i+1])) {
+            Py_INCREF(k[i]);
+            Py_INCREF(k[i+1]);
+            i += 2;
+        }
+        nk = i / 2;
+    }
+    else {
+        kwtuple = NULL;
+        k = NULL;
+    }
+    closure = PyFunction_GET_CLOSURE(func);
+#if PY_MAJOR_VERSION >= 3
+    kwdefs = PyFunction_GET_KW_DEFAULTS(func);
+#endif
+    if (argdefs != NULL) {
+        d = &PyTuple_GET_ITEM(argdefs, 0);
+        nd = Py_SIZE(argdefs);
+    }
+    else {
+        d = NULL;
+        nd = 0;
+    }
+#if PY_MAJOR_VERSION >= 3
+    result = PyEval_EvalCodeEx((PyObject*)co, globals, (PyObject *)NULL,
+                               args, nargs,
+                               k, (int)nk,
+                               d, (int)nd, kwdefs, closure);
+#else
+    result = PyEval_EvalCodeEx(co, globals, (PyObject *)NULL,
+                               args, nargs,
+                               k, (int)nk,
+                               d, (int)nd, closure);
+#endif
+    Py_XDECREF(kwtuple);
+done:
+    Py_LeaveRecursiveCall();
+    return result;
+}
+#endif
+#endif
+
+/* PyCFunctionFastCall */
+        #if CYTHON_FAST_PYCCALL
+static CYTHON_INLINE PyObject * __Pyx_PyCFunction_FastCall(PyObject *func_obj, PyObject **args, Py_ssize_t nargs) {
+    PyCFunctionObject *func = (PyCFunctionObject*)func_obj;
+    PyCFunction meth = PyCFunction_GET_FUNCTION(func);
+    PyObject *self = PyCFunction_GET_SELF(func);
+    int flags = PyCFunction_GET_FLAGS(func);
+    assert(PyCFunction_Check(func));
+    assert(METH_FASTCALL == (flags & ~(METH_CLASS | METH_STATIC | METH_COEXIST | METH_KEYWORDS)));
+    assert(nargs >= 0);
+    assert(nargs == 0 || args != NULL);
+    /* _PyCFunction_FastCallDict() must not be called with an exception set,
+       because it may clear it (directly or indirectly) and so the
+       caller loses its exception */
+    assert(!PyErr_Occurred());
+    if ((PY_VERSION_HEX < 0x030700A0) || unlikely(flags & METH_KEYWORDS)) {
+        return (*((__Pyx_PyCFunctionFastWithKeywords)meth)) (self, args, nargs, NULL);
+    } else {
+        return (*((__Pyx_PyCFunctionFast)meth)) (self, args, nargs);
+    }
+}
+#endif
 
 /* GetItemInt */
         static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j) {
@@ -24232,519 +25324,8 @@ static CYTHON_INLINE int __Pyx_PyErr_GivenExceptionMatches2(PyObject *err, PyObj
 }
 #endif
 
-/* IsLittleEndian */
-        static CYTHON_INLINE int __Pyx_Is_Little_Endian(void)
-{
-  union {
-    uint32_t u32;
-    uint8_t u8[4];
-  } S;
-  S.u32 = 0x01020304;
-  return S.u8[0] == 4;
-}
-
-/* BufferFormatCheck */
-        static void __Pyx_BufFmt_Init(__Pyx_BufFmt_Context* ctx,
-                              __Pyx_BufFmt_StackElem* stack,
-                              __Pyx_TypeInfo* type) {
-  stack[0].field = &ctx->root;
-  stack[0].parent_offset = 0;
-  ctx->root.type = type;
-  ctx->root.name = "buffer dtype";
-  ctx->root.offset = 0;
-  ctx->head = stack;
-  ctx->head->field = &ctx->root;
-  ctx->fmt_offset = 0;
-  ctx->head->parent_offset = 0;
-  ctx->new_packmode = '@';
-  ctx->enc_packmode = '@';
-  ctx->new_count = 1;
-  ctx->enc_count = 0;
-  ctx->enc_type = 0;
-  ctx->is_complex = 0;
-  ctx->is_valid_array = 0;
-  ctx->struct_alignment = 0;
-  while (type->typegroup == 'S') {
-    ++ctx->head;
-    ctx->head->field = type->fields;
-    ctx->head->parent_offset = 0;
-    type = type->fields->type;
-  }
-}
-static int __Pyx_BufFmt_ParseNumber(const char** ts) {
-    int count;
-    const char* t = *ts;
-    if (*t < '0' || *t > '9') {
-      return -1;
-    } else {
-        count = *t++ - '0';
-        while (*t >= '0' && *t < '9') {
-            count *= 10;
-            count += *t++ - '0';
-        }
-    }
-    *ts = t;
-    return count;
-}
-static int __Pyx_BufFmt_ExpectNumber(const char **ts) {
-    int number = __Pyx_BufFmt_ParseNumber(ts);
-    if (number == -1)
-        PyErr_Format(PyExc_ValueError,\
-                     "Does not understand character buffer dtype format string ('%c')", **ts);
-    return number;
-}
-static void __Pyx_BufFmt_RaiseUnexpectedChar(char ch) {
-  PyErr_Format(PyExc_ValueError,
-               "Unexpected format string character: '%c'", ch);
-}
-static const char* __Pyx_BufFmt_DescribeTypeChar(char ch, int is_complex) {
-  switch (ch) {
-    case 'c': return "'char'";
-    case 'b': return "'signed char'";
-    case 'B': return "'unsigned char'";
-    case 'h': return "'short'";
-    case 'H': return "'unsigned short'";
-    case 'i': return "'int'";
-    case 'I': return "'unsigned int'";
-    case 'l': return "'long'";
-    case 'L': return "'unsigned long'";
-    case 'q': return "'long long'";
-    case 'Q': return "'unsigned long long'";
-    case 'f': return (is_complex ? "'complex float'" : "'float'");
-    case 'd': return (is_complex ? "'complex double'" : "'double'");
-    case 'g': return (is_complex ? "'complex long double'" : "'long double'");
-    case 'T': return "a struct";
-    case 'O': return "Python object";
-    case 'P': return "a pointer";
-    case 's': case 'p': return "a string";
-    case 0: return "end";
-    default: return "unparseable format string";
-  }
-}
-static size_t __Pyx_BufFmt_TypeCharToStandardSize(char ch, int is_complex) {
-  switch (ch) {
-    case '?': case 'c': case 'b': case 'B': case 's': case 'p': return 1;
-    case 'h': case 'H': return 2;
-    case 'i': case 'I': case 'l': case 'L': return 4;
-    case 'q': case 'Q': return 8;
-    case 'f': return (is_complex ? 8 : 4);
-    case 'd': return (is_complex ? 16 : 8);
-    case 'g': {
-      PyErr_SetString(PyExc_ValueError, "Python does not define a standard format string size for long double ('g')..");
-      return 0;
-    }
-    case 'O': case 'P': return sizeof(void*);
-    default:
-      __Pyx_BufFmt_RaiseUnexpectedChar(ch);
-      return 0;
-    }
-}
-static size_t __Pyx_BufFmt_TypeCharToNativeSize(char ch, int is_complex) {
-  switch (ch) {
-    case 'c': case 'b': case 'B': case 's': case 'p': return 1;
-    case 'h': case 'H': return sizeof(short);
-    case 'i': case 'I': return sizeof(int);
-    case 'l': case 'L': return sizeof(long);
-    #ifdef HAVE_LONG_LONG
-    case 'q': case 'Q': return sizeof(PY_LONG_LONG);
-    #endif
-    case 'f': return sizeof(float) * (is_complex ? 2 : 1);
-    case 'd': return sizeof(double) * (is_complex ? 2 : 1);
-    case 'g': return sizeof(long double) * (is_complex ? 2 : 1);
-    case 'O': case 'P': return sizeof(void*);
-    default: {
-      __Pyx_BufFmt_RaiseUnexpectedChar(ch);
-      return 0;
-    }
-  }
-}
-typedef struct { char c; short x; } __Pyx_st_short;
-typedef struct { char c; int x; } __Pyx_st_int;
-typedef struct { char c; long x; } __Pyx_st_long;
-typedef struct { char c; float x; } __Pyx_st_float;
-typedef struct { char c; double x; } __Pyx_st_double;
-typedef struct { char c; long double x; } __Pyx_st_longdouble;
-typedef struct { char c; void *x; } __Pyx_st_void_p;
-#ifdef HAVE_LONG_LONG
-typedef struct { char c; PY_LONG_LONG x; } __Pyx_st_longlong;
-#endif
-static size_t __Pyx_BufFmt_TypeCharToAlignment(char ch, CYTHON_UNUSED int is_complex) {
-  switch (ch) {
-    case '?': case 'c': case 'b': case 'B': case 's': case 'p': return 1;
-    case 'h': case 'H': return sizeof(__Pyx_st_short) - sizeof(short);
-    case 'i': case 'I': return sizeof(__Pyx_st_int) - sizeof(int);
-    case 'l': case 'L': return sizeof(__Pyx_st_long) - sizeof(long);
-#ifdef HAVE_LONG_LONG
-    case 'q': case 'Q': return sizeof(__Pyx_st_longlong) - sizeof(PY_LONG_LONG);
-#endif
-    case 'f': return sizeof(__Pyx_st_float) - sizeof(float);
-    case 'd': return sizeof(__Pyx_st_double) - sizeof(double);
-    case 'g': return sizeof(__Pyx_st_longdouble) - sizeof(long double);
-    case 'P': case 'O': return sizeof(__Pyx_st_void_p) - sizeof(void*);
-    default:
-      __Pyx_BufFmt_RaiseUnexpectedChar(ch);
-      return 0;
-    }
-}
-/* These are for computing the padding at the end of the struct to align
-   on the first member of the struct. This will probably the same as above,
-   but we don't have any guarantees.
- */
-typedef struct { short x; char c; } __Pyx_pad_short;
-typedef struct { int x; char c; } __Pyx_pad_int;
-typedef struct { long x; char c; } __Pyx_pad_long;
-typedef struct { float x; char c; } __Pyx_pad_float;
-typedef struct { double x; char c; } __Pyx_pad_double;
-typedef struct { long double x; char c; } __Pyx_pad_longdouble;
-typedef struct { void *x; char c; } __Pyx_pad_void_p;
-#ifdef HAVE_LONG_LONG
-typedef struct { PY_LONG_LONG x; char c; } __Pyx_pad_longlong;
-#endif
-static size_t __Pyx_BufFmt_TypeCharToPadding(char ch, CYTHON_UNUSED int is_complex) {
-  switch (ch) {
-    case '?': case 'c': case 'b': case 'B': case 's': case 'p': return 1;
-    case 'h': case 'H': return sizeof(__Pyx_pad_short) - sizeof(short);
-    case 'i': case 'I': return sizeof(__Pyx_pad_int) - sizeof(int);
-    case 'l': case 'L': return sizeof(__Pyx_pad_long) - sizeof(long);
-#ifdef HAVE_LONG_LONG
-    case 'q': case 'Q': return sizeof(__Pyx_pad_longlong) - sizeof(PY_LONG_LONG);
-#endif
-    case 'f': return sizeof(__Pyx_pad_float) - sizeof(float);
-    case 'd': return sizeof(__Pyx_pad_double) - sizeof(double);
-    case 'g': return sizeof(__Pyx_pad_longdouble) - sizeof(long double);
-    case 'P': case 'O': return sizeof(__Pyx_pad_void_p) - sizeof(void*);
-    default:
-      __Pyx_BufFmt_RaiseUnexpectedChar(ch);
-      return 0;
-    }
-}
-static char __Pyx_BufFmt_TypeCharToGroup(char ch, int is_complex) {
-  switch (ch) {
-    case 'c':
-        return 'H';
-    case 'b': case 'h': case 'i':
-    case 'l': case 'q': case 's': case 'p':
-        return 'I';
-    case 'B': case 'H': case 'I': case 'L': case 'Q':
-        return 'U';
-    case 'f': case 'd': case 'g':
-        return (is_complex ? 'C' : 'R');
-    case 'O':
-        return 'O';
-    case 'P':
-        return 'P';
-    default: {
-      __Pyx_BufFmt_RaiseUnexpectedChar(ch);
-      return 0;
-    }
-  }
-}
-static void __Pyx_BufFmt_RaiseExpected(__Pyx_BufFmt_Context* ctx) {
-  if (ctx->head == NULL || ctx->head->field == &ctx->root) {
-    const char* expected;
-    const char* quote;
-    if (ctx->head == NULL) {
-      expected = "end";
-      quote = "";
-    } else {
-      expected = ctx->head->field->type->name;
-      quote = "'";
-    }
-    PyErr_Format(PyExc_ValueError,
-                 "Buffer dtype mismatch, expected %s%s%s but got %s",
-                 quote, expected, quote,
-                 __Pyx_BufFmt_DescribeTypeChar(ctx->enc_type, ctx->is_complex));
-  } else {
-    __Pyx_StructField* field = ctx->head->field;
-    __Pyx_StructField* parent = (ctx->head - 1)->field;
-    PyErr_Format(PyExc_ValueError,
-                 "Buffer dtype mismatch, expected '%s' but got %s in '%s.%s'",
-                 field->type->name, __Pyx_BufFmt_DescribeTypeChar(ctx->enc_type, ctx->is_complex),
-                 parent->type->name, field->name);
-  }
-}
-static int __Pyx_BufFmt_ProcessTypeChunk(__Pyx_BufFmt_Context* ctx) {
-  char group;
-  size_t size, offset, arraysize = 1;
-  if (ctx->enc_type == 0) return 0;
-  if (ctx->head->field->type->arraysize[0]) {
-    int i, ndim = 0;
-    if (ctx->enc_type == 's' || ctx->enc_type == 'p') {
-        ctx->is_valid_array = ctx->head->field->type->ndim == 1;
-        ndim = 1;
-        if (ctx->enc_count != ctx->head->field->type->arraysize[0]) {
-            PyErr_Format(PyExc_ValueError,
-                         "Expected a dimension of size %zu, got %zu",
-                         ctx->head->field->type->arraysize[0], ctx->enc_count);
-            return -1;
-        }
-    }
-    if (!ctx->is_valid_array) {
-      PyErr_Format(PyExc_ValueError, "Expected %d dimensions, got %d",
-                   ctx->head->field->type->ndim, ndim);
-      return -1;
-    }
-    for (i = 0; i < ctx->head->field->type->ndim; i++) {
-      arraysize *= ctx->head->field->type->arraysize[i];
-    }
-    ctx->is_valid_array = 0;
-    ctx->enc_count = 1;
-  }
-  group = __Pyx_BufFmt_TypeCharToGroup(ctx->enc_type, ctx->is_complex);
-  do {
-    __Pyx_StructField* field = ctx->head->field;
-    __Pyx_TypeInfo* type = field->type;
-    if (ctx->enc_packmode == '@' || ctx->enc_packmode == '^') {
-      size = __Pyx_BufFmt_TypeCharToNativeSize(ctx->enc_type, ctx->is_complex);
-    } else {
-      size = __Pyx_BufFmt_TypeCharToStandardSize(ctx->enc_type, ctx->is_complex);
-    }
-    if (ctx->enc_packmode == '@') {
-      size_t align_at = __Pyx_BufFmt_TypeCharToAlignment(ctx->enc_type, ctx->is_complex);
-      size_t align_mod_offset;
-      if (align_at == 0) return -1;
-      align_mod_offset = ctx->fmt_offset % align_at;
-      if (align_mod_offset > 0) ctx->fmt_offset += align_at - align_mod_offset;
-      if (ctx->struct_alignment == 0)
-          ctx->struct_alignment = __Pyx_BufFmt_TypeCharToPadding(ctx->enc_type,
-                                                                 ctx->is_complex);
-    }
-    if (type->size != size || type->typegroup != group) {
-      if (type->typegroup == 'C' && type->fields != NULL) {
-        size_t parent_offset = ctx->head->parent_offset + field->offset;
-        ++ctx->head;
-        ctx->head->field = type->fields;
-        ctx->head->parent_offset = parent_offset;
-        continue;
-      }
-      if ((type->typegroup == 'H' || group == 'H') && type->size == size) {
-      } else {
-          __Pyx_BufFmt_RaiseExpected(ctx);
-          return -1;
-      }
-    }
-    offset = ctx->head->parent_offset + field->offset;
-    if (ctx->fmt_offset != offset) {
-      PyErr_Format(PyExc_ValueError,
-                   "Buffer dtype mismatch; next field is at offset %" CYTHON_FORMAT_SSIZE_T "d but %" CYTHON_FORMAT_SSIZE_T "d expected",
-                   (Py_ssize_t)ctx->fmt_offset, (Py_ssize_t)offset);
-      return -1;
-    }
-    ctx->fmt_offset += size;
-    if (arraysize)
-      ctx->fmt_offset += (arraysize - 1) * size;
-    --ctx->enc_count;
-    while (1) {
-      if (field == &ctx->root) {
-        ctx->head = NULL;
-        if (ctx->enc_count != 0) {
-          __Pyx_BufFmt_RaiseExpected(ctx);
-          return -1;
-        }
-        break;
-      }
-      ctx->head->field = ++field;
-      if (field->type == NULL) {
-        --ctx->head;
-        field = ctx->head->field;
-        continue;
-      } else if (field->type->typegroup == 'S') {
-        size_t parent_offset = ctx->head->parent_offset + field->offset;
-        if (field->type->fields->type == NULL) continue;
-        field = field->type->fields;
-        ++ctx->head;
-        ctx->head->field = field;
-        ctx->head->parent_offset = parent_offset;
-        break;
-      } else {
-        break;
-      }
-    }
-  } while (ctx->enc_count);
-  ctx->enc_type = 0;
-  ctx->is_complex = 0;
-  return 0;
-}
-static PyObject *
-__pyx_buffmt_parse_array(__Pyx_BufFmt_Context* ctx, const char** tsp)
-{
-    const char *ts = *tsp;
-    int i = 0, number;
-    int ndim = ctx->head->field->type->ndim;
-;
-    ++ts;
-    if (ctx->new_count != 1) {
-        PyErr_SetString(PyExc_ValueError,
-                        "Cannot handle repeated arrays in format string");
-        return NULL;
-    }
-    if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
-    while (*ts && *ts != ')') {
-        switch (*ts) {
-            case ' ': case '\f': case '\r': case '\n': case '\t': case '\v':  continue;
-            default:  break;
-        }
-        number = __Pyx_BufFmt_ExpectNumber(&ts);
-        if (number == -1) return NULL;
-        if (i < ndim && (size_t) number != ctx->head->field->type->arraysize[i])
-            return PyErr_Format(PyExc_ValueError,
-                        "Expected a dimension of size %zu, got %d",
-                        ctx->head->field->type->arraysize[i], number);
-        if (*ts != ',' && *ts != ')')
-            return PyErr_Format(PyExc_ValueError,
-                                "Expected a comma in format string, got '%c'", *ts);
-        if (*ts == ',') ts++;
-        i++;
-    }
-    if (i != ndim)
-        return PyErr_Format(PyExc_ValueError, "Expected %d dimension(s), got %d",
-                            ctx->head->field->type->ndim, i);
-    if (!*ts) {
-        PyErr_SetString(PyExc_ValueError,
-                        "Unexpected end of format string, expected ')'");
-        return NULL;
-    }
-    ctx->is_valid_array = 1;
-    ctx->new_count = 1;
-    *tsp = ++ts;
-    return Py_None;
-}
-static const char* __Pyx_BufFmt_CheckString(__Pyx_BufFmt_Context* ctx, const char* ts) {
-  int got_Z = 0;
-  while (1) {
-    switch(*ts) {
-      case 0:
-        if (ctx->enc_type != 0 && ctx->head == NULL) {
-          __Pyx_BufFmt_RaiseExpected(ctx);
-          return NULL;
-        }
-        if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
-        if (ctx->head != NULL) {
-          __Pyx_BufFmt_RaiseExpected(ctx);
-          return NULL;
-        }
-        return ts;
-      case ' ':
-      case '\r':
-      case '\n':
-        ++ts;
-        break;
-      case '<':
-        if (!__Pyx_Is_Little_Endian()) {
-          PyErr_SetString(PyExc_ValueError, "Little-endian buffer not supported on big-endian compiler");
-          return NULL;
-        }
-        ctx->new_packmode = '=';
-        ++ts;
-        break;
-      case '>':
-      case '!':
-        if (__Pyx_Is_Little_Endian()) {
-          PyErr_SetString(PyExc_ValueError, "Big-endian buffer not supported on little-endian compiler");
-          return NULL;
-        }
-        ctx->new_packmode = '=';
-        ++ts;
-        break;
-      case '=':
-      case '@':
-      case '^':
-        ctx->new_packmode = *ts++;
-        break;
-      case 'T':
-        {
-          const char* ts_after_sub;
-          size_t i, struct_count = ctx->new_count;
-          size_t struct_alignment = ctx->struct_alignment;
-          ctx->new_count = 1;
-          ++ts;
-          if (*ts != '{') {
-            PyErr_SetString(PyExc_ValueError, "Buffer acquisition: Expected '{' after 'T'");
-            return NULL;
-          }
-          if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
-          ctx->enc_type = 0;
-          ctx->enc_count = 0;
-          ctx->struct_alignment = 0;
-          ++ts;
-          ts_after_sub = ts;
-          for (i = 0; i != struct_count; ++i) {
-            ts_after_sub = __Pyx_BufFmt_CheckString(ctx, ts);
-            if (!ts_after_sub) return NULL;
-          }
-          ts = ts_after_sub;
-          if (struct_alignment) ctx->struct_alignment = struct_alignment;
-        }
-        break;
-      case '}':
-        {
-          size_t alignment = ctx->struct_alignment;
-          ++ts;
-          if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
-          ctx->enc_type = 0;
-          if (alignment && ctx->fmt_offset % alignment) {
-            ctx->fmt_offset += alignment - (ctx->fmt_offset % alignment);
-          }
-        }
-        return ts;
-      case 'x':
-        if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
-        ctx->fmt_offset += ctx->new_count;
-        ctx->new_count = 1;
-        ctx->enc_count = 0;
-        ctx->enc_type = 0;
-        ctx->enc_packmode = ctx->new_packmode;
-        ++ts;
-        break;
-      case 'Z':
-        got_Z = 1;
-        ++ts;
-        if (*ts != 'f' && *ts != 'd' && *ts != 'g') {
-          __Pyx_BufFmt_RaiseUnexpectedChar('Z');
-          return NULL;
-        }
-      case 'c': case 'b': case 'B': case 'h': case 'H': case 'i': case 'I':
-      case 'l': case 'L': case 'q': case 'Q':
-      case 'f': case 'd': case 'g':
-      case 'O': case 'p':
-        if (ctx->enc_type == *ts && got_Z == ctx->is_complex &&
-            ctx->enc_packmode == ctx->new_packmode) {
-          ctx->enc_count += ctx->new_count;
-          ctx->new_count = 1;
-          got_Z = 0;
-          ++ts;
-          break;
-        }
-      case 's':
-        if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
-        ctx->enc_count = ctx->new_count;
-        ctx->enc_packmode = ctx->new_packmode;
-        ctx->enc_type = *ts;
-        ctx->is_complex = got_Z;
-        ++ts;
-        ctx->new_count = 1;
-        got_Z = 0;
-        break;
-      case ':':
-        ++ts;
-        while(*ts != ':') ++ts;
-        ++ts;
-        break;
-      case '(':
-        if (!__pyx_buffmt_parse_array(ctx, &ts)) return NULL;
-        break;
-      default:
-        {
-          int number = __Pyx_BufFmt_ExpectNumber(&ts);
-          if (number == -1) return NULL;
-          ctx->new_count = (size_t)number;
-        }
-    }
-  }
-}
-
 /* TypeInfoCompare */
-          static int
+        static int
 __pyx_typeinfo_cmp(__Pyx_TypeInfo *a, __Pyx_TypeInfo *b)
 {
     int i;
@@ -24785,7 +25366,7 @@ __pyx_typeinfo_cmp(__Pyx_TypeInfo *a, __Pyx_TypeInfo *b)
 }
 
 /* MemviewSliceValidateAndInit */
-          static int
+        static int
 __pyx_check_strides(Py_buffer *buf, int dim, int ndim, int spec)
 {
     if (buf->shape[dim] <= 1)
@@ -24967,7 +25548,7 @@ no_fail:
 }
 
 /* ObjectToMemviewSlice */
-          static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_d_dc_nn___pyx_t_5numpy_double_t(PyObject *obj) {
+        static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_d_dc_nn___pyx_t_5numpy_double_t(PyObject *obj) {
     __Pyx_memviewslice result = { 0, 0, { 0 }, { 0 }, { 0 } };
     __Pyx_BufFmt_StackElem stack[1];
     int axes_specs[] = { (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_FOLLOW), (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_CONTIG) };
@@ -24990,7 +25571,7 @@ __pyx_fail:
 }
 
 /* ObjectToMemviewSlice */
-          static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(PyObject *obj) {
+        static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(PyObject *obj) {
     __Pyx_memviewslice result = { 0, 0, { 0 }, { 0 }, { 0 } };
     __Pyx_BufFmt_StackElem stack[1];
     int axes_specs[] = { (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_CONTIG) };
@@ -25013,7 +25594,7 @@ __pyx_fail:
 }
 
 /* CheckBinaryVersion */
-          static int __Pyx_check_binary_version(void) {
+        static int __Pyx_check_binary_version(void) {
     char ctversion[4], rtversion[4];
     PyOS_snprintf(ctversion, 4, "%d.%d", PY_MAJOR_VERSION, PY_MINOR_VERSION);
     PyOS_snprintf(rtversion, 4, "%s", Py_GetVersion());
@@ -25029,7 +25610,7 @@ __pyx_fail:
 }
 
 /* ModuleImport */
-          #ifndef __PYX_HAVE_RT_ImportModule
+        #ifndef __PYX_HAVE_RT_ImportModule
 #define __PYX_HAVE_RT_ImportModule
 static PyObject *__Pyx_ImportModule(const char *name) {
     PyObject *py_name = 0;
@@ -25047,7 +25628,7 @@ bad:
 #endif
 
 /* TypeImport */
-          #ifndef __PYX_HAVE_RT_ImportType
+        #ifndef __PYX_HAVE_RT_ImportType
 #define __PYX_HAVE_RT_ImportType
 static PyTypeObject *__Pyx_ImportType(const char *module_name, const char *class_name,
     size_t size, int strict)
@@ -25112,7 +25693,7 @@ bad:
 #endif
 
 /* InitStrings */
-          static int __Pyx_InitStrings(__Pyx_StringTabEntry *t) {
+        static int __Pyx_InitStrings(__Pyx_StringTabEntry *t) {
     while (t->p) {
         #if PY_MAJOR_VERSION < 3
         if (t->is_unicode) {
