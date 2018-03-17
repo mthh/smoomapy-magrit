@@ -1056,12 +1056,12 @@ typedef npy_double __pyx_t_5numpy_double_t;
  */
 typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
 
-/* "smoomacypy/compute.pyx":13
+/* "smoomacypy/compute.pyx":12
  * 
  * DTYPE = np.double
  * ctypedef np.double_t DTYPE_t             # <<<<<<<<<<<<<<
- * ctypedef float (*DIST_FUNC)(float, float, float, float) nogil
  * ctypedef float (*SMOOTH_FUNC)(float, float, float) nogil
+ * 
  */
 typedef __pyx_t_5numpy_double_t __pyx_t_10smoomacypy_7compute_DTYPE_t;
 /* Declarations.proto */
@@ -1130,24 +1130,75 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  * cdef inline object PyArray_MultiIterNew1(a):
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
+struct __pyx_t_10smoomacypy_7compute_PtValueGeo;
+struct __pyx_t_10smoomacypy_7compute_PtValue;
+struct __pyx_t_10smoomacypy_7compute_Pt2ValueGeo;
+struct __pyx_t_10smoomacypy_7compute_Pt2Value;
 
-/* "smoomacypy/compute.pyx":14
+/* "smoomacypy/compute.pyx":13
  * DTYPE = np.double
  * ctypedef np.double_t DTYPE_t
- * ctypedef float (*DIST_FUNC)(float, float, float, float) nogil             # <<<<<<<<<<<<<<
- * ctypedef float (*SMOOTH_FUNC)(float, float, float) nogil
- * 
- */
-typedef float (*__pyx_t_10smoomacypy_7compute_DIST_FUNC)(float, float, float, float);
-
-/* "smoomacypy/compute.pyx":15
- * ctypedef np.double_t DTYPE_t
- * ctypedef float (*DIST_FUNC)(float, float, float, float) nogil
  * ctypedef float (*SMOOTH_FUNC)(float, float, float) nogil             # <<<<<<<<<<<<<<
  * 
- * 
+ * cdef struct PtValueGeo:
  */
 typedef float (*__pyx_t_10smoomacypy_7compute_SMOOTH_FUNC)(float, float, float);
+
+/* "smoomacypy/compute.pyx":15
+ * ctypedef float (*SMOOTH_FUNC)(float, float, float) nogil
+ * 
+ * cdef struct PtValueGeo:             # <<<<<<<<<<<<<<
+ *     float x
+ *     float y
+ */
+struct __pyx_t_10smoomacypy_7compute_PtValueGeo {
+  float x;
+  float y;
+  float cos_y;
+  float value;
+};
+
+/* "smoomacypy/compute.pyx":21
+ *     float value
+ * 
+ * cdef struct PtValue:             # <<<<<<<<<<<<<<
+ *     float x
+ *     float y
+ */
+struct __pyx_t_10smoomacypy_7compute_PtValue {
+  float x;
+  float y;
+  float value;
+};
+
+/* "smoomacypy/compute.pyx":26
+ *     float value
+ * 
+ * cdef struct Pt2ValueGeo:             # <<<<<<<<<<<<<<
+ *     float x
+ *     float y
+ */
+struct __pyx_t_10smoomacypy_7compute_Pt2ValueGeo {
+  float x;
+  float y;
+  float cos_y;
+  float value1;
+  float value2;
+};
+
+/* "smoomacypy/compute.pyx":33
+ *     float value2
+ * 
+ * cdef struct Pt2Value:             # <<<<<<<<<<<<<<
+ *     float x
+ *     float y
+ */
+struct __pyx_t_10smoomacypy_7compute_Pt2Value {
+  float x;
+  float y;
+  float value1;
+  float value2;
+};
 
 /* "View.MemoryView":103
  * 
@@ -2036,10 +2087,12 @@ static int __pyx_memoryview_thread_locks_used;
 static PyThread_type_lock __pyx_memoryview_thread_locks[8];
 static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_pareto(float, float, float); /*proto*/
 static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_exponential(float, float, float); /*proto*/
-static float __pyx_f_10smoomacypy_7compute_haversine(float, float, float, float); /*proto*/
-static float __pyx_f_10smoomacypy_7compute_euclidian(float, float, float, float); /*proto*/
-static PyObject *__pyx_f_10smoomacypy_7compute_compute_1_var(__Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, double, double, double, int, int); /*proto*/
-static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, double, double, double, int, int); /*proto*/
+static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_haversine2(float, float, float, float, float, float); /*proto*/
+static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_euclidian(float, float, float, float); /*proto*/
+static PyObject *__pyx_f_10smoomacypy_7compute_compute_1_var_geo(__Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, double, double, double, int); /*proto*/
+static PyObject *__pyx_f_10smoomacypy_7compute_compute_1_var_euclidian(__Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, double, double, double, int); /*proto*/
+static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var_geo(__Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, double, double, double, int); /*proto*/
+static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var_euclidian(__Pyx_memviewslice, __Pyx_memviewslice, __Pyx_memviewslice, double, double, double, int); /*proto*/
 static struct __pyx_array_obj *__pyx_array_new(PyObject *, Py_ssize_t, char *, char *, char *); /*proto*/
 static void *__pyx_align_pointer(void *, size_t); /*proto*/
 static PyObject *__pyx_memoryview_new(PyObject *, int, int, __Pyx_TypeInfo *); /*proto*/
@@ -2409,7 +2462,7 @@ static PyObject *__pyx_tuple__36;
 static PyObject *__pyx_codeobj__30;
 static PyObject *__pyx_codeobj__37;
 
-/* "smoomacypy/compute.pyx":18
+/* "smoomacypy/compute.pyx":40
  * 
  * 
  * cdef inline float pareto(float alpha, float beta, float dist) nogil:             # <<<<<<<<<<<<<<
@@ -2420,7 +2473,7 @@ static PyObject *__pyx_codeobj__37;
 static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_pareto(float __pyx_v_alpha, float __pyx_v_beta, float __pyx_v_dist) {
   float __pyx_r;
 
-  /* "smoomacypy/compute.pyx":19
+  /* "smoomacypy/compute.pyx":41
  * 
  * cdef inline float pareto(float alpha, float beta, float dist) nogil:
  *     return _pow((1.0 + alpha * dist), -beta)             # <<<<<<<<<<<<<<
@@ -2430,7 +2483,7 @@ static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_pareto(float __pyx_v_al
   __pyx_r = pow((1.0 + (__pyx_v_alpha * __pyx_v_dist)), (-__pyx_v_beta));
   goto __pyx_L0;
 
-  /* "smoomacypy/compute.pyx":18
+  /* "smoomacypy/compute.pyx":40
  * 
  * 
  * cdef inline float pareto(float alpha, float beta, float dist) nogil:             # <<<<<<<<<<<<<<
@@ -2443,7 +2496,7 @@ static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_pareto(float __pyx_v_al
   return __pyx_r;
 }
 
-/* "smoomacypy/compute.pyx":22
+/* "smoomacypy/compute.pyx":44
  * 
  * 
  * cdef inline float exponential(float alpha, float beta, float dist) nogil:             # <<<<<<<<<<<<<<
@@ -2454,7 +2507,7 @@ static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_pareto(float __pyx_v_al
 static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_exponential(float __pyx_v_alpha, float __pyx_v_beta, float __pyx_v_dist) {
   float __pyx_r;
 
-  /* "smoomacypy/compute.pyx":23
+  /* "smoomacypy/compute.pyx":45
  * 
  * cdef inline float exponential(float alpha, float beta, float dist) nogil:
  *     return exp(-alpha * _pow(dist, beta))             # <<<<<<<<<<<<<<
@@ -2464,7 +2517,7 @@ static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_exponential(float __pyx
   __pyx_r = exp(((-__pyx_v_alpha) * pow(__pyx_v_dist, __pyx_v_beta)));
   goto __pyx_L0;
 
-  /* "smoomacypy/compute.pyx":22
+  /* "smoomacypy/compute.pyx":44
  * 
  * 
  * cdef inline float exponential(float alpha, float beta, float dist) nogil:             # <<<<<<<<<<<<<<
@@ -2477,61 +2530,61 @@ static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_exponential(float __pyx
   return __pyx_r;
 }
 
-/* "smoomacypy/compute.pyx":26
+/* "smoomacypy/compute.pyx":48
  * 
  * 
- * cdef float haversine(float lon1, float lat1, float lon2, float lat2) nogil:             # <<<<<<<<<<<<<<
+ * cdef inline float haversine2(float lon1, float lat1, float coslat1, float lon2, float lat2, float coslat2) nogil:             # <<<<<<<<<<<<<<
  *     cdef float dlon = lon2 - lon1
  *     cdef float dlat = lat2 - lat1
  */
 
-static float __pyx_f_10smoomacypy_7compute_haversine(float __pyx_v_lon1, float __pyx_v_lat1, float __pyx_v_lon2, float __pyx_v_lat2) {
+static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_haversine2(float __pyx_v_lon1, float __pyx_v_lat1, float __pyx_v_coslat1, float __pyx_v_lon2, float __pyx_v_lat2, float __pyx_v_coslat2) {
   float __pyx_v_dlon;
   float __pyx_v_dlat;
   float __pyx_v_a;
   float __pyx_r;
 
-  /* "smoomacypy/compute.pyx":27
+  /* "smoomacypy/compute.pyx":49
  * 
- * cdef float haversine(float lon1, float lat1, float lon2, float lat2) nogil:
+ * cdef inline float haversine2(float lon1, float lat1, float coslat1, float lon2, float lat2, float coslat2) nogil:
  *     cdef float dlon = lon2 - lon1             # <<<<<<<<<<<<<<
  *     cdef float dlat = lat2 - lat1
- *     cdef float a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+ *     cdef float a = sin(dlat/2)**2 + coslat1 * coslat2 * sin(dlon/2)**2
  */
   __pyx_v_dlon = (__pyx_v_lon2 - __pyx_v_lon1);
 
-  /* "smoomacypy/compute.pyx":28
- * cdef float haversine(float lon1, float lat1, float lon2, float lat2) nogil:
+  /* "smoomacypy/compute.pyx":50
+ * cdef inline float haversine2(float lon1, float lat1, float coslat1, float lon2, float lat2, float coslat2) nogil:
  *     cdef float dlon = lon2 - lon1
  *     cdef float dlat = lat2 - lat1             # <<<<<<<<<<<<<<
- *     cdef float a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+ *     cdef float a = sin(dlat/2)**2 + coslat1 * coslat2 * sin(dlon/2)**2
  * 
  */
   __pyx_v_dlat = (__pyx_v_lat2 - __pyx_v_lat1);
 
-  /* "smoomacypy/compute.pyx":29
+  /* "smoomacypy/compute.pyx":51
  *     cdef float dlon = lon2 - lon1
  *     cdef float dlat = lat2 - lat1
- *     cdef float a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2             # <<<<<<<<<<<<<<
+ *     cdef float a = sin(dlat/2)**2 + coslat1 * coslat2 * sin(dlon/2)**2             # <<<<<<<<<<<<<<
  * 
- *     return 6371000 * 2 * asin(sqrt(a))
+ *     return 12742000 * asin(sqrt(a))
  */
-  __pyx_v_a = (pow(sin((__pyx_v_dlat / 2.0)), 2.0) + ((cos(__pyx_v_lat1) * cos(__pyx_v_lat2)) * pow(sin((__pyx_v_dlon / 2.0)), 2.0)));
+  __pyx_v_a = (pow(sin((__pyx_v_dlat / 2.0)), 2.0) + ((__pyx_v_coslat1 * __pyx_v_coslat2) * pow(sin((__pyx_v_dlon / 2.0)), 2.0)));
 
-  /* "smoomacypy/compute.pyx":31
- *     cdef float a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
+  /* "smoomacypy/compute.pyx":53
+ *     cdef float a = sin(dlat/2)**2 + coslat1 * coslat2 * sin(dlon/2)**2
  * 
- *     return 6371000 * 2 * asin(sqrt(a))             # <<<<<<<<<<<<<<
+ *     return 12742000 * asin(sqrt(a))             # <<<<<<<<<<<<<<
  * 
- * 
+ * cdef inline float euclidian(float x1, float y1, float x2, float y2) nogil:
  */
   __pyx_r = (12742000.0 * asin(sqrt(__pyx_v_a)));
   goto __pyx_L0;
 
-  /* "smoomacypy/compute.pyx":26
+  /* "smoomacypy/compute.pyx":48
  * 
  * 
- * cdef float haversine(float lon1, float lat1, float lon2, float lat2) nogil:             # <<<<<<<<<<<<<<
+ * cdef inline float haversine2(float lon1, float lat1, float coslat1, float lon2, float lat2, float coslat2) nogil:             # <<<<<<<<<<<<<<
  *     cdef float dlon = lon2 - lon1
  *     cdef float dlat = lat2 - lat1
  */
@@ -2541,30 +2594,30 @@ static float __pyx_f_10smoomacypy_7compute_haversine(float __pyx_v_lon1, float _
   return __pyx_r;
 }
 
-/* "smoomacypy/compute.pyx":34
+/* "smoomacypy/compute.pyx":55
+ *     return 12742000 * asin(sqrt(a))
  * 
- * 
- * cdef float euclidian(float x1, float y1, float x2, float y2) nogil:             # <<<<<<<<<<<<<<
+ * cdef inline float euclidian(float x1, float y1, float x2, float y2) nogil:             # <<<<<<<<<<<<<<
  *     cdef float a = x1 - x2
  *     cdef float b = y1 - y2
  */
 
-static float __pyx_f_10smoomacypy_7compute_euclidian(float __pyx_v_x1, float __pyx_v_y1, float __pyx_v_x2, float __pyx_v_y2) {
+static CYTHON_INLINE float __pyx_f_10smoomacypy_7compute_euclidian(float __pyx_v_x1, float __pyx_v_y1, float __pyx_v_x2, float __pyx_v_y2) {
   float __pyx_v_a;
   float __pyx_v_b;
   float __pyx_r;
 
-  /* "smoomacypy/compute.pyx":35
+  /* "smoomacypy/compute.pyx":56
  * 
- * cdef float euclidian(float x1, float y1, float x2, float y2) nogil:
+ * cdef inline float euclidian(float x1, float y1, float x2, float y2) nogil:
  *     cdef float a = x1 - x2             # <<<<<<<<<<<<<<
  *     cdef float b = y1 - y2
  *     return sqrt(a * a + b * b)
  */
   __pyx_v_a = (__pyx_v_x1 - __pyx_v_x2);
 
-  /* "smoomacypy/compute.pyx":36
- * cdef float euclidian(float x1, float y1, float x2, float y2) nogil:
+  /* "smoomacypy/compute.pyx":57
+ * cdef inline float euclidian(float x1, float y1, float x2, float y2) nogil:
  *     cdef float a = x1 - x2
  *     cdef float b = y1 - y2             # <<<<<<<<<<<<<<
  *     return sqrt(a * a + b * b)
@@ -2572,7 +2625,7 @@ static float __pyx_f_10smoomacypy_7compute_euclidian(float __pyx_v_x1, float __p
  */
   __pyx_v_b = (__pyx_v_y1 - __pyx_v_y2);
 
-  /* "smoomacypy/compute.pyx":37
+  /* "smoomacypy/compute.pyx":58
  *     cdef float a = x1 - x2
  *     cdef float b = y1 - y2
  *     return sqrt(a * a + b * b)             # <<<<<<<<<<<<<<
@@ -2582,10 +2635,10 @@ static float __pyx_f_10smoomacypy_7compute_euclidian(float __pyx_v_x1, float __p
   __pyx_r = sqrt(((__pyx_v_a * __pyx_v_a) + (__pyx_v_b * __pyx_v_b)));
   goto __pyx_L0;
 
-  /* "smoomacypy/compute.pyx":34
+  /* "smoomacypy/compute.pyx":55
+ *     return 12742000 * asin(sqrt(a))
  * 
- * 
- * cdef float euclidian(float x1, float y1, float x2, float y2) nogil:             # <<<<<<<<<<<<<<
+ * cdef inline float euclidian(float x1, float y1, float x2, float y2) nogil:             # <<<<<<<<<<<<<<
  *     cdef float a = x1 - x2
  *     cdef float b = y1 - y2
  */
@@ -2595,7 +2648,7 @@ static float __pyx_f_10smoomacypy_7compute_euclidian(float __pyx_v_x1, float __p
   return __pyx_r;
 }
 
-/* "smoomacypy/compute.pyx":40
+/* "smoomacypy/compute.pyx":61
  * 
  * 
  * def _compute_stewart(knownpts, XI, YI, nb_var, type_function, span, beta, lonlat):             # <<<<<<<<<<<<<<
@@ -2653,47 +2706,47 @@ static PyObject *__pyx_pw_10smoomacypy_7compute_1_compute_stewart(PyObject *__py
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_XI)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 1); __PYX_ERR(0, 40, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 1); __PYX_ERR(0, 61, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_YI)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 2); __PYX_ERR(0, 40, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 2); __PYX_ERR(0, 61, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_nb_var)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 3); __PYX_ERR(0, 40, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 3); __PYX_ERR(0, 61, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_type_function)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 4); __PYX_ERR(0, 40, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 4); __PYX_ERR(0, 61, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_span)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 5); __PYX_ERR(0, 40, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 5); __PYX_ERR(0, 61, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_beta)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 6); __PYX_ERR(0, 40, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 6); __PYX_ERR(0, 61, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
         if (likely((values[7] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_lonlat)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 7); __PYX_ERR(0, 40, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, 7); __PYX_ERR(0, 61, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_compute_stewart") < 0)) __PYX_ERR(0, 40, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "_compute_stewart") < 0)) __PYX_ERR(0, 61, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 8) {
       goto __pyx_L5_argtuple_error;
@@ -2718,7 +2771,7 @@ static PyObject *__pyx_pw_10smoomacypy_7compute_1_compute_stewart(PyObject *__py
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 40, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("_compute_stewart", 1, 8, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 61, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("smoomacypy.compute._compute_stewart", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2747,32 +2800,32 @@ static PyObject *__pyx_pf_10smoomacypy_7compute__compute_stewart(CYTHON_UNUSED P
   double __pyx_t_9;
   __Pyx_RefNannySetupContext("_compute_stewart", 0);
 
-  /* "smoomacypy/compute.pyx":41
+  /* "smoomacypy/compute.pyx":62
  * 
  * def _compute_stewart(knownpts, XI, YI, nb_var, type_function, span, beta, lonlat):
  *     if type_function == 'exponential':             # <<<<<<<<<<<<<<
  *         alpha = 0.6931471805 / pow(span, beta)
  *         expfunc = True
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_type_function, __pyx_n_s_exponential, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 41, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_type_function, __pyx_n_s_exponential, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 62, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "smoomacypy/compute.pyx":42
+    /* "smoomacypy/compute.pyx":63
  * def _compute_stewart(knownpts, XI, YI, nb_var, type_function, span, beta, lonlat):
  *     if type_function == 'exponential':
  *         alpha = 0.6931471805 / pow(span, beta)             # <<<<<<<<<<<<<<
  *         expfunc = True
  *     else:
  */
-    __pyx_t_2 = __Pyx_PyNumber_Power2(__pyx_v_span, __pyx_v_beta); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 42, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyNumber_Power2(__pyx_v_span, __pyx_v_beta); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyFloat_DivideCObj(__pyx_float_0_6931471805, __pyx_t_2, 0.6931471805, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 42, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyFloat_DivideCObj(__pyx_float_0_6931471805, __pyx_t_2, 0.6931471805, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 63, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_v_alpha = __pyx_t_3;
     __pyx_t_3 = 0;
 
-    /* "smoomacypy/compute.pyx":43
+    /* "smoomacypy/compute.pyx":64
  *     if type_function == 'exponential':
  *         alpha = 0.6931471805 / pow(span, beta)
  *         expfunc = True             # <<<<<<<<<<<<<<
@@ -2781,7 +2834,7 @@ static PyObject *__pyx_pf_10smoomacypy_7compute__compute_stewart(CYTHON_UNUSED P
  */
     __pyx_v_expfunc = 1;
 
-    /* "smoomacypy/compute.pyx":41
+    /* "smoomacypy/compute.pyx":62
  * 
  * def _compute_stewart(knownpts, XI, YI, nb_var, type_function, span, beta, lonlat):
  *     if type_function == 'exponential':             # <<<<<<<<<<<<<<
@@ -2791,7 +2844,7 @@ static PyObject *__pyx_pf_10smoomacypy_7compute__compute_stewart(CYTHON_UNUSED P
     goto __pyx_L3;
   }
 
-  /* "smoomacypy/compute.pyx":45
+  /* "smoomacypy/compute.pyx":66
  *         expfunc = True
  *     else:
  *         alpha = (pow(2, 1/beta) - 1) / span             # <<<<<<<<<<<<<<
@@ -2799,122 +2852,226 @@ static PyObject *__pyx_pf_10smoomacypy_7compute__compute_stewart(CYTHON_UNUSED P
  * 
  */
   /*else*/ {
-    __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_int_1, __pyx_v_beta); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 45, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyNumber_Divide(__pyx_int_1, __pyx_v_beta); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 66, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = __Pyx_PyNumber_Power2(__pyx_int_2, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 45, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyNumber_Power2(__pyx_int_2, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 66, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyInt_SubtractObjC(__pyx_t_2, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 45, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyInt_SubtractObjC(__pyx_t_2, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 66, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyNumber_Divide(__pyx_t_3, __pyx_v_span); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 45, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyNumber_Divide(__pyx_t_3, __pyx_v_span); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 66, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_v_alpha = __pyx_t_2;
     __pyx_t_2 = 0;
 
-    /* "smoomacypy/compute.pyx":46
+    /* "smoomacypy/compute.pyx":67
  *     else:
  *         alpha = (pow(2, 1/beta) - 1) / span
  *         expfunc = False             # <<<<<<<<<<<<<<
  * 
- *     if nb_var == 1:
+ * 
  */
     __pyx_v_expfunc = 0;
   }
   __pyx_L3:;
 
-  /* "smoomacypy/compute.pyx":48
- *         expfunc = False
+  /* "smoomacypy/compute.pyx":70
+ * 
  * 
  *     if nb_var == 1:             # <<<<<<<<<<<<<<
- *         return compute_1_var(knownpts, XI, YI, span, alpha, beta, lonlat, expfunc)
- *     else:
+ *         if lonlat:
+ *             return compute_1_var_geo(knownpts, XI, YI, span, alpha, beta, expfunc)
  */
-  __pyx_t_2 = __Pyx_PyInt_EqObjC(__pyx_v_nb_var, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 48, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_EqObjC(__pyx_v_nb_var, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 48, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (__pyx_t_1) {
 
-    /* "smoomacypy/compute.pyx":49
+    /* "smoomacypy/compute.pyx":71
  * 
  *     if nb_var == 1:
- *         return compute_1_var(knownpts, XI, YI, span, alpha, beta, lonlat, expfunc)             # <<<<<<<<<<<<<<
- *     else:
- *         return compute_2_var(knownpts, XI, YI, span, alpha, beta, lonlat, expfunc)
+ *         if lonlat:             # <<<<<<<<<<<<<<
+ *             return compute_1_var_geo(knownpts, XI, YI, span, alpha, beta, expfunc)
+ *         else:
  */
-    __Pyx_XDECREF(__pyx_r);
-    __pyx_t_4 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_nn___pyx_t_5numpy_double_t(__pyx_v_knownpts);
-    if (unlikely(!__pyx_t_4.memview)) __PYX_ERR(0, 49, __pyx_L1_error)
-    __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_XI);
-    if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 49, __pyx_L1_error)
-    __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_YI);
-    if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 49, __pyx_L1_error)
-    __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_span); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L1_error)
-    __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_alpha); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L1_error)
-    __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_v_beta); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L1_error)
-    __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_lonlat); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L1_error)
-    __pyx_t_2 = __pyx_f_10smoomacypy_7compute_compute_1_var(__pyx_t_4, __pyx_t_5, __pyx_t_6, __pyx_t_7, __pyx_t_8, __pyx_t_9, __pyx_t_1, __pyx_v_expfunc); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 49, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __PYX_XDEC_MEMVIEW(&__pyx_t_4, 1);
-    __pyx_t_4.memview = NULL;
-    __pyx_t_4.data = NULL;
-    __PYX_XDEC_MEMVIEW(&__pyx_t_5, 1);
-    __pyx_t_5.memview = NULL;
-    __pyx_t_5.data = NULL;
-    __PYX_XDEC_MEMVIEW(&__pyx_t_6, 1);
-    __pyx_t_6.memview = NULL;
-    __pyx_t_6.data = NULL;
-    __pyx_r = __pyx_t_2;
-    __pyx_t_2 = 0;
-    goto __pyx_L0;
+    __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_lonlat); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 71, __pyx_L1_error)
+    if (__pyx_t_1) {
 
-    /* "smoomacypy/compute.pyx":48
- *         expfunc = False
+      /* "smoomacypy/compute.pyx":72
+ *     if nb_var == 1:
+ *         if lonlat:
+ *             return compute_1_var_geo(knownpts, XI, YI, span, alpha, beta, expfunc)             # <<<<<<<<<<<<<<
+ *         else:
+ *             return compute_1_var_euclidian(knownpts, XI, YI, span, alpha, beta, expfunc)
+ */
+      __Pyx_XDECREF(__pyx_r);
+      __pyx_t_4 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_nn___pyx_t_5numpy_double_t(__pyx_v_knownpts);
+      if (unlikely(!__pyx_t_4.memview)) __PYX_ERR(0, 72, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_XI);
+      if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 72, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_YI);
+      if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 72, __pyx_L1_error)
+      __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_span); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 72, __pyx_L1_error)
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_alpha); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 72, __pyx_L1_error)
+      __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_v_beta); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 72, __pyx_L1_error)
+      __pyx_t_2 = __pyx_f_10smoomacypy_7compute_compute_1_var_geo(__pyx_t_4, __pyx_t_5, __pyx_t_6, __pyx_t_7, __pyx_t_8, __pyx_t_9, __pyx_v_expfunc); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 72, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __PYX_XDEC_MEMVIEW(&__pyx_t_4, 1);
+      __pyx_t_4.memview = NULL;
+      __pyx_t_4.data = NULL;
+      __PYX_XDEC_MEMVIEW(&__pyx_t_5, 1);
+      __pyx_t_5.memview = NULL;
+      __pyx_t_5.data = NULL;
+      __PYX_XDEC_MEMVIEW(&__pyx_t_6, 1);
+      __pyx_t_6.memview = NULL;
+      __pyx_t_6.data = NULL;
+      __pyx_r = __pyx_t_2;
+      __pyx_t_2 = 0;
+      goto __pyx_L0;
+
+      /* "smoomacypy/compute.pyx":71
+ * 
+ *     if nb_var == 1:
+ *         if lonlat:             # <<<<<<<<<<<<<<
+ *             return compute_1_var_geo(knownpts, XI, YI, span, alpha, beta, expfunc)
+ *         else:
+ */
+    }
+
+    /* "smoomacypy/compute.pyx":74
+ *             return compute_1_var_geo(knownpts, XI, YI, span, alpha, beta, expfunc)
+ *         else:
+ *             return compute_1_var_euclidian(knownpts, XI, YI, span, alpha, beta, expfunc)             # <<<<<<<<<<<<<<
+ *     else:
+ *         if lonlat:
+ */
+    /*else*/ {
+      __Pyx_XDECREF(__pyx_r);
+      __pyx_t_4 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_nn___pyx_t_5numpy_double_t(__pyx_v_knownpts);
+      if (unlikely(!__pyx_t_4.memview)) __PYX_ERR(0, 74, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_XI);
+      if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 74, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_YI);
+      if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 74, __pyx_L1_error)
+      __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_v_span); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 74, __pyx_L1_error)
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_alpha); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 74, __pyx_L1_error)
+      __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_beta); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 74, __pyx_L1_error)
+      __pyx_t_2 = __pyx_f_10smoomacypy_7compute_compute_1_var_euclidian(__pyx_t_4, __pyx_t_6, __pyx_t_5, __pyx_t_9, __pyx_t_8, __pyx_t_7, __pyx_v_expfunc); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 74, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __PYX_XDEC_MEMVIEW(&__pyx_t_4, 1);
+      __pyx_t_4.memview = NULL;
+      __pyx_t_4.data = NULL;
+      __PYX_XDEC_MEMVIEW(&__pyx_t_6, 1);
+      __pyx_t_6.memview = NULL;
+      __pyx_t_6.data = NULL;
+      __PYX_XDEC_MEMVIEW(&__pyx_t_5, 1);
+      __pyx_t_5.memview = NULL;
+      __pyx_t_5.data = NULL;
+      __pyx_r = __pyx_t_2;
+      __pyx_t_2 = 0;
+      goto __pyx_L0;
+    }
+
+    /* "smoomacypy/compute.pyx":70
+ * 
  * 
  *     if nb_var == 1:             # <<<<<<<<<<<<<<
- *         return compute_1_var(knownpts, XI, YI, span, alpha, beta, lonlat, expfunc)
- *     else:
+ *         if lonlat:
+ *             return compute_1_var_geo(knownpts, XI, YI, span, alpha, beta, expfunc)
  */
   }
 
-  /* "smoomacypy/compute.pyx":51
- *         return compute_1_var(knownpts, XI, YI, span, alpha, beta, lonlat, expfunc)
+  /* "smoomacypy/compute.pyx":76
+ *             return compute_1_var_euclidian(knownpts, XI, YI, span, alpha, beta, expfunc)
  *     else:
- *         return compute_2_var(knownpts, XI, YI, span, alpha, beta, lonlat, expfunc)             # <<<<<<<<<<<<<<
- * 
- * 
+ *         if lonlat:             # <<<<<<<<<<<<<<
+ *             return compute_2_var_geo(knownpts, XI, YI, span, alpha, beta, expfunc)
+ *         else:
  */
   /*else*/ {
-    __Pyx_XDECREF(__pyx_r);
-    __pyx_t_4 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_nn___pyx_t_5numpy_double_t(__pyx_v_knownpts);
-    if (unlikely(!__pyx_t_4.memview)) __PYX_ERR(0, 51, __pyx_L1_error)
-    __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_XI);
-    if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 51, __pyx_L1_error)
-    __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_YI);
-    if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 51, __pyx_L1_error)
-    __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_v_span); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L1_error)
-    __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_alpha); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L1_error)
-    __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_beta); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L1_error)
-    __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_lonlat); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L1_error)
-    __pyx_t_2 = __pyx_f_10smoomacypy_7compute_compute_2_var(__pyx_t_4, __pyx_t_6, __pyx_t_5, __pyx_t_9, __pyx_t_8, __pyx_t_7, __pyx_t_1, __pyx_v_expfunc); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 51, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __PYX_XDEC_MEMVIEW(&__pyx_t_4, 1);
-    __pyx_t_4.memview = NULL;
-    __pyx_t_4.data = NULL;
-    __PYX_XDEC_MEMVIEW(&__pyx_t_6, 1);
-    __pyx_t_6.memview = NULL;
-    __pyx_t_6.data = NULL;
-    __PYX_XDEC_MEMVIEW(&__pyx_t_5, 1);
-    __pyx_t_5.memview = NULL;
-    __pyx_t_5.data = NULL;
-    __pyx_r = __pyx_t_2;
-    __pyx_t_2 = 0;
-    goto __pyx_L0;
+    __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_lonlat); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 76, __pyx_L1_error)
+    if (__pyx_t_1) {
+
+      /* "smoomacypy/compute.pyx":77
+ *     else:
+ *         if lonlat:
+ *             return compute_2_var_geo(knownpts, XI, YI, span, alpha, beta, expfunc)             # <<<<<<<<<<<<<<
+ *         else:
+ *             return compute_2_var_euclidian(knownpts, XI, YI, span, alpha, beta, expfunc)
+ */
+      __Pyx_XDECREF(__pyx_r);
+      __pyx_t_4 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_nn___pyx_t_5numpy_double_t(__pyx_v_knownpts);
+      if (unlikely(!__pyx_t_4.memview)) __PYX_ERR(0, 77, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_XI);
+      if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 77, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_YI);
+      if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 77, __pyx_L1_error)
+      __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_span); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 77, __pyx_L1_error)
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_alpha); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 77, __pyx_L1_error)
+      __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_v_beta); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 77, __pyx_L1_error)
+      __pyx_t_2 = __pyx_f_10smoomacypy_7compute_compute_2_var_geo(__pyx_t_4, __pyx_t_5, __pyx_t_6, __pyx_t_7, __pyx_t_8, __pyx_t_9, __pyx_v_expfunc); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 77, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __PYX_XDEC_MEMVIEW(&__pyx_t_4, 1);
+      __pyx_t_4.memview = NULL;
+      __pyx_t_4.data = NULL;
+      __PYX_XDEC_MEMVIEW(&__pyx_t_5, 1);
+      __pyx_t_5.memview = NULL;
+      __pyx_t_5.data = NULL;
+      __PYX_XDEC_MEMVIEW(&__pyx_t_6, 1);
+      __pyx_t_6.memview = NULL;
+      __pyx_t_6.data = NULL;
+      __pyx_r = __pyx_t_2;
+      __pyx_t_2 = 0;
+      goto __pyx_L0;
+
+      /* "smoomacypy/compute.pyx":76
+ *             return compute_1_var_euclidian(knownpts, XI, YI, span, alpha, beta, expfunc)
+ *     else:
+ *         if lonlat:             # <<<<<<<<<<<<<<
+ *             return compute_2_var_geo(knownpts, XI, YI, span, alpha, beta, expfunc)
+ *         else:
+ */
+    }
+
+    /* "smoomacypy/compute.pyx":79
+ *             return compute_2_var_geo(knownpts, XI, YI, span, alpha, beta, expfunc)
+ *         else:
+ *             return compute_2_var_euclidian(knownpts, XI, YI, span, alpha, beta, expfunc)             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+    /*else*/ {
+      __Pyx_XDECREF(__pyx_r);
+      __pyx_t_4 = __Pyx_PyObject_to_MemoryviewSlice_d_dc_nn___pyx_t_5numpy_double_t(__pyx_v_knownpts);
+      if (unlikely(!__pyx_t_4.memview)) __PYX_ERR(0, 79, __pyx_L1_error)
+      __pyx_t_6 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_XI);
+      if (unlikely(!__pyx_t_6.memview)) __PYX_ERR(0, 79, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_to_MemoryviewSlice_dc_nn___pyx_t_5numpy_double_t(__pyx_v_YI);
+      if (unlikely(!__pyx_t_5.memview)) __PYX_ERR(0, 79, __pyx_L1_error)
+      __pyx_t_9 = __pyx_PyFloat_AsDouble(__pyx_v_span); if (unlikely((__pyx_t_9 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 79, __pyx_L1_error)
+      __pyx_t_8 = __pyx_PyFloat_AsDouble(__pyx_v_alpha); if (unlikely((__pyx_t_8 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 79, __pyx_L1_error)
+      __pyx_t_7 = __pyx_PyFloat_AsDouble(__pyx_v_beta); if (unlikely((__pyx_t_7 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 79, __pyx_L1_error)
+      __pyx_t_2 = __pyx_f_10smoomacypy_7compute_compute_2_var_euclidian(__pyx_t_4, __pyx_t_6, __pyx_t_5, __pyx_t_9, __pyx_t_8, __pyx_t_7, __pyx_v_expfunc); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 79, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __PYX_XDEC_MEMVIEW(&__pyx_t_4, 1);
+      __pyx_t_4.memview = NULL;
+      __pyx_t_4.data = NULL;
+      __PYX_XDEC_MEMVIEW(&__pyx_t_6, 1);
+      __pyx_t_6.memview = NULL;
+      __pyx_t_6.data = NULL;
+      __PYX_XDEC_MEMVIEW(&__pyx_t_5, 1);
+      __pyx_t_5.memview = NULL;
+      __pyx_t_5.data = NULL;
+      __pyx_r = __pyx_t_2;
+      __pyx_t_2 = 0;
+      goto __pyx_L0;
+    }
   }
 
-  /* "smoomacypy/compute.pyx":40
+  /* "smoomacypy/compute.pyx":61
  * 
  * 
  * def _compute_stewart(knownpts, XI, YI, nb_var, type_function, span, beta, lonlat):             # <<<<<<<<<<<<<<
@@ -2938,16 +3095,15 @@ static PyObject *__pyx_pf_10smoomacypy_7compute__compute_stewart(CYTHON_UNUSED P
   return __pyx_r;
 }
 
-/* "smoomacypy/compute.pyx":54
+/* "smoomacypy/compute.pyx":82
  * 
  * 
- * cdef compute_1_var(             # <<<<<<<<<<<<<<
+ * cdef compute_1_var_geo(             # <<<<<<<<<<<<<<
  *         np.double_t[:,::1] knownpts, np.double_t[::1] XI, np.double_t[::1] YI,
- *         double span, double alpha, double beta, bint lonlat, bint expfunc):
+ *         double span, double alpha, double beta, bint expfunc):
  */
 
-static PyObject *__pyx_f_10smoomacypy_7compute_compute_1_var(__Pyx_memviewslice __pyx_v_knownpts, __Pyx_memviewslice __pyx_v_XI, __Pyx_memviewslice __pyx_v_YI, CYTHON_UNUSED double __pyx_v_span, double __pyx_v_alpha, double __pyx_v_beta, int __pyx_v_lonlat, int __pyx_v_expfunc) {
-  __pyx_t_10smoomacypy_7compute_DIST_FUNC __pyx_v_dist_func;
+static PyObject *__pyx_f_10smoomacypy_7compute_compute_1_var_geo(__Pyx_memviewslice __pyx_v_knownpts, __Pyx_memviewslice __pyx_v_XI, __Pyx_memviewslice __pyx_v_YI, CYTHON_UNUSED double __pyx_v_span, double __pyx_v_alpha, double __pyx_v_beta, int __pyx_v_expfunc) {
   __pyx_t_10smoomacypy_7compute_SMOOTH_FUNC __pyx_v_smooth;
   Py_ssize_t __pyx_v_len_xi;
   Py_ssize_t __pyx_v_len_yi;
@@ -2957,690 +3113,15 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_1_var(__Pyx_memviewslice 
   Py_ssize_t __pyx_v_ix_y;
   __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_x_cell;
   __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_y_cell;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_cos_y_cell;
   Py_ssize_t __pyx_v_j;
   __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v__sum;
   Py_ssize_t __pyx_v_ix;
   __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_dist;
   __Pyx_memviewslice __pyx_v_point = { 0, 0, { 0 }, { 0 }, { 0 } };
   PyArrayObject *__pyx_v_res = 0;
-  __pyx_t_10smoomacypy_7compute_DTYPE_t *__pyx_v_x_knownpts;
-  __pyx_t_10smoomacypy_7compute_DTYPE_t *__pyx_v_y_knownpts;
-  __pyx_t_10smoomacypy_7compute_DTYPE_t *__pyx_v_z_knownpts;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_res;
-  __Pyx_Buffer __pyx_pybuffer_res;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  PyArrayObject *__pyx_t_5 = NULL;
-  int __pyx_t_6;
-  Py_ssize_t __pyx_t_7;
-  Py_ssize_t __pyx_t_8;
-  __Pyx_memviewslice __pyx_t_9 = { 0, 0, { 0 }, { 0 }, { 0 } };
-  Py_ssize_t __pyx_t_10;
-  Py_ssize_t __pyx_t_11;
-  Py_ssize_t __pyx_t_12;
-  Py_ssize_t __pyx_t_13;
-  Py_ssize_t __pyx_t_14;
-  Py_ssize_t __pyx_t_15;
-  Py_ssize_t __pyx_t_16;
-  Py_ssize_t __pyx_t_17;
-  Py_ssize_t __pyx_t_18;
-  Py_ssize_t __pyx_t_19;
-  __Pyx_RefNannySetupContext("compute_1_var", 0);
-  __pyx_pybuffer_res.pybuffer.buf = NULL;
-  __pyx_pybuffer_res.refcount = 0;
-  __pyx_pybuffernd_res.data = NULL;
-  __pyx_pybuffernd_res.rcbuffer = &__pyx_pybuffer_res;
-
-  /* "smoomacypy/compute.pyx":59
- *     cdef DIST_FUNC dist_func
- *     cdef SMOOTH_FUNC smooth
- *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]             # <<<<<<<<<<<<<<
- *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
- *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi
- */
-  __pyx_v_len_xi = ((Py_ssize_t)(__pyx_v_XI.shape[0]));
-
-  /* "smoomacypy/compute.pyx":60
- *     cdef SMOOTH_FUNC smooth
- *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]
- *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]             # <<<<<<<<<<<<<<
- *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi
- *     cdef Py_ssize_t nb_pts = knownpts.shape[0]
- */
-  __pyx_v_len_yi = ((Py_ssize_t)(__pyx_v_YI.shape[0]));
-
-  /* "smoomacypy/compute.pyx":61
- *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]
- *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
- *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi             # <<<<<<<<<<<<<<
- *     cdef Py_ssize_t nb_pts = knownpts.shape[0]
- *     cdef Py_ssize_t ix_x
- */
-  __pyx_v_nb_pot = (((Py_ssize_t)__pyx_v_len_xi) * __pyx_v_len_yi);
-
-  /* "smoomacypy/compute.pyx":62
- *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
- *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi
- *     cdef Py_ssize_t nb_pts = knownpts.shape[0]             # <<<<<<<<<<<<<<
- *     cdef Py_ssize_t ix_x
- *     cdef Py_ssize_t ix_y
- */
-  __pyx_v_nb_pts = (__pyx_v_knownpts.shape[0]);
-
-  /* "smoomacypy/compute.pyx":68
- *     cdef DTYPE_t y_cell
- *     cdef Py_ssize_t j
- *     cdef DTYPE_t _sum = 0.0             # <<<<<<<<<<<<<<
- *     cdef Py_ssize_t ix = 0
- *     cdef DTYPE_t dist
- */
-  __pyx_v__sum = 0.0;
-
-  /* "smoomacypy/compute.pyx":69
- *     cdef Py_ssize_t j
- *     cdef DTYPE_t _sum = 0.0
- *     cdef Py_ssize_t ix = 0             # <<<<<<<<<<<<<<
- *     cdef DTYPE_t dist
- *     cdef np.double_t[:] point
- */
-  __pyx_v_ix = 0;
-
-  /* "smoomacypy/compute.pyx":72
- *     cdef DTYPE_t dist
- *     cdef np.double_t[:] point
- *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)             # <<<<<<<<<<<<<<
- *     cdef DTYPE_t *x_knownpts
- *     cdef DTYPE_t *y_knownpts
- */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 72, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyInt_FromSsize_t(__pyx_v_nb_pot); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 72, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_GIVEREF(__pyx_t_1);
-  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
-  __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 72, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_4) < 0) __PYX_ERR(0, 72, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 72, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 72, __pyx_L1_error)
-  __pyx_t_5 = ((PyArrayObject *)__pyx_t_4);
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_res.rcbuffer->pybuffer, (PyObject*)__pyx_t_5, &__Pyx_TypeInfo_nn___pyx_t_10smoomacypy_7compute_DTYPE_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
-      __pyx_v_res = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_res.rcbuffer->pybuffer.buf = NULL;
-      __PYX_ERR(0, 72, __pyx_L1_error)
-    } else {__pyx_pybuffernd_res.diminfo[0].strides = __pyx_pybuffernd_res.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_res.diminfo[0].shape = __pyx_pybuffernd_res.rcbuffer->pybuffer.shape[0];
-    }
-  }
-  __pyx_t_5 = 0;
-  __pyx_v_res = ((PyArrayObject *)__pyx_t_4);
-  __pyx_t_4 = 0;
-
-  /* "smoomacypy/compute.pyx":78
- * 
- * 
- *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))             # <<<<<<<<<<<<<<
- *     if not x_knownpts:
- *         raise MemoryError()
- */
-  __pyx_v_x_knownpts = ((__pyx_t_10smoomacypy_7compute_DTYPE_t *)malloc((__pyx_v_nb_pts * (sizeof(__pyx_t_10smoomacypy_7compute_DTYPE_t)))));
-
-  /* "smoomacypy/compute.pyx":79
- * 
- *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not x_knownpts:             # <<<<<<<<<<<<<<
- *         raise MemoryError()
- *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- */
-  __pyx_t_6 = ((!(__pyx_v_x_knownpts != 0)) != 0);
-  if (__pyx_t_6) {
-
-    /* "smoomacypy/compute.pyx":80
- *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not x_knownpts:
- *         raise MemoryError()             # <<<<<<<<<<<<<<
- *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not y_knownpts:
- */
-    PyErr_NoMemory(); __PYX_ERR(0, 80, __pyx_L1_error)
-
-    /* "smoomacypy/compute.pyx":79
- * 
- *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not x_knownpts:             # <<<<<<<<<<<<<<
- *         raise MemoryError()
- *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- */
-  }
-
-  /* "smoomacypy/compute.pyx":81
- *     if not x_knownpts:
- *         raise MemoryError()
- *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))             # <<<<<<<<<<<<<<
- *     if not y_knownpts:
- *         free(x_knownpts)
- */
-  __pyx_v_y_knownpts = ((__pyx_t_10smoomacypy_7compute_DTYPE_t *)malloc((__pyx_v_nb_pts * (sizeof(__pyx_t_10smoomacypy_7compute_DTYPE_t)))));
-
-  /* "smoomacypy/compute.pyx":82
- *         raise MemoryError()
- *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not y_knownpts:             # <<<<<<<<<<<<<<
- *         free(x_knownpts)
- *         raise MemoryError()
- */
-  __pyx_t_6 = ((!(__pyx_v_y_knownpts != 0)) != 0);
-  if (__pyx_t_6) {
-
-    /* "smoomacypy/compute.pyx":83
- *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not y_knownpts:
- *         free(x_knownpts)             # <<<<<<<<<<<<<<
- *         raise MemoryError()
- *     z_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- */
-    free(__pyx_v_x_knownpts);
-
-    /* "smoomacypy/compute.pyx":84
- *     if not y_knownpts:
- *         free(x_knownpts)
- *         raise MemoryError()             # <<<<<<<<<<<<<<
- *     z_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not z_knownpts:
- */
-    PyErr_NoMemory(); __PYX_ERR(0, 84, __pyx_L1_error)
-
-    /* "smoomacypy/compute.pyx":82
- *         raise MemoryError()
- *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not y_knownpts:             # <<<<<<<<<<<<<<
- *         free(x_knownpts)
- *         raise MemoryError()
- */
-  }
-
-  /* "smoomacypy/compute.pyx":85
- *         free(x_knownpts)
- *         raise MemoryError()
- *     z_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))             # <<<<<<<<<<<<<<
- *     if not z_knownpts:
- *         free(x_knownpts)
- */
-  __pyx_v_z_knownpts = ((__pyx_t_10smoomacypy_7compute_DTYPE_t *)malloc((__pyx_v_nb_pts * (sizeof(__pyx_t_10smoomacypy_7compute_DTYPE_t)))));
-
-  /* "smoomacypy/compute.pyx":86
- *         raise MemoryError()
- *     z_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not z_knownpts:             # <<<<<<<<<<<<<<
- *         free(x_knownpts)
- *         free(y_knownpts)
- */
-  __pyx_t_6 = ((!(__pyx_v_z_knownpts != 0)) != 0);
-  if (__pyx_t_6) {
-
-    /* "smoomacypy/compute.pyx":87
- *     z_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not z_knownpts:
- *         free(x_knownpts)             # <<<<<<<<<<<<<<
- *         free(y_knownpts)
- *         raise MemoryError()
- */
-    free(__pyx_v_x_knownpts);
-
-    /* "smoomacypy/compute.pyx":88
- *     if not z_knownpts:
- *         free(x_knownpts)
- *         free(y_knownpts)             # <<<<<<<<<<<<<<
- *         raise MemoryError()
- * 
- */
-    free(__pyx_v_y_knownpts);
-
-    /* "smoomacypy/compute.pyx":89
- *         free(x_knownpts)
- *         free(y_knownpts)
- *         raise MemoryError()             # <<<<<<<<<<<<<<
- * 
- *     with nogil:
- */
-    PyErr_NoMemory(); __PYX_ERR(0, 89, __pyx_L1_error)
-
-    /* "smoomacypy/compute.pyx":86
- *         raise MemoryError()
- *     z_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not z_knownpts:             # <<<<<<<<<<<<<<
- *         free(x_knownpts)
- *         free(y_knownpts)
- */
-  }
-
-  /* "smoomacypy/compute.pyx":91
- *         raise MemoryError()
- * 
- *     with nogil:             # <<<<<<<<<<<<<<
- *         for j in range(nb_pts):
- *             point = knownpts[j]
- */
-  {
-      #ifdef WITH_THREAD
-      PyThreadState *_save;
-      Py_UNBLOCK_THREADS
-      __Pyx_FastGIL_Remember();
-      #endif
-      /*try:*/ {
-
-        /* "smoomacypy/compute.pyx":92
- * 
- *     with nogil:
- *         for j in range(nb_pts):             # <<<<<<<<<<<<<<
- *             point = knownpts[j]
- *             x_knownpts[j] = point[<Py_ssize_t>0]
- */
-        __pyx_t_7 = __pyx_v_nb_pts;
-        for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
-          __pyx_v_j = __pyx_t_8;
-
-          /* "smoomacypy/compute.pyx":93
- *     with nogil:
- *         for j in range(nb_pts):
- *             point = knownpts[j]             # <<<<<<<<<<<<<<
- *             x_knownpts[j] = point[<Py_ssize_t>0]
- *             y_knownpts[j] = point[<Py_ssize_t>1]
- */
-          __pyx_t_9.data = __pyx_v_knownpts.data;
-          __pyx_t_9.memview = __pyx_v_knownpts.memview;
-          __PYX_INC_MEMVIEW(&__pyx_t_9, 0);
-          {
-    Py_ssize_t __pyx_tmp_idx = __pyx_v_j;
-    Py_ssize_t __pyx_tmp_shape = __pyx_v_knownpts.shape[0];
-    Py_ssize_t __pyx_tmp_stride = __pyx_v_knownpts.strides[0];
-    if (0 && (__pyx_tmp_idx < 0))
-        __pyx_tmp_idx += __pyx_tmp_shape;
-    if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
-            #ifdef WITH_THREAD
-            PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
-            #endif
-        PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
-            #ifdef WITH_THREAD
-            PyGILState_Release(__pyx_gilstate_save);
-            #endif
-        __PYX_ERR(0, 93, __pyx_L7_error)
-    }
-        __pyx_t_9.data += __pyx_tmp_idx * __pyx_tmp_stride;
-}
-
-__pyx_t_9.shape[0] = __pyx_v_knownpts.shape[1];
-__pyx_t_9.strides[0] = __pyx_v_knownpts.strides[1];
-    __pyx_t_9.suboffsets[0] = -1;
-
-__PYX_XDEC_MEMVIEW(&__pyx_v_point, 0);
-          __pyx_v_point = __pyx_t_9;
-          __pyx_t_9.memview = NULL;
-          __pyx_t_9.data = NULL;
-
-          /* "smoomacypy/compute.pyx":94
- *         for j in range(nb_pts):
- *             point = knownpts[j]
- *             x_knownpts[j] = point[<Py_ssize_t>0]             # <<<<<<<<<<<<<<
- *             y_knownpts[j] = point[<Py_ssize_t>1]
- *             z_knownpts[j] = point[<Py_ssize_t>2]
- */
-          __pyx_t_10 = ((Py_ssize_t)0);
-          (__pyx_v_x_knownpts[__pyx_v_j]) = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_10 * __pyx_v_point.strides[0]) )));
-
-          /* "smoomacypy/compute.pyx":95
- *             point = knownpts[j]
- *             x_knownpts[j] = point[<Py_ssize_t>0]
- *             y_knownpts[j] = point[<Py_ssize_t>1]             # <<<<<<<<<<<<<<
- *             z_knownpts[j] = point[<Py_ssize_t>2]
- * 
- */
-          __pyx_t_11 = ((Py_ssize_t)1);
-          (__pyx_v_y_knownpts[__pyx_v_j]) = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_11 * __pyx_v_point.strides[0]) )));
-
-          /* "smoomacypy/compute.pyx":96
- *             x_knownpts[j] = point[<Py_ssize_t>0]
- *             y_knownpts[j] = point[<Py_ssize_t>1]
- *             z_knownpts[j] = point[<Py_ssize_t>2]             # <<<<<<<<<<<<<<
- * 
- *         if lonlat:
- */
-          __pyx_t_12 = ((Py_ssize_t)2);
-          (__pyx_v_z_knownpts[__pyx_v_j]) = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_12 * __pyx_v_point.strides[0]) )));
-        }
-
-        /* "smoomacypy/compute.pyx":98
- *             z_knownpts[j] = point[<Py_ssize_t>2]
- * 
- *         if lonlat:             # <<<<<<<<<<<<<<
- *             dist_func = haversine
- *         else:
- */
-        __pyx_t_6 = (__pyx_v_lonlat != 0);
-        if (__pyx_t_6) {
-
-          /* "smoomacypy/compute.pyx":99
- * 
- *         if lonlat:
- *             dist_func = haversine             # <<<<<<<<<<<<<<
- *         else:
- *             dist_func = euclidian
- */
-          __pyx_v_dist_func = __pyx_f_10smoomacypy_7compute_haversine;
-
-          /* "smoomacypy/compute.pyx":98
- *             z_knownpts[j] = point[<Py_ssize_t>2]
- * 
- *         if lonlat:             # <<<<<<<<<<<<<<
- *             dist_func = haversine
- *         else:
- */
-          goto __pyx_L11;
-        }
-
-        /* "smoomacypy/compute.pyx":101
- *             dist_func = haversine
- *         else:
- *             dist_func = euclidian             # <<<<<<<<<<<<<<
- * 
- *         if expfunc:
- */
-        /*else*/ {
-          __pyx_v_dist_func = __pyx_f_10smoomacypy_7compute_euclidian;
-        }
-        __pyx_L11:;
-
-        /* "smoomacypy/compute.pyx":103
- *             dist_func = euclidian
- * 
- *         if expfunc:             # <<<<<<<<<<<<<<
- *             smooth = exponential
- *         else:
- */
-        __pyx_t_6 = (__pyx_v_expfunc != 0);
-        if (__pyx_t_6) {
-
-          /* "smoomacypy/compute.pyx":104
- * 
- *         if expfunc:
- *             smooth = exponential             # <<<<<<<<<<<<<<
- *         else:
- *             smooth = pareto
- */
-          __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_exponential;
-
-          /* "smoomacypy/compute.pyx":103
- *             dist_func = euclidian
- * 
- *         if expfunc:             # <<<<<<<<<<<<<<
- *             smooth = exponential
- *         else:
- */
-          goto __pyx_L12;
-        }
-
-        /* "smoomacypy/compute.pyx":106
- *             smooth = exponential
- *         else:
- *             smooth = pareto             # <<<<<<<<<<<<<<
- * 
- *         for ix_x in range(len_xi):
- */
-        /*else*/ {
-          __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_pareto;
-        }
-        __pyx_L12:;
-
-        /* "smoomacypy/compute.pyx":108
- *             smooth = pareto
- * 
- *         for ix_x in range(len_xi):             # <<<<<<<<<<<<<<
- *             x_cell = XI[ix_x]
- *             for ix_y in range(len_yi):
- */
-        __pyx_t_7 = __pyx_v_len_xi;
-        for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
-          __pyx_v_ix_x = __pyx_t_8;
-
-          /* "smoomacypy/compute.pyx":109
- * 
- *         for ix_x in range(len_xi):
- *             x_cell = XI[ix_x]             # <<<<<<<<<<<<<<
- *             for ix_y in range(len_yi):
- *                 y_cell= YI[ix_y]
- */
-          __pyx_t_13 = __pyx_v_ix_x;
-          __pyx_v_x_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_XI.data) + __pyx_t_13)) )));
-
-          /* "smoomacypy/compute.pyx":110
- *         for ix_x in range(len_xi):
- *             x_cell = XI[ix_x]
- *             for ix_y in range(len_yi):             # <<<<<<<<<<<<<<
- *                 y_cell= YI[ix_y]
- *                 _sum = 0.0
- */
-          __pyx_t_14 = __pyx_v_len_yi;
-          for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_14; __pyx_t_15+=1) {
-            __pyx_v_ix_y = __pyx_t_15;
-
-            /* "smoomacypy/compute.pyx":111
- *             x_cell = XI[ix_x]
- *             for ix_y in range(len_yi):
- *                 y_cell= YI[ix_y]             # <<<<<<<<<<<<<<
- *                 _sum = 0.0
- *                 for j in range(nb_pts):
- */
-            __pyx_t_16 = __pyx_v_ix_y;
-            __pyx_v_y_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_YI.data) + __pyx_t_16)) )));
-
-            /* "smoomacypy/compute.pyx":112
- *             for ix_y in range(len_yi):
- *                 y_cell= YI[ix_y]
- *                 _sum = 0.0             # <<<<<<<<<<<<<<
- *                 for j in range(nb_pts):
- *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
- */
-            __pyx_v__sum = 0.0;
-
-            /* "smoomacypy/compute.pyx":113
- *                 y_cell= YI[ix_y]
- *                 _sum = 0.0
- *                 for j in range(nb_pts):             # <<<<<<<<<<<<<<
- *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
- *                     _sum += z_knownpts[j] * smooth(alpha, beta, dist)
- */
-            __pyx_t_17 = __pyx_v_nb_pts;
-            for (__pyx_t_18 = 0; __pyx_t_18 < __pyx_t_17; __pyx_t_18+=1) {
-              __pyx_v_j = __pyx_t_18;
-
-              /* "smoomacypy/compute.pyx":114
- *                 _sum = 0.0
- *                 for j in range(nb_pts):
- *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])             # <<<<<<<<<<<<<<
- *                     _sum += z_knownpts[j] * smooth(alpha, beta, dist)
- *                 res[ix] = _sum
- */
-              __pyx_v_dist = __pyx_v_dist_func(__pyx_v_x_cell, __pyx_v_y_cell, (__pyx_v_x_knownpts[__pyx_v_j]), (__pyx_v_y_knownpts[__pyx_v_j]));
-
-              /* "smoomacypy/compute.pyx":115
- *                 for j in range(nb_pts):
- *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
- *                     _sum += z_knownpts[j] * smooth(alpha, beta, dist)             # <<<<<<<<<<<<<<
- *                 res[ix] = _sum
- *                 ix += 1
- */
-              __pyx_v__sum = (__pyx_v__sum + ((__pyx_v_z_knownpts[__pyx_v_j]) * __pyx_v_smooth(__pyx_v_alpha, __pyx_v_beta, __pyx_v_dist)));
-            }
-
-            /* "smoomacypy/compute.pyx":116
- *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
- *                     _sum += z_knownpts[j] * smooth(alpha, beta, dist)
- *                 res[ix] = _sum             # <<<<<<<<<<<<<<
- *                 ix += 1
- *         free(x_knownpts)
- */
-            __pyx_t_19 = __pyx_v_ix;
-            *__Pyx_BufPtrCContig1d(__pyx_t_10smoomacypy_7compute_DTYPE_t *, __pyx_pybuffernd_res.rcbuffer->pybuffer.buf, __pyx_t_19, __pyx_pybuffernd_res.diminfo[0].strides) = __pyx_v__sum;
-
-            /* "smoomacypy/compute.pyx":117
- *                     _sum += z_knownpts[j] * smooth(alpha, beta, dist)
- *                 res[ix] = _sum
- *                 ix += 1             # <<<<<<<<<<<<<<
- *         free(x_knownpts)
- *         free(y_knownpts)
- */
-            __pyx_v_ix = (__pyx_v_ix + 1);
-          }
-        }
-
-        /* "smoomacypy/compute.pyx":118
- *                 res[ix] = _sum
- *                 ix += 1
- *         free(x_knownpts)             # <<<<<<<<<<<<<<
- *         free(y_knownpts)
- *         free(z_knownpts)
- */
-        free(__pyx_v_x_knownpts);
-
-        /* "smoomacypy/compute.pyx":119
- *                 ix += 1
- *         free(x_knownpts)
- *         free(y_knownpts)             # <<<<<<<<<<<<<<
- *         free(z_knownpts)
- *     return res
- */
-        free(__pyx_v_y_knownpts);
-
-        /* "smoomacypy/compute.pyx":120
- *         free(x_knownpts)
- *         free(y_knownpts)
- *         free(z_knownpts)             # <<<<<<<<<<<<<<
- *     return res
- * 
- */
-        free(__pyx_v_z_knownpts);
-      }
-
-      /* "smoomacypy/compute.pyx":91
- *         raise MemoryError()
- * 
- *     with nogil:             # <<<<<<<<<<<<<<
- *         for j in range(nb_pts):
- *             point = knownpts[j]
- */
-      /*finally:*/ {
-        /*normal exit:*/{
-          #ifdef WITH_THREAD
-          __Pyx_FastGIL_Forget();
-          Py_BLOCK_THREADS
-          #endif
-          goto __pyx_L8;
-        }
-        __pyx_L7_error: {
-          #ifdef WITH_THREAD
-          __Pyx_FastGIL_Forget();
-          Py_BLOCK_THREADS
-          #endif
-          goto __pyx_L1_error;
-        }
-        __pyx_L8:;
-      }
-  }
-
-  /* "smoomacypy/compute.pyx":121
- *         free(y_knownpts)
- *         free(z_knownpts)
- *     return res             # <<<<<<<<<<<<<<
- * 
- * 
- */
-  __Pyx_XDECREF(__pyx_r);
-  __Pyx_INCREF(((PyObject *)__pyx_v_res));
-  __pyx_r = ((PyObject *)__pyx_v_res);
-  goto __pyx_L0;
-
-  /* "smoomacypy/compute.pyx":54
- * 
- * 
- * cdef compute_1_var(             # <<<<<<<<<<<<<<
- *         np.double_t[:,::1] knownpts, np.double_t[::1] XI, np.double_t[::1] YI,
- *         double span, double alpha, double beta, bint lonlat, bint expfunc):
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __PYX_XDEC_MEMVIEW(&__pyx_t_9, 1);
-  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
-    __Pyx_PyThreadState_declare
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
-  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("smoomacypy.compute.compute_1_var", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  goto __pyx_L2;
-  __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
-  __pyx_L2:;
-  __PYX_XDEC_MEMVIEW(&__pyx_v_point, 1);
-  __Pyx_XDECREF((PyObject *)__pyx_v_res);
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "smoomacypy/compute.pyx":124
- * 
- * 
- * cdef compute_2_var(             # <<<<<<<<<<<<<<
- *         np.double_t[:,::1] knownpts, np.double_t[::1] XI, np.double_t[::1] YI,
- *         double span, double alpha, double beta, bint lonlat, bint expfunc):
- */
-
-static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice __pyx_v_knownpts, __Pyx_memviewslice __pyx_v_XI, __Pyx_memviewslice __pyx_v_YI, CYTHON_UNUSED double __pyx_v_span, double __pyx_v_alpha, double __pyx_v_beta, int __pyx_v_lonlat, int __pyx_v_expfunc) {
-  __pyx_t_10smoomacypy_7compute_DIST_FUNC __pyx_v_dist_func;
-  __pyx_t_10smoomacypy_7compute_SMOOTH_FUNC __pyx_v_smooth;
-  Py_ssize_t __pyx_v_len_xi;
-  Py_ssize_t __pyx_v_len_yi;
-  Py_ssize_t __pyx_v_nb_pot;
-  Py_ssize_t __pyx_v_nb_pts;
-  Py_ssize_t __pyx_v_ix_x;
-  Py_ssize_t __pyx_v_ix_y;
-  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_x_cell;
-  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_y_cell;
-  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v__sum1;
-  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v__sum2;
-  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_t;
-  Py_ssize_t __pyx_v_ix;
-  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_dist;
-  __Pyx_memviewslice __pyx_v_point = { 0, 0, { 0 }, { 0 }, { 0 } };
-  PyArrayObject *__pyx_v_res = 0;
-  __pyx_t_10smoomacypy_7compute_DTYPE_t *__pyx_v_x_knownpts;
-  __pyx_t_10smoomacypy_7compute_DTYPE_t *__pyx_v_y_knownpts;
-  __pyx_t_10smoomacypy_7compute_DTYPE_t *__pyx_v_z1_knownpts;
-  __pyx_t_10smoomacypy_7compute_DTYPE_t *__pyx_v_z2_knownpts;
-  Py_ssize_t __pyx_v_j;
+  struct __pyx_t_10smoomacypy_7compute_PtValueGeo *__pyx_v_c_knownpts;
+  struct __pyx_t_10smoomacypy_7compute_PtValueGeo *__pyx_v_ptval;
   __Pyx_LocalBuf_ND __pyx_pybuffernd_res;
   __Pyx_Buffer __pyx_pybuffer_res;
   PyObject *__pyx_r = NULL;
@@ -3665,14 +3146,14 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
   Py_ssize_t __pyx_t_18;
   Py_ssize_t __pyx_t_19;
   Py_ssize_t __pyx_t_20;
-  __Pyx_RefNannySetupContext("compute_2_var", 0);
+  __Pyx_RefNannySetupContext("compute_1_var_geo", 0);
   __pyx_pybuffer_res.pybuffer.buf = NULL;
   __pyx_pybuffer_res.refcount = 0;
   __pyx_pybuffernd_res.data = NULL;
   __pyx_pybuffernd_res.rcbuffer = &__pyx_pybuffer_res;
 
-  /* "smoomacypy/compute.pyx":129
- *     cdef DIST_FUNC dist_func
+  /* "smoomacypy/compute.pyx":86
+ *         double span, double alpha, double beta, bint expfunc):
  *     cdef SMOOTH_FUNC smooth
  *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]             # <<<<<<<<<<<<<<
  *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
@@ -3680,7 +3161,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
  */
   __pyx_v_len_xi = ((Py_ssize_t)(__pyx_v_XI.shape[0]));
 
-  /* "smoomacypy/compute.pyx":130
+  /* "smoomacypy/compute.pyx":87
  *     cdef SMOOTH_FUNC smooth
  *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]
  *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]             # <<<<<<<<<<<<<<
@@ -3689,7 +3170,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
  */
   __pyx_v_len_yi = ((Py_ssize_t)(__pyx_v_YI.shape[0]));
 
-  /* "smoomacypy/compute.pyx":131
+  /* "smoomacypy/compute.pyx":88
  *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]
  *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
  *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi             # <<<<<<<<<<<<<<
@@ -3698,7 +3179,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
  */
   __pyx_v_nb_pot = (((Py_ssize_t)__pyx_v_len_xi) * __pyx_v_len_yi);
 
-  /* "smoomacypy/compute.pyx":132
+  /* "smoomacypy/compute.pyx":89
  *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
  *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi
  *     cdef Py_ssize_t nb_pts = knownpts.shape[0]             # <<<<<<<<<<<<<<
@@ -3707,79 +3188,61 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
  */
   __pyx_v_nb_pts = (__pyx_v_knownpts.shape[0]);
 
-  /* "smoomacypy/compute.pyx":137
- *     cdef DTYPE_t x_cell
- *     cdef DTYPE_t y_cell
- *     cdef DTYPE_t _sum1 = 0.0             # <<<<<<<<<<<<<<
- *     cdef DTYPE_t _sum2 = 0.0
- *     cdef DTYPE_t t = 0.0
- */
-  __pyx_v__sum1 = 0.0;
-
-  /* "smoomacypy/compute.pyx":138
- *     cdef DTYPE_t y_cell
- *     cdef DTYPE_t _sum1 = 0.0
- *     cdef DTYPE_t _sum2 = 0.0             # <<<<<<<<<<<<<<
- *     cdef DTYPE_t t = 0.0
- *     cdef Py_ssize_t ix = 0
- */
-  __pyx_v__sum2 = 0.0;
-
-  /* "smoomacypy/compute.pyx":139
- *     cdef DTYPE_t _sum1 = 0.0
- *     cdef DTYPE_t _sum2 = 0.0
- *     cdef DTYPE_t t = 0.0             # <<<<<<<<<<<<<<
+  /* "smoomacypy/compute.pyx":96
+ *     cdef DTYPE_t cos_y_cell
+ *     cdef Py_ssize_t j
+ *     cdef DTYPE_t _sum = 0.0             # <<<<<<<<<<<<<<
  *     cdef Py_ssize_t ix = 0
  *     cdef DTYPE_t dist
  */
-  __pyx_v_t = 0.0;
+  __pyx_v__sum = 0.0;
 
-  /* "smoomacypy/compute.pyx":140
- *     cdef DTYPE_t _sum2 = 0.0
- *     cdef DTYPE_t t = 0.0
+  /* "smoomacypy/compute.pyx":97
+ *     cdef Py_ssize_t j
+ *     cdef DTYPE_t _sum = 0.0
  *     cdef Py_ssize_t ix = 0             # <<<<<<<<<<<<<<
  *     cdef DTYPE_t dist
  *     cdef np.double_t[:] point
  */
   __pyx_v_ix = 0;
 
-  /* "smoomacypy/compute.pyx":143
+  /* "smoomacypy/compute.pyx":100
  *     cdef DTYPE_t dist
  *     cdef np.double_t[:] point
  *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)             # <<<<<<<<<<<<<<
- *     cdef DTYPE_t *x_knownpts
- *     cdef DTYPE_t *y_knownpts
+ *     cdef PtValueGeo *c_knownpts = <PtValueGeo *>malloc(nb_pts * sizeof(PtValueGeo))
+ *     cdef PtValueGeo *ptval
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyInt_FromSsize_t(__pyx_v_nb_pot); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_1 = PyInt_FromSsize_t(__pyx_v_nb_pot); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_4) < 0) __PYX_ERR(0, 143, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_4) < 0) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 143, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 100, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 143, __pyx_L1_error)
+  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 100, __pyx_L1_error)
   __pyx_t_5 = ((PyArrayObject *)__pyx_t_4);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
     if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_res.rcbuffer->pybuffer, (PyObject*)__pyx_t_5, &__Pyx_TypeInfo_nn___pyx_t_10smoomacypy_7compute_DTYPE_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
       __pyx_v_res = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_res.rcbuffer->pybuffer.buf = NULL;
-      __PYX_ERR(0, 143, __pyx_L1_error)
+      __PYX_ERR(0, 100, __pyx_L1_error)
     } else {__pyx_pybuffernd_res.diminfo[0].strides = __pyx_pybuffernd_res.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_res.diminfo[0].shape = __pyx_pybuffernd_res.rcbuffer->pybuffer.shape[0];
     }
   }
@@ -3787,209 +3250,44 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
   __pyx_v_res = ((PyArrayObject *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "smoomacypy/compute.pyx":150
- * 
- * 
- *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))             # <<<<<<<<<<<<<<
- *     if not x_knownpts:
- *         raise MemoryError()
+  /* "smoomacypy/compute.pyx":101
+ *     cdef np.double_t[:] point
+ *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)
+ *     cdef PtValueGeo *c_knownpts = <PtValueGeo *>malloc(nb_pts * sizeof(PtValueGeo))             # <<<<<<<<<<<<<<
+ *     cdef PtValueGeo *ptval
+ *     if not c_knownpts:
  */
-  __pyx_v_x_knownpts = ((__pyx_t_10smoomacypy_7compute_DTYPE_t *)malloc((__pyx_v_nb_pts * (sizeof(__pyx_t_10smoomacypy_7compute_DTYPE_t)))));
+  __pyx_v_c_knownpts = ((struct __pyx_t_10smoomacypy_7compute_PtValueGeo *)malloc((__pyx_v_nb_pts * (sizeof(struct __pyx_t_10smoomacypy_7compute_PtValueGeo)))));
 
-  /* "smoomacypy/compute.pyx":151
- * 
- *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not x_knownpts:             # <<<<<<<<<<<<<<
+  /* "smoomacypy/compute.pyx":103
+ *     cdef PtValueGeo *c_knownpts = <PtValueGeo *>malloc(nb_pts * sizeof(PtValueGeo))
+ *     cdef PtValueGeo *ptval
+ *     if not c_knownpts:             # <<<<<<<<<<<<<<
  *         raise MemoryError()
- *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
+ * 
  */
-  __pyx_t_6 = ((!(__pyx_v_x_knownpts != 0)) != 0);
+  __pyx_t_6 = ((!(__pyx_v_c_knownpts != 0)) != 0);
   if (__pyx_t_6) {
 
-    /* "smoomacypy/compute.pyx":152
- *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not x_knownpts:
- *         raise MemoryError()             # <<<<<<<<<<<<<<
- *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not y_knownpts:
- */
-    PyErr_NoMemory(); __PYX_ERR(0, 152, __pyx_L1_error)
-
-    /* "smoomacypy/compute.pyx":151
- * 
- *     x_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not x_knownpts:             # <<<<<<<<<<<<<<
- *         raise MemoryError()
- *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- */
-  }
-
-  /* "smoomacypy/compute.pyx":153
- *     if not x_knownpts:
- *         raise MemoryError()
- *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))             # <<<<<<<<<<<<<<
- *     if not y_knownpts:
- *         free(x_knownpts)
- */
-  __pyx_v_y_knownpts = ((__pyx_t_10smoomacypy_7compute_DTYPE_t *)malloc((__pyx_v_nb_pts * (sizeof(__pyx_t_10smoomacypy_7compute_DTYPE_t)))));
-
-  /* "smoomacypy/compute.pyx":154
- *         raise MemoryError()
- *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not y_knownpts:             # <<<<<<<<<<<<<<
- *         free(x_knownpts)
- *         raise MemoryError()
- */
-  __pyx_t_6 = ((!(__pyx_v_y_knownpts != 0)) != 0);
-  if (__pyx_t_6) {
-
-    /* "smoomacypy/compute.pyx":155
- *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not y_knownpts:
- *         free(x_knownpts)             # <<<<<<<<<<<<<<
- *         raise MemoryError()
- *     z1_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- */
-    free(__pyx_v_x_knownpts);
-
-    /* "smoomacypy/compute.pyx":156
- *     if not y_knownpts:
- *         free(x_knownpts)
- *         raise MemoryError()             # <<<<<<<<<<<<<<
- *     z1_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not z1_knownpts:
- */
-    PyErr_NoMemory(); __PYX_ERR(0, 156, __pyx_L1_error)
-
-    /* "smoomacypy/compute.pyx":154
- *         raise MemoryError()
- *     y_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not y_knownpts:             # <<<<<<<<<<<<<<
- *         free(x_knownpts)
- *         raise MemoryError()
- */
-  }
-
-  /* "smoomacypy/compute.pyx":157
- *         free(x_knownpts)
- *         raise MemoryError()
- *     z1_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))             # <<<<<<<<<<<<<<
- *     if not z1_knownpts:
- *         free(x_knownpts)
- */
-  __pyx_v_z1_knownpts = ((__pyx_t_10smoomacypy_7compute_DTYPE_t *)malloc((__pyx_v_nb_pts * (sizeof(__pyx_t_10smoomacypy_7compute_DTYPE_t)))));
-
-  /* "smoomacypy/compute.pyx":158
- *         raise MemoryError()
- *     z1_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not z1_knownpts:             # <<<<<<<<<<<<<<
- *         free(x_knownpts)
- *         free(y_knownpts)
- */
-  __pyx_t_6 = ((!(__pyx_v_z1_knownpts != 0)) != 0);
-  if (__pyx_t_6) {
-
-    /* "smoomacypy/compute.pyx":159
- *     z1_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not z1_knownpts:
- *         free(x_knownpts)             # <<<<<<<<<<<<<<
- *         free(y_knownpts)
- *         raise MemoryError()
- */
-    free(__pyx_v_x_knownpts);
-
-    /* "smoomacypy/compute.pyx":160
- *     if not z1_knownpts:
- *         free(x_knownpts)
- *         free(y_knownpts)             # <<<<<<<<<<<<<<
- *         raise MemoryError()
- *     z2_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- */
-    free(__pyx_v_y_knownpts);
-
-    /* "smoomacypy/compute.pyx":161
- *         free(x_knownpts)
- *         free(y_knownpts)
- *         raise MemoryError()             # <<<<<<<<<<<<<<
- *     z2_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not z2_knownpts:
- */
-    PyErr_NoMemory(); __PYX_ERR(0, 161, __pyx_L1_error)
-
-    /* "smoomacypy/compute.pyx":158
- *         raise MemoryError()
- *     z1_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not z1_knownpts:             # <<<<<<<<<<<<<<
- *         free(x_knownpts)
- *         free(y_knownpts)
- */
-  }
-
-  /* "smoomacypy/compute.pyx":162
- *         free(y_knownpts)
- *         raise MemoryError()
- *     z2_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))             # <<<<<<<<<<<<<<
- *     if not z2_knownpts:
- *         free(x_knownpts)
- */
-  __pyx_v_z2_knownpts = ((__pyx_t_10smoomacypy_7compute_DTYPE_t *)malloc((__pyx_v_nb_pts * (sizeof(__pyx_t_10smoomacypy_7compute_DTYPE_t)))));
-
-  /* "smoomacypy/compute.pyx":163
- *         raise MemoryError()
- *     z2_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not z2_knownpts:             # <<<<<<<<<<<<<<
- *         free(x_knownpts)
- *         free(y_knownpts)
- */
-  __pyx_t_6 = ((!(__pyx_v_z2_knownpts != 0)) != 0);
-  if (__pyx_t_6) {
-
-    /* "smoomacypy/compute.pyx":164
- *     z2_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not z2_knownpts:
- *         free(x_knownpts)             # <<<<<<<<<<<<<<
- *         free(y_knownpts)
- *         free(z1_knownpts)
- */
-    free(__pyx_v_x_knownpts);
-
-    /* "smoomacypy/compute.pyx":165
- *     if not z2_knownpts:
- *         free(x_knownpts)
- *         free(y_knownpts)             # <<<<<<<<<<<<<<
- *         free(z1_knownpts)
- *         raise MemoryError()
- */
-    free(__pyx_v_y_knownpts);
-
-    /* "smoomacypy/compute.pyx":166
- *         free(x_knownpts)
- *         free(y_knownpts)
- *         free(z1_knownpts)             # <<<<<<<<<<<<<<
- *         raise MemoryError()
- * 
- */
-    free(__pyx_v_z1_knownpts);
-
-    /* "smoomacypy/compute.pyx":167
- *         free(y_knownpts)
- *         free(z1_knownpts)
+    /* "smoomacypy/compute.pyx":104
+ *     cdef PtValueGeo *ptval
+ *     if not c_knownpts:
  *         raise MemoryError()             # <<<<<<<<<<<<<<
  * 
  *     with nogil:
  */
-    PyErr_NoMemory(); __PYX_ERR(0, 167, __pyx_L1_error)
+    PyErr_NoMemory(); __PYX_ERR(0, 104, __pyx_L1_error)
 
-    /* "smoomacypy/compute.pyx":163
+    /* "smoomacypy/compute.pyx":103
+ *     cdef PtValueGeo *c_knownpts = <PtValueGeo *>malloc(nb_pts * sizeof(PtValueGeo))
+ *     cdef PtValueGeo *ptval
+ *     if not c_knownpts:             # <<<<<<<<<<<<<<
  *         raise MemoryError()
- *     z2_knownpts = <DTYPE_t *>malloc(nb_pts * sizeof(DTYPE_t))
- *     if not z2_knownpts:             # <<<<<<<<<<<<<<
- *         free(x_knownpts)
- *         free(y_knownpts)
+ * 
  */
   }
 
-  /* "smoomacypy/compute.pyx":169
+  /* "smoomacypy/compute.pyx":106
  *         raise MemoryError()
  * 
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -4004,23 +3302,23 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
       #endif
       /*try:*/ {
 
-        /* "smoomacypy/compute.pyx":170
+        /* "smoomacypy/compute.pyx":107
  * 
  *     with nogil:
  *         for j in range(nb_pts):             # <<<<<<<<<<<<<<
  *             point = knownpts[j]
- *             x_knownpts[j] = point[<Py_ssize_t>0]
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
  */
         __pyx_t_7 = __pyx_v_nb_pts;
         for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
           __pyx_v_j = __pyx_t_8;
 
-          /* "smoomacypy/compute.pyx":171
+          /* "smoomacypy/compute.pyx":108
  *     with nogil:
  *         for j in range(nb_pts):
  *             point = knownpts[j]             # <<<<<<<<<<<<<<
- *             x_knownpts[j] = point[<Py_ssize_t>0]
- *             y_knownpts[j] = point[<Py_ssize_t>1]
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]
  */
           __pyx_t_9.data = __pyx_v_knownpts.data;
           __pyx_t_9.memview = __pyx_v_knownpts.memview;
@@ -4039,7 +3337,7 @@ static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var(__Pyx_memviewslice 
             #ifdef WITH_THREAD
             PyGILState_Release(__pyx_gilstate_save);
             #endif
-        __PYX_ERR(0, 171, __pyx_L8_error)
+        __PYX_ERR(0, 108, __pyx_L5_error)
     }
         __pyx_t_9.data += __pyx_tmp_idx * __pyx_tmp_stride;
 }
@@ -4053,90 +3351,49 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_point, 0);
           __pyx_t_9.memview = NULL;
           __pyx_t_9.data = NULL;
 
-          /* "smoomacypy/compute.pyx":172
+          /* "smoomacypy/compute.pyx":109
  *         for j in range(nb_pts):
  *             point = knownpts[j]
- *             x_knownpts[j] = point[<Py_ssize_t>0]             # <<<<<<<<<<<<<<
- *             y_knownpts[j] = point[<Py_ssize_t>1]
- *             z1_knownpts[j] = point[<Py_ssize_t>2]
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]             # <<<<<<<<<<<<<<
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]
+ *             c_knownpts[j].cos_y = cos(point[<Py_ssize_t>1])
  */
           __pyx_t_10 = ((Py_ssize_t)0);
-          (__pyx_v_x_knownpts[__pyx_v_j]) = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_10 * __pyx_v_point.strides[0]) )));
+          (__pyx_v_c_knownpts[__pyx_v_j]).x = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_10 * __pyx_v_point.strides[0]) )));
 
-          /* "smoomacypy/compute.pyx":173
+          /* "smoomacypy/compute.pyx":110
  *             point = knownpts[j]
- *             x_knownpts[j] = point[<Py_ssize_t>0]
- *             y_knownpts[j] = point[<Py_ssize_t>1]             # <<<<<<<<<<<<<<
- *             z1_knownpts[j] = point[<Py_ssize_t>2]
- *             z2_knownpts[j] = point[<Py_ssize_t>3]
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]             # <<<<<<<<<<<<<<
+ *             c_knownpts[j].cos_y = cos(point[<Py_ssize_t>1])
+ *             c_knownpts[j].value = point[<Py_ssize_t>2]
  */
           __pyx_t_11 = ((Py_ssize_t)1);
-          (__pyx_v_y_knownpts[__pyx_v_j]) = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_11 * __pyx_v_point.strides[0]) )));
+          (__pyx_v_c_knownpts[__pyx_v_j]).y = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_11 * __pyx_v_point.strides[0]) )));
 
-          /* "smoomacypy/compute.pyx":174
- *             x_knownpts[j] = point[<Py_ssize_t>0]
- *             y_knownpts[j] = point[<Py_ssize_t>1]
- *             z1_knownpts[j] = point[<Py_ssize_t>2]             # <<<<<<<<<<<<<<
- *             z2_knownpts[j] = point[<Py_ssize_t>3]
+          /* "smoomacypy/compute.pyx":111
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]
+ *             c_knownpts[j].cos_y = cos(point[<Py_ssize_t>1])             # <<<<<<<<<<<<<<
+ *             c_knownpts[j].value = point[<Py_ssize_t>2]
  * 
  */
-          __pyx_t_12 = ((Py_ssize_t)2);
-          (__pyx_v_z1_knownpts[__pyx_v_j]) = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_12 * __pyx_v_point.strides[0]) )));
+          __pyx_t_12 = ((Py_ssize_t)1);
+          (__pyx_v_c_knownpts[__pyx_v_j]).cos_y = cos((*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_12 * __pyx_v_point.strides[0]) ))));
 
-          /* "smoomacypy/compute.pyx":175
- *             y_knownpts[j] = point[<Py_ssize_t>1]
- *             z1_knownpts[j] = point[<Py_ssize_t>2]
- *             z2_knownpts[j] = point[<Py_ssize_t>3]             # <<<<<<<<<<<<<<
- * 
- *         if lonlat:
- */
-          __pyx_t_13 = ((Py_ssize_t)3);
-          (__pyx_v_z2_knownpts[__pyx_v_j]) = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_13 * __pyx_v_point.strides[0]) )));
-        }
-
-        /* "smoomacypy/compute.pyx":177
- *             z2_knownpts[j] = point[<Py_ssize_t>3]
- * 
- *         if lonlat:             # <<<<<<<<<<<<<<
- *             dist_func = haversine
- *         else:
- */
-        __pyx_t_6 = (__pyx_v_lonlat != 0);
-        if (__pyx_t_6) {
-
-          /* "smoomacypy/compute.pyx":178
- * 
- *         if lonlat:
- *             dist_func = haversine             # <<<<<<<<<<<<<<
- *         else:
- *             dist_func = euclidian
- */
-          __pyx_v_dist_func = __pyx_f_10smoomacypy_7compute_haversine;
-
-          /* "smoomacypy/compute.pyx":177
- *             z2_knownpts[j] = point[<Py_ssize_t>3]
- * 
- *         if lonlat:             # <<<<<<<<<<<<<<
- *             dist_func = haversine
- *         else:
- */
-          goto __pyx_L12;
-        }
-
-        /* "smoomacypy/compute.pyx":180
- *             dist_func = haversine
- *         else:
- *             dist_func = euclidian             # <<<<<<<<<<<<<<
+          /* "smoomacypy/compute.pyx":112
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]
+ *             c_knownpts[j].cos_y = cos(point[<Py_ssize_t>1])
+ *             c_knownpts[j].value = point[<Py_ssize_t>2]             # <<<<<<<<<<<<<<
  * 
  *         if expfunc:
  */
-        /*else*/ {
-          __pyx_v_dist_func = __pyx_f_10smoomacypy_7compute_euclidian;
+          __pyx_t_13 = ((Py_ssize_t)2);
+          (__pyx_v_c_knownpts[__pyx_v_j]).value = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_13 * __pyx_v_point.strides[0]) )));
         }
-        __pyx_L12:;
 
-        /* "smoomacypy/compute.pyx":182
- *             dist_func = euclidian
+        /* "smoomacypy/compute.pyx":114
+ *             c_knownpts[j].value = point[<Py_ssize_t>2]
  * 
  *         if expfunc:             # <<<<<<<<<<<<<<
  *             smooth = exponential
@@ -4145,7 +3402,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_point, 0);
         __pyx_t_6 = (__pyx_v_expfunc != 0);
         if (__pyx_t_6) {
 
-          /* "smoomacypy/compute.pyx":183
+          /* "smoomacypy/compute.pyx":115
  * 
  *         if expfunc:
  *             smooth = exponential             # <<<<<<<<<<<<<<
@@ -4154,17 +3411,17 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_point, 0);
  */
           __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_exponential;
 
-          /* "smoomacypy/compute.pyx":182
- *             dist_func = euclidian
+          /* "smoomacypy/compute.pyx":114
+ *             c_knownpts[j].value = point[<Py_ssize_t>2]
  * 
  *         if expfunc:             # <<<<<<<<<<<<<<
  *             smooth = exponential
  *         else:
  */
-          goto __pyx_L13;
+          goto __pyx_L9;
         }
 
-        /* "smoomacypy/compute.pyx":185
+        /* "smoomacypy/compute.pyx":117
  *             smooth = exponential
  *         else:
  *             smooth = pareto             # <<<<<<<<<<<<<<
@@ -4174,9 +3431,9 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_point, 0);
         /*else*/ {
           __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_pareto;
         }
-        __pyx_L13:;
+        __pyx_L9:;
 
-        /* "smoomacypy/compute.pyx":187
+        /* "smoomacypy/compute.pyx":119
  *             smooth = pareto
  * 
  *         for ix_x in range(len_xi):             # <<<<<<<<<<<<<<
@@ -4187,7 +3444,7 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_point, 0);
         for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
           __pyx_v_ix_x = __pyx_t_8;
 
-          /* "smoomacypy/compute.pyx":188
+          /* "smoomacypy/compute.pyx":120
  * 
  *         for ix_x in range(len_xi):
  *             x_cell = XI[ix_x]             # <<<<<<<<<<<<<<
@@ -4197,151 +3454,116 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_point, 0);
           __pyx_t_14 = __pyx_v_ix_x;
           __pyx_v_x_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_XI.data) + __pyx_t_14)) )));
 
-          /* "smoomacypy/compute.pyx":189
+          /* "smoomacypy/compute.pyx":121
  *         for ix_x in range(len_xi):
  *             x_cell = XI[ix_x]
  *             for ix_y in range(len_yi):             # <<<<<<<<<<<<<<
  *                 y_cell= YI[ix_y]
- *                 _sum1 = 0.0
+ *                 cos_y_cell = cos(y_cell)
  */
           __pyx_t_15 = __pyx_v_len_yi;
           for (__pyx_t_16 = 0; __pyx_t_16 < __pyx_t_15; __pyx_t_16+=1) {
             __pyx_v_ix_y = __pyx_t_16;
 
-            /* "smoomacypy/compute.pyx":190
+            /* "smoomacypy/compute.pyx":122
  *             x_cell = XI[ix_x]
  *             for ix_y in range(len_yi):
  *                 y_cell= YI[ix_y]             # <<<<<<<<<<<<<<
- *                 _sum1 = 0.0
- *                 _sum2 = 0.0
+ *                 cos_y_cell = cos(y_cell)
+ *                 _sum = 0.0
  */
             __pyx_t_17 = __pyx_v_ix_y;
             __pyx_v_y_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_YI.data) + __pyx_t_17)) )));
 
-            /* "smoomacypy/compute.pyx":191
+            /* "smoomacypy/compute.pyx":123
  *             for ix_y in range(len_yi):
  *                 y_cell= YI[ix_y]
- *                 _sum1 = 0.0             # <<<<<<<<<<<<<<
- *                 _sum2 = 0.0
+ *                 cos_y_cell = cos(y_cell)             # <<<<<<<<<<<<<<
+ *                 _sum = 0.0
  *                 for j in range(nb_pts):
  */
-            __pyx_v__sum1 = 0.0;
+            __pyx_v_cos_y_cell = cos(__pyx_v_y_cell);
 
-            /* "smoomacypy/compute.pyx":192
+            /* "smoomacypy/compute.pyx":124
  *                 y_cell= YI[ix_y]
- *                 _sum1 = 0.0
- *                 _sum2 = 0.0             # <<<<<<<<<<<<<<
+ *                 cos_y_cell = cos(y_cell)
+ *                 _sum = 0.0             # <<<<<<<<<<<<<<
  *                 for j in range(nb_pts):
- *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
+ *                     ptval = &c_knownpts[j]
  */
-            __pyx_v__sum2 = 0.0;
+            __pyx_v__sum = 0.0;
 
-            /* "smoomacypy/compute.pyx":193
- *                 _sum1 = 0.0
- *                 _sum2 = 0.0
+            /* "smoomacypy/compute.pyx":125
+ *                 cos_y_cell = cos(y_cell)
+ *                 _sum = 0.0
  *                 for j in range(nb_pts):             # <<<<<<<<<<<<<<
- *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
- *                     t = smooth(alpha, beta, dist)
+ *                     ptval = &c_knownpts[j]
+ *                     dist = haversine2(x_cell, y_cell, cos_y_cell, ptval.x, ptval.y, ptval.cos_y)
  */
             __pyx_t_18 = __pyx_v_nb_pts;
             for (__pyx_t_19 = 0; __pyx_t_19 < __pyx_t_18; __pyx_t_19+=1) {
               __pyx_v_j = __pyx_t_19;
 
-              /* "smoomacypy/compute.pyx":194
- *                 _sum2 = 0.0
+              /* "smoomacypy/compute.pyx":126
+ *                 _sum = 0.0
  *                 for j in range(nb_pts):
- *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])             # <<<<<<<<<<<<<<
- *                     t = smooth(alpha, beta, dist)
- *                     _sum1 += z1_knownpts[j] * t
+ *                     ptval = &c_knownpts[j]             # <<<<<<<<<<<<<<
+ *                     dist = haversine2(x_cell, y_cell, cos_y_cell, ptval.x, ptval.y, ptval.cos_y)
+ *                     _sum += ptval.value * smooth(alpha, beta, dist)
  */
-              __pyx_v_dist = __pyx_v_dist_func(__pyx_v_x_cell, __pyx_v_y_cell, (__pyx_v_x_knownpts[__pyx_v_j]), (__pyx_v_y_knownpts[__pyx_v_j]));
+              __pyx_v_ptval = (&(__pyx_v_c_knownpts[__pyx_v_j]));
 
-              /* "smoomacypy/compute.pyx":195
+              /* "smoomacypy/compute.pyx":127
  *                 for j in range(nb_pts):
- *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
- *                     t = smooth(alpha, beta, dist)             # <<<<<<<<<<<<<<
- *                     _sum1 += z1_knownpts[j] * t
- *                     _sum2 += z2_knownpts[j] * t
+ *                     ptval = &c_knownpts[j]
+ *                     dist = haversine2(x_cell, y_cell, cos_y_cell, ptval.x, ptval.y, ptval.cos_y)             # <<<<<<<<<<<<<<
+ *                     _sum += ptval.value * smooth(alpha, beta, dist)
+ *                 res[ix] = _sum
  */
-              __pyx_v_t = __pyx_v_smooth(__pyx_v_alpha, __pyx_v_beta, __pyx_v_dist);
+              __pyx_v_dist = __pyx_f_10smoomacypy_7compute_haversine2(__pyx_v_x_cell, __pyx_v_y_cell, __pyx_v_cos_y_cell, __pyx_v_ptval->x, __pyx_v_ptval->y, __pyx_v_ptval->cos_y);
 
-              /* "smoomacypy/compute.pyx":196
- *                     dist = dist_func(x_cell, y_cell, x_knownpts[j], y_knownpts[j])
- *                     t = smooth(alpha, beta, dist)
- *                     _sum1 += z1_knownpts[j] * t             # <<<<<<<<<<<<<<
- *                     _sum2 += z2_knownpts[j] * t
- *                 res[ix] = _sum1 / _sum2
- */
-              __pyx_v__sum1 = (__pyx_v__sum1 + ((__pyx_v_z1_knownpts[__pyx_v_j]) * __pyx_v_t));
-
-              /* "smoomacypy/compute.pyx":197
- *                     t = smooth(alpha, beta, dist)
- *                     _sum1 += z1_knownpts[j] * t
- *                     _sum2 += z2_knownpts[j] * t             # <<<<<<<<<<<<<<
- *                 res[ix] = _sum1 / _sum2
+              /* "smoomacypy/compute.pyx":128
+ *                     ptval = &c_knownpts[j]
+ *                     dist = haversine2(x_cell, y_cell, cos_y_cell, ptval.x, ptval.y, ptval.cos_y)
+ *                     _sum += ptval.value * smooth(alpha, beta, dist)             # <<<<<<<<<<<<<<
+ *                 res[ix] = _sum
  *                 ix += 1
  */
-              __pyx_v__sum2 = (__pyx_v__sum2 + ((__pyx_v_z2_knownpts[__pyx_v_j]) * __pyx_v_t));
+              __pyx_v__sum = (__pyx_v__sum + (__pyx_v_ptval->value * __pyx_v_smooth(__pyx_v_alpha, __pyx_v_beta, __pyx_v_dist)));
             }
 
-            /* "smoomacypy/compute.pyx":198
- *                     _sum1 += z1_knownpts[j] * t
- *                     _sum2 += z2_knownpts[j] * t
- *                 res[ix] = _sum1 / _sum2             # <<<<<<<<<<<<<<
+            /* "smoomacypy/compute.pyx":129
+ *                     dist = haversine2(x_cell, y_cell, cos_y_cell, ptval.x, ptval.y, ptval.cos_y)
+ *                     _sum += ptval.value * smooth(alpha, beta, dist)
+ *                 res[ix] = _sum             # <<<<<<<<<<<<<<
  *                 ix += 1
- *         free(x_knownpts)
+ *         free(c_knownpts)
  */
             __pyx_t_20 = __pyx_v_ix;
-            *__Pyx_BufPtrCContig1d(__pyx_t_10smoomacypy_7compute_DTYPE_t *, __pyx_pybuffernd_res.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_res.diminfo[0].strides) = (__pyx_v__sum1 / __pyx_v__sum2);
+            *__Pyx_BufPtrCContig1d(__pyx_t_10smoomacypy_7compute_DTYPE_t *, __pyx_pybuffernd_res.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_res.diminfo[0].strides) = __pyx_v__sum;
 
-            /* "smoomacypy/compute.pyx":199
- *                     _sum2 += z2_knownpts[j] * t
- *                 res[ix] = _sum1 / _sum2
+            /* "smoomacypy/compute.pyx":130
+ *                     _sum += ptval.value * smooth(alpha, beta, dist)
+ *                 res[ix] = _sum
  *                 ix += 1             # <<<<<<<<<<<<<<
- *         free(x_knownpts)
- *         free(y_knownpts)
+ *         free(c_knownpts)
+ *     return res
  */
             __pyx_v_ix = (__pyx_v_ix + 1);
           }
         }
 
-        /* "smoomacypy/compute.pyx":200
- *                 res[ix] = _sum1 / _sum2
+        /* "smoomacypy/compute.pyx":131
+ *                 res[ix] = _sum
  *                 ix += 1
- *         free(x_knownpts)             # <<<<<<<<<<<<<<
- *         free(y_knownpts)
- *         free(z1_knownpts)
- */
-        free(__pyx_v_x_knownpts);
-
-        /* "smoomacypy/compute.pyx":201
- *                 ix += 1
- *         free(x_knownpts)
- *         free(y_knownpts)             # <<<<<<<<<<<<<<
- *         free(z1_knownpts)
- *         free(z2_knownpts)
- */
-        free(__pyx_v_y_knownpts);
-
-        /* "smoomacypy/compute.pyx":202
- *         free(x_knownpts)
- *         free(y_knownpts)
- *         free(z1_knownpts)             # <<<<<<<<<<<<<<
- *         free(z2_knownpts)
+ *         free(c_knownpts)             # <<<<<<<<<<<<<<
  *     return res
+ * 
  */
-        free(__pyx_v_z1_knownpts);
-
-        /* "smoomacypy/compute.pyx":203
- *         free(y_knownpts)
- *         free(z1_knownpts)
- *         free(z2_knownpts)             # <<<<<<<<<<<<<<
- *     return res
- */
-        free(__pyx_v_z2_knownpts);
+        free(__pyx_v_c_knownpts);
       }
 
-      /* "smoomacypy/compute.pyx":169
+      /* "smoomacypy/compute.pyx":106
  *         raise MemoryError()
  * 
  *     with nogil:             # <<<<<<<<<<<<<<
@@ -4354,35 +3576,37 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_point, 0);
           __Pyx_FastGIL_Forget();
           Py_BLOCK_THREADS
           #endif
-          goto __pyx_L9;
+          goto __pyx_L6;
         }
-        __pyx_L8_error: {
+        __pyx_L5_error: {
           #ifdef WITH_THREAD
           __Pyx_FastGIL_Forget();
           Py_BLOCK_THREADS
           #endif
           goto __pyx_L1_error;
         }
-        __pyx_L9:;
+        __pyx_L6:;
       }
   }
 
-  /* "smoomacypy/compute.pyx":204
- *         free(z1_knownpts)
- *         free(z2_knownpts)
+  /* "smoomacypy/compute.pyx":132
+ *                 ix += 1
+ *         free(c_knownpts)
  *     return res             # <<<<<<<<<<<<<<
+ * 
+ * cdef compute_1_var_euclidian(
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(((PyObject *)__pyx_v_res));
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "smoomacypy/compute.pyx":124
+  /* "smoomacypy/compute.pyx":82
  * 
  * 
- * cdef compute_2_var(             # <<<<<<<<<<<<<<
+ * cdef compute_1_var_geo(             # <<<<<<<<<<<<<<
  *         np.double_t[:,::1] knownpts, np.double_t[::1] XI, np.double_t[::1] YI,
- *         double span, double alpha, double beta, bint lonlat, bint expfunc):
+ *         double span, double alpha, double beta, bint expfunc):
  */
 
   /* function exit code */
@@ -4398,7 +3622,1671 @@ __PYX_XDEC_MEMVIEW(&__pyx_v_point, 0);
     __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
     __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
   __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
-  __Pyx_AddTraceback("smoomacypy.compute.compute_2_var", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("smoomacypy.compute.compute_1_var_geo", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  goto __pyx_L2;
+  __pyx_L0:;
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
+  __pyx_L2:;
+  __PYX_XDEC_MEMVIEW(&__pyx_v_point, 1);
+  __Pyx_XDECREF((PyObject *)__pyx_v_res);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "smoomacypy/compute.pyx":134
+ *     return res
+ * 
+ * cdef compute_1_var_euclidian(             # <<<<<<<<<<<<<<
+ *         np.double_t[:,::1] knownpts, np.double_t[::1] XI, np.double_t[::1] YI,
+ *         double span, double alpha, double beta, bint expfunc):
+ */
+
+static PyObject *__pyx_f_10smoomacypy_7compute_compute_1_var_euclidian(__Pyx_memviewslice __pyx_v_knownpts, __Pyx_memviewslice __pyx_v_XI, __Pyx_memviewslice __pyx_v_YI, CYTHON_UNUSED double __pyx_v_span, double __pyx_v_alpha, double __pyx_v_beta, int __pyx_v_expfunc) {
+  __pyx_t_10smoomacypy_7compute_SMOOTH_FUNC __pyx_v_smooth;
+  Py_ssize_t __pyx_v_len_xi;
+  Py_ssize_t __pyx_v_len_yi;
+  Py_ssize_t __pyx_v_nb_pot;
+  Py_ssize_t __pyx_v_nb_pts;
+  Py_ssize_t __pyx_v_ix_x;
+  Py_ssize_t __pyx_v_ix_y;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_x_cell;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_y_cell;
+  Py_ssize_t __pyx_v_j;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v__sum;
+  Py_ssize_t __pyx_v_ix;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_dist;
+  __Pyx_memviewslice __pyx_v_point = { 0, 0, { 0 }, { 0 }, { 0 } };
+  PyArrayObject *__pyx_v_res = 0;
+  struct __pyx_t_10smoomacypy_7compute_PtValue *__pyx_v_c_knownpts;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_res;
+  __Pyx_Buffer __pyx_pybuffer_res;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyArrayObject *__pyx_t_5 = NULL;
+  int __pyx_t_6;
+  Py_ssize_t __pyx_t_7;
+  Py_ssize_t __pyx_t_8;
+  __Pyx_memviewslice __pyx_t_9 = { 0, 0, { 0 }, { 0 }, { 0 } };
+  Py_ssize_t __pyx_t_10;
+  Py_ssize_t __pyx_t_11;
+  Py_ssize_t __pyx_t_12;
+  Py_ssize_t __pyx_t_13;
+  Py_ssize_t __pyx_t_14;
+  Py_ssize_t __pyx_t_15;
+  Py_ssize_t __pyx_t_16;
+  Py_ssize_t __pyx_t_17;
+  Py_ssize_t __pyx_t_18;
+  Py_ssize_t __pyx_t_19;
+  __Pyx_RefNannySetupContext("compute_1_var_euclidian", 0);
+  __pyx_pybuffer_res.pybuffer.buf = NULL;
+  __pyx_pybuffer_res.refcount = 0;
+  __pyx_pybuffernd_res.data = NULL;
+  __pyx_pybuffernd_res.rcbuffer = &__pyx_pybuffer_res;
+
+  /* "smoomacypy/compute.pyx":138
+ *         double span, double alpha, double beta, bint expfunc):
+ *     cdef SMOOTH_FUNC smooth
+ *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
+ *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi
+ */
+  __pyx_v_len_xi = ((Py_ssize_t)(__pyx_v_XI.shape[0]));
+
+  /* "smoomacypy/compute.pyx":139
+ *     cdef SMOOTH_FUNC smooth
+ *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]
+ *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi
+ *     cdef Py_ssize_t nb_pts = knownpts.shape[0]
+ */
+  __pyx_v_len_yi = ((Py_ssize_t)(__pyx_v_YI.shape[0]));
+
+  /* "smoomacypy/compute.pyx":140
+ *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]
+ *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
+ *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t nb_pts = knownpts.shape[0]
+ *     cdef Py_ssize_t ix_x
+ */
+  __pyx_v_nb_pot = (((Py_ssize_t)__pyx_v_len_xi) * __pyx_v_len_yi);
+
+  /* "smoomacypy/compute.pyx":141
+ *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
+ *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi
+ *     cdef Py_ssize_t nb_pts = knownpts.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t ix_x
+ *     cdef Py_ssize_t ix_y
+ */
+  __pyx_v_nb_pts = (__pyx_v_knownpts.shape[0]);
+
+  /* "smoomacypy/compute.pyx":147
+ *     cdef DTYPE_t y_cell
+ *     cdef Py_ssize_t j
+ *     cdef DTYPE_t _sum = 0.0             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t ix = 0
+ *     cdef DTYPE_t dist
+ */
+  __pyx_v__sum = 0.0;
+
+  /* "smoomacypy/compute.pyx":148
+ *     cdef Py_ssize_t j
+ *     cdef DTYPE_t _sum = 0.0
+ *     cdef Py_ssize_t ix = 0             # <<<<<<<<<<<<<<
+ *     cdef DTYPE_t dist
+ *     cdef np.double_t[:] point
+ */
+  __pyx_v_ix = 0;
+
+  /* "smoomacypy/compute.pyx":151
+ *     cdef DTYPE_t dist
+ *     cdef np.double_t[:] point
+ *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)             # <<<<<<<<<<<<<<
+ *     cdef PtValue *c_knownpts = <PtValue *>malloc(nb_pts * sizeof(PtValue))
+ *     if not c_knownpts:
+ */
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 151, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 151, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = PyInt_FromSsize_t(__pyx_v_nb_pot); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 151, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 151, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
+  __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 151, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 151, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_4) < 0) __PYX_ERR(0, 151, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 151, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 151, __pyx_L1_error)
+  __pyx_t_5 = ((PyArrayObject *)__pyx_t_4);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_res.rcbuffer->pybuffer, (PyObject*)__pyx_t_5, &__Pyx_TypeInfo_nn___pyx_t_10smoomacypy_7compute_DTYPE_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
+      __pyx_v_res = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_res.rcbuffer->pybuffer.buf = NULL;
+      __PYX_ERR(0, 151, __pyx_L1_error)
+    } else {__pyx_pybuffernd_res.diminfo[0].strides = __pyx_pybuffernd_res.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_res.diminfo[0].shape = __pyx_pybuffernd_res.rcbuffer->pybuffer.shape[0];
+    }
+  }
+  __pyx_t_5 = 0;
+  __pyx_v_res = ((PyArrayObject *)__pyx_t_4);
+  __pyx_t_4 = 0;
+
+  /* "smoomacypy/compute.pyx":152
+ *     cdef np.double_t[:] point
+ *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)
+ *     cdef PtValue *c_knownpts = <PtValue *>malloc(nb_pts * sizeof(PtValue))             # <<<<<<<<<<<<<<
+ *     if not c_knownpts:
+ *         raise MemoryError()
+ */
+  __pyx_v_c_knownpts = ((struct __pyx_t_10smoomacypy_7compute_PtValue *)malloc((__pyx_v_nb_pts * (sizeof(struct __pyx_t_10smoomacypy_7compute_PtValue)))));
+
+  /* "smoomacypy/compute.pyx":153
+ *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)
+ *     cdef PtValue *c_knownpts = <PtValue *>malloc(nb_pts * sizeof(PtValue))
+ *     if not c_knownpts:             # <<<<<<<<<<<<<<
+ *         raise MemoryError()
+ * 
+ */
+  __pyx_t_6 = ((!(__pyx_v_c_knownpts != 0)) != 0);
+  if (__pyx_t_6) {
+
+    /* "smoomacypy/compute.pyx":154
+ *     cdef PtValue *c_knownpts = <PtValue *>malloc(nb_pts * sizeof(PtValue))
+ *     if not c_knownpts:
+ *         raise MemoryError()             # <<<<<<<<<<<<<<
+ * 
+ *     with nogil:
+ */
+    PyErr_NoMemory(); __PYX_ERR(0, 154, __pyx_L1_error)
+
+    /* "smoomacypy/compute.pyx":153
+ *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)
+ *     cdef PtValue *c_knownpts = <PtValue *>malloc(nb_pts * sizeof(PtValue))
+ *     if not c_knownpts:             # <<<<<<<<<<<<<<
+ *         raise MemoryError()
+ * 
+ */
+  }
+
+  /* "smoomacypy/compute.pyx":156
+ *         raise MemoryError()
+ * 
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]
+ */
+  {
+      #ifdef WITH_THREAD
+      PyThreadState *_save;
+      Py_UNBLOCK_THREADS
+      __Pyx_FastGIL_Remember();
+      #endif
+      /*try:*/ {
+
+        /* "smoomacypy/compute.pyx":157
+ * 
+ *     with nogil:
+ *         for j in range(nb_pts):             # <<<<<<<<<<<<<<
+ *             point = knownpts[j]
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
+ */
+        __pyx_t_7 = __pyx_v_nb_pts;
+        for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+          __pyx_v_j = __pyx_t_8;
+
+          /* "smoomacypy/compute.pyx":158
+ *     with nogil:
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]             # <<<<<<<<<<<<<<
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]
+ */
+          __pyx_t_9.data = __pyx_v_knownpts.data;
+          __pyx_t_9.memview = __pyx_v_knownpts.memview;
+          __PYX_INC_MEMVIEW(&__pyx_t_9, 0);
+          {
+    Py_ssize_t __pyx_tmp_idx = __pyx_v_j;
+    Py_ssize_t __pyx_tmp_shape = __pyx_v_knownpts.shape[0];
+    Py_ssize_t __pyx_tmp_stride = __pyx_v_knownpts.strides[0];
+    if (0 && (__pyx_tmp_idx < 0))
+        __pyx_tmp_idx += __pyx_tmp_shape;
+    if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
+            #ifdef WITH_THREAD
+            PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+            #endif
+        PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
+            #ifdef WITH_THREAD
+            PyGILState_Release(__pyx_gilstate_save);
+            #endif
+        __PYX_ERR(0, 158, __pyx_L5_error)
+    }
+        __pyx_t_9.data += __pyx_tmp_idx * __pyx_tmp_stride;
+}
+
+__pyx_t_9.shape[0] = __pyx_v_knownpts.shape[1];
+__pyx_t_9.strides[0] = __pyx_v_knownpts.strides[1];
+    __pyx_t_9.suboffsets[0] = -1;
+
+__PYX_XDEC_MEMVIEW(&__pyx_v_point, 0);
+          __pyx_v_point = __pyx_t_9;
+          __pyx_t_9.memview = NULL;
+          __pyx_t_9.data = NULL;
+
+          /* "smoomacypy/compute.pyx":159
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]             # <<<<<<<<<<<<<<
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]
+ *             c_knownpts[j].value = point[<Py_ssize_t>2]
+ */
+          __pyx_t_10 = ((Py_ssize_t)0);
+          (__pyx_v_c_knownpts[__pyx_v_j]).x = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_10 * __pyx_v_point.strides[0]) )));
+
+          /* "smoomacypy/compute.pyx":160
+ *             point = knownpts[j]
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]             # <<<<<<<<<<<<<<
+ *             c_knownpts[j].value = point[<Py_ssize_t>2]
+ * 
+ */
+          __pyx_t_11 = ((Py_ssize_t)1);
+          (__pyx_v_c_knownpts[__pyx_v_j]).y = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_11 * __pyx_v_point.strides[0]) )));
+
+          /* "smoomacypy/compute.pyx":161
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]
+ *             c_knownpts[j].value = point[<Py_ssize_t>2]             # <<<<<<<<<<<<<<
+ * 
+ *         if expfunc:
+ */
+          __pyx_t_12 = ((Py_ssize_t)2);
+          (__pyx_v_c_knownpts[__pyx_v_j]).value = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_12 * __pyx_v_point.strides[0]) )));
+        }
+
+        /* "smoomacypy/compute.pyx":163
+ *             c_knownpts[j].value = point[<Py_ssize_t>2]
+ * 
+ *         if expfunc:             # <<<<<<<<<<<<<<
+ *             smooth = exponential
+ *         else:
+ */
+        __pyx_t_6 = (__pyx_v_expfunc != 0);
+        if (__pyx_t_6) {
+
+          /* "smoomacypy/compute.pyx":164
+ * 
+ *         if expfunc:
+ *             smooth = exponential             # <<<<<<<<<<<<<<
+ *         else:
+ *             smooth = pareto
+ */
+          __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_exponential;
+
+          /* "smoomacypy/compute.pyx":163
+ *             c_knownpts[j].value = point[<Py_ssize_t>2]
+ * 
+ *         if expfunc:             # <<<<<<<<<<<<<<
+ *             smooth = exponential
+ *         else:
+ */
+          goto __pyx_L9;
+        }
+
+        /* "smoomacypy/compute.pyx":166
+ *             smooth = exponential
+ *         else:
+ *             smooth = pareto             # <<<<<<<<<<<<<<
+ * 
+ *         for ix_x in range(len_xi):
+ */
+        /*else*/ {
+          __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_pareto;
+        }
+        __pyx_L9:;
+
+        /* "smoomacypy/compute.pyx":168
+ *             smooth = pareto
+ * 
+ *         for ix_x in range(len_xi):             # <<<<<<<<<<<<<<
+ *             x_cell = XI[ix_x]
+ *             for ix_y in range(len_yi):
+ */
+        __pyx_t_7 = __pyx_v_len_xi;
+        for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+          __pyx_v_ix_x = __pyx_t_8;
+
+          /* "smoomacypy/compute.pyx":169
+ * 
+ *         for ix_x in range(len_xi):
+ *             x_cell = XI[ix_x]             # <<<<<<<<<<<<<<
+ *             for ix_y in range(len_yi):
+ *                 y_cell= YI[ix_y]
+ */
+          __pyx_t_13 = __pyx_v_ix_x;
+          __pyx_v_x_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_XI.data) + __pyx_t_13)) )));
+
+          /* "smoomacypy/compute.pyx":170
+ *         for ix_x in range(len_xi):
+ *             x_cell = XI[ix_x]
+ *             for ix_y in range(len_yi):             # <<<<<<<<<<<<<<
+ *                 y_cell= YI[ix_y]
+ *                 _sum = 0.0
+ */
+          __pyx_t_14 = __pyx_v_len_yi;
+          for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_14; __pyx_t_15+=1) {
+            __pyx_v_ix_y = __pyx_t_15;
+
+            /* "smoomacypy/compute.pyx":171
+ *             x_cell = XI[ix_x]
+ *             for ix_y in range(len_yi):
+ *                 y_cell= YI[ix_y]             # <<<<<<<<<<<<<<
+ *                 _sum = 0.0
+ *                 for j in range(nb_pts):
+ */
+            __pyx_t_16 = __pyx_v_ix_y;
+            __pyx_v_y_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_YI.data) + __pyx_t_16)) )));
+
+            /* "smoomacypy/compute.pyx":172
+ *             for ix_y in range(len_yi):
+ *                 y_cell= YI[ix_y]
+ *                 _sum = 0.0             # <<<<<<<<<<<<<<
+ *                 for j in range(nb_pts):
+ *                     dist = euclidian(x_cell, y_cell, c_knownpts[j].x, c_knownpts[j].y)
+ */
+            __pyx_v__sum = 0.0;
+
+            /* "smoomacypy/compute.pyx":173
+ *                 y_cell= YI[ix_y]
+ *                 _sum = 0.0
+ *                 for j in range(nb_pts):             # <<<<<<<<<<<<<<
+ *                     dist = euclidian(x_cell, y_cell, c_knownpts[j].x, c_knownpts[j].y)
+ *                     _sum += c_knownpts[j].value * smooth(alpha, beta, dist)
+ */
+            __pyx_t_17 = __pyx_v_nb_pts;
+            for (__pyx_t_18 = 0; __pyx_t_18 < __pyx_t_17; __pyx_t_18+=1) {
+              __pyx_v_j = __pyx_t_18;
+
+              /* "smoomacypy/compute.pyx":174
+ *                 _sum = 0.0
+ *                 for j in range(nb_pts):
+ *                     dist = euclidian(x_cell, y_cell, c_knownpts[j].x, c_knownpts[j].y)             # <<<<<<<<<<<<<<
+ *                     _sum += c_knownpts[j].value * smooth(alpha, beta, dist)
+ *                 res[ix] = _sum
+ */
+              __pyx_v_dist = __pyx_f_10smoomacypy_7compute_euclidian(__pyx_v_x_cell, __pyx_v_y_cell, (__pyx_v_c_knownpts[__pyx_v_j]).x, (__pyx_v_c_knownpts[__pyx_v_j]).y);
+
+              /* "smoomacypy/compute.pyx":175
+ *                 for j in range(nb_pts):
+ *                     dist = euclidian(x_cell, y_cell, c_knownpts[j].x, c_knownpts[j].y)
+ *                     _sum += c_knownpts[j].value * smooth(alpha, beta, dist)             # <<<<<<<<<<<<<<
+ *                 res[ix] = _sum
+ *                 ix += 1
+ */
+              __pyx_v__sum = (__pyx_v__sum + ((__pyx_v_c_knownpts[__pyx_v_j]).value * __pyx_v_smooth(__pyx_v_alpha, __pyx_v_beta, __pyx_v_dist)));
+            }
+
+            /* "smoomacypy/compute.pyx":176
+ *                     dist = euclidian(x_cell, y_cell, c_knownpts[j].x, c_knownpts[j].y)
+ *                     _sum += c_knownpts[j].value * smooth(alpha, beta, dist)
+ *                 res[ix] = _sum             # <<<<<<<<<<<<<<
+ *                 ix += 1
+ *         free(c_knownpts)
+ */
+            __pyx_t_19 = __pyx_v_ix;
+            *__Pyx_BufPtrCContig1d(__pyx_t_10smoomacypy_7compute_DTYPE_t *, __pyx_pybuffernd_res.rcbuffer->pybuffer.buf, __pyx_t_19, __pyx_pybuffernd_res.diminfo[0].strides) = __pyx_v__sum;
+
+            /* "smoomacypy/compute.pyx":177
+ *                     _sum += c_knownpts[j].value * smooth(alpha, beta, dist)
+ *                 res[ix] = _sum
+ *                 ix += 1             # <<<<<<<<<<<<<<
+ *         free(c_knownpts)
+ *     return res
+ */
+            __pyx_v_ix = (__pyx_v_ix + 1);
+          }
+        }
+
+        /* "smoomacypy/compute.pyx":178
+ *                 res[ix] = _sum
+ *                 ix += 1
+ *         free(c_knownpts)             # <<<<<<<<<<<<<<
+ *     return res
+ * 
+ */
+        free(__pyx_v_c_knownpts);
+      }
+
+      /* "smoomacypy/compute.pyx":156
+ *         raise MemoryError()
+ * 
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]
+ */
+      /*finally:*/ {
+        /*normal exit:*/{
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L6;
+        }
+        __pyx_L5_error: {
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L1_error;
+        }
+        __pyx_L6:;
+      }
+  }
+
+  /* "smoomacypy/compute.pyx":179
+ *                 ix += 1
+ *         free(c_knownpts)
+ *     return res             # <<<<<<<<<<<<<<
+ * 
+ * cdef compute_2_var_geo(
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_res));
+  __pyx_r = ((PyObject *)__pyx_v_res);
+  goto __pyx_L0;
+
+  /* "smoomacypy/compute.pyx":134
+ *     return res
+ * 
+ * cdef compute_1_var_euclidian(             # <<<<<<<<<<<<<<
+ *         np.double_t[:,::1] knownpts, np.double_t[::1] XI, np.double_t[::1] YI,
+ *         double span, double alpha, double beta, bint expfunc):
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_9, 1);
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
+  __Pyx_AddTraceback("smoomacypy.compute.compute_1_var_euclidian", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  goto __pyx_L2;
+  __pyx_L0:;
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
+  __pyx_L2:;
+  __PYX_XDEC_MEMVIEW(&__pyx_v_point, 1);
+  __Pyx_XDECREF((PyObject *)__pyx_v_res);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "smoomacypy/compute.pyx":181
+ *     return res
+ * 
+ * cdef compute_2_var_geo(             # <<<<<<<<<<<<<<
+ *         np.double_t[:,::1] knownpts, np.double_t[::1] XI, np.double_t[::1] YI,
+ *         double span, double alpha, double beta, bint expfunc):
+ */
+
+static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var_geo(__Pyx_memviewslice __pyx_v_knownpts, __Pyx_memviewslice __pyx_v_XI, __Pyx_memviewslice __pyx_v_YI, CYTHON_UNUSED double __pyx_v_span, double __pyx_v_alpha, double __pyx_v_beta, int __pyx_v_expfunc) {
+  __pyx_t_10smoomacypy_7compute_SMOOTH_FUNC __pyx_v_smooth;
+  Py_ssize_t __pyx_v_len_xi;
+  Py_ssize_t __pyx_v_len_yi;
+  Py_ssize_t __pyx_v_nb_pot;
+  Py_ssize_t __pyx_v_nb_pts;
+  Py_ssize_t __pyx_v_ix_x;
+  Py_ssize_t __pyx_v_ix_y;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_x_cell;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_y_cell;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_cos_y_cell;
+  Py_ssize_t __pyx_v_j;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v__sum1;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v__sum2;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_t;
+  Py_ssize_t __pyx_v_ix;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_dist;
+  __Pyx_memviewslice __pyx_v_point = { 0, 0, { 0 }, { 0 }, { 0 } };
+  PyArrayObject *__pyx_v_res = 0;
+  struct __pyx_t_10smoomacypy_7compute_Pt2ValueGeo *__pyx_v_c_knownpts;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_res;
+  __Pyx_Buffer __pyx_pybuffer_res;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyArrayObject *__pyx_t_5 = NULL;
+  int __pyx_t_6;
+  Py_ssize_t __pyx_t_7;
+  Py_ssize_t __pyx_t_8;
+  __Pyx_memviewslice __pyx_t_9 = { 0, 0, { 0 }, { 0 }, { 0 } };
+  Py_ssize_t __pyx_t_10;
+  Py_ssize_t __pyx_t_11;
+  Py_ssize_t __pyx_t_12;
+  Py_ssize_t __pyx_t_13;
+  Py_ssize_t __pyx_t_14;
+  Py_ssize_t __pyx_t_15;
+  Py_ssize_t __pyx_t_16;
+  Py_ssize_t __pyx_t_17;
+  Py_ssize_t __pyx_t_18;
+  Py_ssize_t __pyx_t_19;
+  Py_ssize_t __pyx_t_20;
+  Py_ssize_t __pyx_t_21;
+  __Pyx_RefNannySetupContext("compute_2_var_geo", 0);
+  __pyx_pybuffer_res.pybuffer.buf = NULL;
+  __pyx_pybuffer_res.refcount = 0;
+  __pyx_pybuffernd_res.data = NULL;
+  __pyx_pybuffernd_res.rcbuffer = &__pyx_pybuffer_res;
+
+  /* "smoomacypy/compute.pyx":185
+ *         double span, double alpha, double beta, bint expfunc):
+ *     cdef SMOOTH_FUNC smooth
+ *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
+ *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi
+ */
+  __pyx_v_len_xi = ((Py_ssize_t)(__pyx_v_XI.shape[0]));
+
+  /* "smoomacypy/compute.pyx":186
+ *     cdef SMOOTH_FUNC smooth
+ *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]
+ *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi
+ *     cdef Py_ssize_t nb_pts = knownpts.shape[0]
+ */
+  __pyx_v_len_yi = ((Py_ssize_t)(__pyx_v_YI.shape[0]));
+
+  /* "smoomacypy/compute.pyx":187
+ *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]
+ *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
+ *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t nb_pts = knownpts.shape[0]
+ *     cdef Py_ssize_t ix_x
+ */
+  __pyx_v_nb_pot = (((Py_ssize_t)__pyx_v_len_xi) * __pyx_v_len_yi);
+
+  /* "smoomacypy/compute.pyx":188
+ *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
+ *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi
+ *     cdef Py_ssize_t nb_pts = knownpts.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t ix_x
+ *     cdef Py_ssize_t ix_y
+ */
+  __pyx_v_nb_pts = (__pyx_v_knownpts.shape[0]);
+
+  /* "smoomacypy/compute.pyx":195
+ *     cdef DTYPE_t cos_y_cell
+ *     cdef Py_ssize_t j
+ *     cdef DTYPE_t _sum1 = 0.0             # <<<<<<<<<<<<<<
+ *     cdef DTYPE_t _sum2 = 0.0
+ *     cdef DTYPE_t t = 0.0
+ */
+  __pyx_v__sum1 = 0.0;
+
+  /* "smoomacypy/compute.pyx":196
+ *     cdef Py_ssize_t j
+ *     cdef DTYPE_t _sum1 = 0.0
+ *     cdef DTYPE_t _sum2 = 0.0             # <<<<<<<<<<<<<<
+ *     cdef DTYPE_t t = 0.0
+ *     cdef Py_ssize_t ix = 0
+ */
+  __pyx_v__sum2 = 0.0;
+
+  /* "smoomacypy/compute.pyx":197
+ *     cdef DTYPE_t _sum1 = 0.0
+ *     cdef DTYPE_t _sum2 = 0.0
+ *     cdef DTYPE_t t = 0.0             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t ix = 0
+ *     cdef DTYPE_t dist
+ */
+  __pyx_v_t = 0.0;
+
+  /* "smoomacypy/compute.pyx":198
+ *     cdef DTYPE_t _sum2 = 0.0
+ *     cdef DTYPE_t t = 0.0
+ *     cdef Py_ssize_t ix = 0             # <<<<<<<<<<<<<<
+ *     cdef DTYPE_t dist
+ *     cdef np.double_t[:] point
+ */
+  __pyx_v_ix = 0;
+
+  /* "smoomacypy/compute.pyx":201
+ *     cdef DTYPE_t dist
+ *     cdef np.double_t[:] point
+ *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)             # <<<<<<<<<<<<<<
+ *     cdef Pt2ValueGeo *c_knownpts = <Pt2ValueGeo *>malloc(nb_pts * sizeof(Pt2ValueGeo))
+ *     if not c_knownpts:
+ */
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 201, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 201, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = PyInt_FromSsize_t(__pyx_v_nb_pot); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 201, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 201, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
+  __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 201, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 201, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_4) < 0) __PYX_ERR(0, 201, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 201, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 201, __pyx_L1_error)
+  __pyx_t_5 = ((PyArrayObject *)__pyx_t_4);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_res.rcbuffer->pybuffer, (PyObject*)__pyx_t_5, &__Pyx_TypeInfo_nn___pyx_t_10smoomacypy_7compute_DTYPE_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
+      __pyx_v_res = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_res.rcbuffer->pybuffer.buf = NULL;
+      __PYX_ERR(0, 201, __pyx_L1_error)
+    } else {__pyx_pybuffernd_res.diminfo[0].strides = __pyx_pybuffernd_res.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_res.diminfo[0].shape = __pyx_pybuffernd_res.rcbuffer->pybuffer.shape[0];
+    }
+  }
+  __pyx_t_5 = 0;
+  __pyx_v_res = ((PyArrayObject *)__pyx_t_4);
+  __pyx_t_4 = 0;
+
+  /* "smoomacypy/compute.pyx":202
+ *     cdef np.double_t[:] point
+ *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)
+ *     cdef Pt2ValueGeo *c_knownpts = <Pt2ValueGeo *>malloc(nb_pts * sizeof(Pt2ValueGeo))             # <<<<<<<<<<<<<<
+ *     if not c_knownpts:
+ *         raise MemoryError()
+ */
+  __pyx_v_c_knownpts = ((struct __pyx_t_10smoomacypy_7compute_Pt2ValueGeo *)malloc((__pyx_v_nb_pts * (sizeof(struct __pyx_t_10smoomacypy_7compute_Pt2ValueGeo)))));
+
+  /* "smoomacypy/compute.pyx":203
+ *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)
+ *     cdef Pt2ValueGeo *c_knownpts = <Pt2ValueGeo *>malloc(nb_pts * sizeof(Pt2ValueGeo))
+ *     if not c_knownpts:             # <<<<<<<<<<<<<<
+ *         raise MemoryError()
+ * 
+ */
+  __pyx_t_6 = ((!(__pyx_v_c_knownpts != 0)) != 0);
+  if (__pyx_t_6) {
+
+    /* "smoomacypy/compute.pyx":204
+ *     cdef Pt2ValueGeo *c_knownpts = <Pt2ValueGeo *>malloc(nb_pts * sizeof(Pt2ValueGeo))
+ *     if not c_knownpts:
+ *         raise MemoryError()             # <<<<<<<<<<<<<<
+ * 
+ *     with nogil:
+ */
+    PyErr_NoMemory(); __PYX_ERR(0, 204, __pyx_L1_error)
+
+    /* "smoomacypy/compute.pyx":203
+ *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)
+ *     cdef Pt2ValueGeo *c_knownpts = <Pt2ValueGeo *>malloc(nb_pts * sizeof(Pt2ValueGeo))
+ *     if not c_knownpts:             # <<<<<<<<<<<<<<
+ *         raise MemoryError()
+ * 
+ */
+  }
+
+  /* "smoomacypy/compute.pyx":206
+ *         raise MemoryError()
+ * 
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]
+ */
+  {
+      #ifdef WITH_THREAD
+      PyThreadState *_save;
+      Py_UNBLOCK_THREADS
+      __Pyx_FastGIL_Remember();
+      #endif
+      /*try:*/ {
+
+        /* "smoomacypy/compute.pyx":207
+ * 
+ *     with nogil:
+ *         for j in range(nb_pts):             # <<<<<<<<<<<<<<
+ *             point = knownpts[j]
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
+ */
+        __pyx_t_7 = __pyx_v_nb_pts;
+        for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+          __pyx_v_j = __pyx_t_8;
+
+          /* "smoomacypy/compute.pyx":208
+ *     with nogil:
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]             # <<<<<<<<<<<<<<
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]
+ */
+          __pyx_t_9.data = __pyx_v_knownpts.data;
+          __pyx_t_9.memview = __pyx_v_knownpts.memview;
+          __PYX_INC_MEMVIEW(&__pyx_t_9, 0);
+          {
+    Py_ssize_t __pyx_tmp_idx = __pyx_v_j;
+    Py_ssize_t __pyx_tmp_shape = __pyx_v_knownpts.shape[0];
+    Py_ssize_t __pyx_tmp_stride = __pyx_v_knownpts.strides[0];
+    if (0 && (__pyx_tmp_idx < 0))
+        __pyx_tmp_idx += __pyx_tmp_shape;
+    if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
+            #ifdef WITH_THREAD
+            PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+            #endif
+        PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
+            #ifdef WITH_THREAD
+            PyGILState_Release(__pyx_gilstate_save);
+            #endif
+        __PYX_ERR(0, 208, __pyx_L5_error)
+    }
+        __pyx_t_9.data += __pyx_tmp_idx * __pyx_tmp_stride;
+}
+
+__pyx_t_9.shape[0] = __pyx_v_knownpts.shape[1];
+__pyx_t_9.strides[0] = __pyx_v_knownpts.strides[1];
+    __pyx_t_9.suboffsets[0] = -1;
+
+__PYX_XDEC_MEMVIEW(&__pyx_v_point, 0);
+          __pyx_v_point = __pyx_t_9;
+          __pyx_t_9.memview = NULL;
+          __pyx_t_9.data = NULL;
+
+          /* "smoomacypy/compute.pyx":209
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]             # <<<<<<<<<<<<<<
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]
+ *             c_knownpts[j].cos_y = cos(point[<Py_ssize_t>1])
+ */
+          __pyx_t_10 = ((Py_ssize_t)0);
+          (__pyx_v_c_knownpts[__pyx_v_j]).x = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_10 * __pyx_v_point.strides[0]) )));
+
+          /* "smoomacypy/compute.pyx":210
+ *             point = knownpts[j]
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]             # <<<<<<<<<<<<<<
+ *             c_knownpts[j].cos_y = cos(point[<Py_ssize_t>1])
+ *             c_knownpts[j].value1 = point[<Py_ssize_t>2]
+ */
+          __pyx_t_11 = ((Py_ssize_t)1);
+          (__pyx_v_c_knownpts[__pyx_v_j]).y = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_11 * __pyx_v_point.strides[0]) )));
+
+          /* "smoomacypy/compute.pyx":211
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]
+ *             c_knownpts[j].cos_y = cos(point[<Py_ssize_t>1])             # <<<<<<<<<<<<<<
+ *             c_knownpts[j].value1 = point[<Py_ssize_t>2]
+ *             c_knownpts[j].value2 = point[<Py_ssize_t>3]
+ */
+          __pyx_t_12 = ((Py_ssize_t)1);
+          (__pyx_v_c_knownpts[__pyx_v_j]).cos_y = cos((*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_12 * __pyx_v_point.strides[0]) ))));
+
+          /* "smoomacypy/compute.pyx":212
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]
+ *             c_knownpts[j].cos_y = cos(point[<Py_ssize_t>1])
+ *             c_knownpts[j].value1 = point[<Py_ssize_t>2]             # <<<<<<<<<<<<<<
+ *             c_knownpts[j].value2 = point[<Py_ssize_t>3]
+ * 
+ */
+          __pyx_t_13 = ((Py_ssize_t)2);
+          (__pyx_v_c_knownpts[__pyx_v_j]).value1 = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_13 * __pyx_v_point.strides[0]) )));
+
+          /* "smoomacypy/compute.pyx":213
+ *             c_knownpts[j].cos_y = cos(point[<Py_ssize_t>1])
+ *             c_knownpts[j].value1 = point[<Py_ssize_t>2]
+ *             c_knownpts[j].value2 = point[<Py_ssize_t>3]             # <<<<<<<<<<<<<<
+ * 
+ *         if expfunc:
+ */
+          __pyx_t_14 = ((Py_ssize_t)3);
+          (__pyx_v_c_knownpts[__pyx_v_j]).value2 = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_14 * __pyx_v_point.strides[0]) )));
+        }
+
+        /* "smoomacypy/compute.pyx":215
+ *             c_knownpts[j].value2 = point[<Py_ssize_t>3]
+ * 
+ *         if expfunc:             # <<<<<<<<<<<<<<
+ *             smooth = exponential
+ *         else:
+ */
+        __pyx_t_6 = (__pyx_v_expfunc != 0);
+        if (__pyx_t_6) {
+
+          /* "smoomacypy/compute.pyx":216
+ * 
+ *         if expfunc:
+ *             smooth = exponential             # <<<<<<<<<<<<<<
+ *         else:
+ *             smooth = pareto
+ */
+          __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_exponential;
+
+          /* "smoomacypy/compute.pyx":215
+ *             c_knownpts[j].value2 = point[<Py_ssize_t>3]
+ * 
+ *         if expfunc:             # <<<<<<<<<<<<<<
+ *             smooth = exponential
+ *         else:
+ */
+          goto __pyx_L9;
+        }
+
+        /* "smoomacypy/compute.pyx":218
+ *             smooth = exponential
+ *         else:
+ *             smooth = pareto             # <<<<<<<<<<<<<<
+ * 
+ *         for ix_x in range(len_xi):
+ */
+        /*else*/ {
+          __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_pareto;
+        }
+        __pyx_L9:;
+
+        /* "smoomacypy/compute.pyx":220
+ *             smooth = pareto
+ * 
+ *         for ix_x in range(len_xi):             # <<<<<<<<<<<<<<
+ *             x_cell = XI[ix_x]
+ *             for ix_y in range(len_yi):
+ */
+        __pyx_t_7 = __pyx_v_len_xi;
+        for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+          __pyx_v_ix_x = __pyx_t_8;
+
+          /* "smoomacypy/compute.pyx":221
+ * 
+ *         for ix_x in range(len_xi):
+ *             x_cell = XI[ix_x]             # <<<<<<<<<<<<<<
+ *             for ix_y in range(len_yi):
+ *                 y_cell= YI[ix_y]
+ */
+          __pyx_t_15 = __pyx_v_ix_x;
+          __pyx_v_x_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_XI.data) + __pyx_t_15)) )));
+
+          /* "smoomacypy/compute.pyx":222
+ *         for ix_x in range(len_xi):
+ *             x_cell = XI[ix_x]
+ *             for ix_y in range(len_yi):             # <<<<<<<<<<<<<<
+ *                 y_cell= YI[ix_y]
+ *                 cos_y_cell = cos(y_cell)
+ */
+          __pyx_t_16 = __pyx_v_len_yi;
+          for (__pyx_t_17 = 0; __pyx_t_17 < __pyx_t_16; __pyx_t_17+=1) {
+            __pyx_v_ix_y = __pyx_t_17;
+
+            /* "smoomacypy/compute.pyx":223
+ *             x_cell = XI[ix_x]
+ *             for ix_y in range(len_yi):
+ *                 y_cell= YI[ix_y]             # <<<<<<<<<<<<<<
+ *                 cos_y_cell = cos(y_cell)
+ *                 _sum1 = 0.0
+ */
+            __pyx_t_18 = __pyx_v_ix_y;
+            __pyx_v_y_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_YI.data) + __pyx_t_18)) )));
+
+            /* "smoomacypy/compute.pyx":224
+ *             for ix_y in range(len_yi):
+ *                 y_cell= YI[ix_y]
+ *                 cos_y_cell = cos(y_cell)             # <<<<<<<<<<<<<<
+ *                 _sum1 = 0.0
+ *                 _sum2 = 0.0
+ */
+            __pyx_v_cos_y_cell = cos(__pyx_v_y_cell);
+
+            /* "smoomacypy/compute.pyx":225
+ *                 y_cell= YI[ix_y]
+ *                 cos_y_cell = cos(y_cell)
+ *                 _sum1 = 0.0             # <<<<<<<<<<<<<<
+ *                 _sum2 = 0.0
+ *                 for j in range(nb_pts):
+ */
+            __pyx_v__sum1 = 0.0;
+
+            /* "smoomacypy/compute.pyx":226
+ *                 cos_y_cell = cos(y_cell)
+ *                 _sum1 = 0.0
+ *                 _sum2 = 0.0             # <<<<<<<<<<<<<<
+ *                 for j in range(nb_pts):
+ *                     dist = haversine2(x_cell, y_cell, cos_y_cell, c_knownpts[j].x, c_knownpts[j].y, c_knownpts[j].cos_y)
+ */
+            __pyx_v__sum2 = 0.0;
+
+            /* "smoomacypy/compute.pyx":227
+ *                 _sum1 = 0.0
+ *                 _sum2 = 0.0
+ *                 for j in range(nb_pts):             # <<<<<<<<<<<<<<
+ *                     dist = haversine2(x_cell, y_cell, cos_y_cell, c_knownpts[j].x, c_knownpts[j].y, c_knownpts[j].cos_y)
+ *                     t = smooth(alpha, beta, dist)
+ */
+            __pyx_t_19 = __pyx_v_nb_pts;
+            for (__pyx_t_20 = 0; __pyx_t_20 < __pyx_t_19; __pyx_t_20+=1) {
+              __pyx_v_j = __pyx_t_20;
+
+              /* "smoomacypy/compute.pyx":228
+ *                 _sum2 = 0.0
+ *                 for j in range(nb_pts):
+ *                     dist = haversine2(x_cell, y_cell, cos_y_cell, c_knownpts[j].x, c_knownpts[j].y, c_knownpts[j].cos_y)             # <<<<<<<<<<<<<<
+ *                     t = smooth(alpha, beta, dist)
+ *                     _sum1 += c_knownpts[j].value1 * t
+ */
+              __pyx_v_dist = __pyx_f_10smoomacypy_7compute_haversine2(__pyx_v_x_cell, __pyx_v_y_cell, __pyx_v_cos_y_cell, (__pyx_v_c_knownpts[__pyx_v_j]).x, (__pyx_v_c_knownpts[__pyx_v_j]).y, (__pyx_v_c_knownpts[__pyx_v_j]).cos_y);
+
+              /* "smoomacypy/compute.pyx":229
+ *                 for j in range(nb_pts):
+ *                     dist = haversine2(x_cell, y_cell, cos_y_cell, c_knownpts[j].x, c_knownpts[j].y, c_knownpts[j].cos_y)
+ *                     t = smooth(alpha, beta, dist)             # <<<<<<<<<<<<<<
+ *                     _sum1 += c_knownpts[j].value1 * t
+ *                     _sum2 += c_knownpts[j].value2 * t
+ */
+              __pyx_v_t = __pyx_v_smooth(__pyx_v_alpha, __pyx_v_beta, __pyx_v_dist);
+
+              /* "smoomacypy/compute.pyx":230
+ *                     dist = haversine2(x_cell, y_cell, cos_y_cell, c_knownpts[j].x, c_knownpts[j].y, c_knownpts[j].cos_y)
+ *                     t = smooth(alpha, beta, dist)
+ *                     _sum1 += c_knownpts[j].value1 * t             # <<<<<<<<<<<<<<
+ *                     _sum2 += c_knownpts[j].value2 * t
+ *                 res[ix] = _sum1 / _sum2
+ */
+              __pyx_v__sum1 = (__pyx_v__sum1 + ((__pyx_v_c_knownpts[__pyx_v_j]).value1 * __pyx_v_t));
+
+              /* "smoomacypy/compute.pyx":231
+ *                     t = smooth(alpha, beta, dist)
+ *                     _sum1 += c_knownpts[j].value1 * t
+ *                     _sum2 += c_knownpts[j].value2 * t             # <<<<<<<<<<<<<<
+ *                 res[ix] = _sum1 / _sum2
+ *                 ix += 1
+ */
+              __pyx_v__sum2 = (__pyx_v__sum2 + ((__pyx_v_c_knownpts[__pyx_v_j]).value2 * __pyx_v_t));
+            }
+
+            /* "smoomacypy/compute.pyx":232
+ *                     _sum1 += c_knownpts[j].value1 * t
+ *                     _sum2 += c_knownpts[j].value2 * t
+ *                 res[ix] = _sum1 / _sum2             # <<<<<<<<<<<<<<
+ *                 ix += 1
+ *         free(c_knownpts)
+ */
+            __pyx_t_21 = __pyx_v_ix;
+            *__Pyx_BufPtrCContig1d(__pyx_t_10smoomacypy_7compute_DTYPE_t *, __pyx_pybuffernd_res.rcbuffer->pybuffer.buf, __pyx_t_21, __pyx_pybuffernd_res.diminfo[0].strides) = (__pyx_v__sum1 / __pyx_v__sum2);
+
+            /* "smoomacypy/compute.pyx":233
+ *                     _sum2 += c_knownpts[j].value2 * t
+ *                 res[ix] = _sum1 / _sum2
+ *                 ix += 1             # <<<<<<<<<<<<<<
+ *         free(c_knownpts)
+ *     return res
+ */
+            __pyx_v_ix = (__pyx_v_ix + 1);
+          }
+        }
+
+        /* "smoomacypy/compute.pyx":234
+ *                 res[ix] = _sum1 / _sum2
+ *                 ix += 1
+ *         free(c_knownpts)             # <<<<<<<<<<<<<<
+ *     return res
+ * 
+ */
+        free(__pyx_v_c_knownpts);
+      }
+
+      /* "smoomacypy/compute.pyx":206
+ *         raise MemoryError()
+ * 
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]
+ */
+      /*finally:*/ {
+        /*normal exit:*/{
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L6;
+        }
+        __pyx_L5_error: {
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L1_error;
+        }
+        __pyx_L6:;
+      }
+  }
+
+  /* "smoomacypy/compute.pyx":235
+ *                 ix += 1
+ *         free(c_knownpts)
+ *     return res             # <<<<<<<<<<<<<<
+ * 
+ * cdef compute_2_var_euclidian(
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_res));
+  __pyx_r = ((PyObject *)__pyx_v_res);
+  goto __pyx_L0;
+
+  /* "smoomacypy/compute.pyx":181
+ *     return res
+ * 
+ * cdef compute_2_var_geo(             # <<<<<<<<<<<<<<
+ *         np.double_t[:,::1] knownpts, np.double_t[::1] XI, np.double_t[::1] YI,
+ *         double span, double alpha, double beta, bint expfunc):
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_9, 1);
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
+  __Pyx_AddTraceback("smoomacypy.compute.compute_2_var_geo", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  goto __pyx_L2;
+  __pyx_L0:;
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
+  __pyx_L2:;
+  __PYX_XDEC_MEMVIEW(&__pyx_v_point, 1);
+  __Pyx_XDECREF((PyObject *)__pyx_v_res);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "smoomacypy/compute.pyx":237
+ *     return res
+ * 
+ * cdef compute_2_var_euclidian(             # <<<<<<<<<<<<<<
+ *         np.double_t[:,::1] knownpts, np.double_t[::1] XI, np.double_t[::1] YI,
+ *         double span, double alpha, double beta, bint expfunc):
+ */
+
+static PyObject *__pyx_f_10smoomacypy_7compute_compute_2_var_euclidian(__Pyx_memviewslice __pyx_v_knownpts, __Pyx_memviewslice __pyx_v_XI, __Pyx_memviewslice __pyx_v_YI, CYTHON_UNUSED double __pyx_v_span, double __pyx_v_alpha, double __pyx_v_beta, int __pyx_v_expfunc) {
+  __pyx_t_10smoomacypy_7compute_SMOOTH_FUNC __pyx_v_smooth;
+  Py_ssize_t __pyx_v_len_xi;
+  Py_ssize_t __pyx_v_len_yi;
+  Py_ssize_t __pyx_v_nb_pot;
+  Py_ssize_t __pyx_v_nb_pts;
+  Py_ssize_t __pyx_v_ix_x;
+  Py_ssize_t __pyx_v_ix_y;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_x_cell;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_y_cell;
+  Py_ssize_t __pyx_v_j;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v__sum1;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v__sum2;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_t;
+  Py_ssize_t __pyx_v_ix;
+  __pyx_t_10smoomacypy_7compute_DTYPE_t __pyx_v_dist;
+  __Pyx_memviewslice __pyx_v_point = { 0, 0, { 0 }, { 0 }, { 0 } };
+  PyArrayObject *__pyx_v_res = 0;
+  struct __pyx_t_10smoomacypy_7compute_Pt2Value *__pyx_v_c_knownpts;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_res;
+  __Pyx_Buffer __pyx_pybuffer_res;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyArrayObject *__pyx_t_5 = NULL;
+  int __pyx_t_6;
+  Py_ssize_t __pyx_t_7;
+  Py_ssize_t __pyx_t_8;
+  __Pyx_memviewslice __pyx_t_9 = { 0, 0, { 0 }, { 0 }, { 0 } };
+  Py_ssize_t __pyx_t_10;
+  Py_ssize_t __pyx_t_11;
+  Py_ssize_t __pyx_t_12;
+  Py_ssize_t __pyx_t_13;
+  Py_ssize_t __pyx_t_14;
+  Py_ssize_t __pyx_t_15;
+  Py_ssize_t __pyx_t_16;
+  Py_ssize_t __pyx_t_17;
+  Py_ssize_t __pyx_t_18;
+  Py_ssize_t __pyx_t_19;
+  Py_ssize_t __pyx_t_20;
+  __Pyx_RefNannySetupContext("compute_2_var_euclidian", 0);
+  __pyx_pybuffer_res.pybuffer.buf = NULL;
+  __pyx_pybuffer_res.refcount = 0;
+  __pyx_pybuffernd_res.data = NULL;
+  __pyx_pybuffernd_res.rcbuffer = &__pyx_pybuffer_res;
+
+  /* "smoomacypy/compute.pyx":241
+ *         double span, double alpha, double beta, bint expfunc):
+ *     cdef SMOOTH_FUNC smooth
+ *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
+ *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi
+ */
+  __pyx_v_len_xi = ((Py_ssize_t)(__pyx_v_XI.shape[0]));
+
+  /* "smoomacypy/compute.pyx":242
+ *     cdef SMOOTH_FUNC smooth
+ *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]
+ *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi
+ *     cdef Py_ssize_t nb_pts = knownpts.shape[0]
+ */
+  __pyx_v_len_yi = ((Py_ssize_t)(__pyx_v_YI.shape[0]));
+
+  /* "smoomacypy/compute.pyx":243
+ *     cdef Py_ssize_t len_xi = <Py_ssize_t>XI.shape[0]
+ *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
+ *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t nb_pts = knownpts.shape[0]
+ *     cdef Py_ssize_t ix_x
+ */
+  __pyx_v_nb_pot = (((Py_ssize_t)__pyx_v_len_xi) * __pyx_v_len_yi);
+
+  /* "smoomacypy/compute.pyx":244
+ *     cdef Py_ssize_t len_yi = <Py_ssize_t>YI.shape[0]
+ *     cdef Py_ssize_t nb_pot = <Py_ssize_t>len_xi * len_yi
+ *     cdef Py_ssize_t nb_pts = knownpts.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t ix_x
+ *     cdef Py_ssize_t ix_y
+ */
+  __pyx_v_nb_pts = (__pyx_v_knownpts.shape[0]);
+
+  /* "smoomacypy/compute.pyx":250
+ *     cdef DTYPE_t y_cell
+ *     cdef Py_ssize_t j
+ *     cdef DTYPE_t _sum1 = 0.0             # <<<<<<<<<<<<<<
+ *     cdef DTYPE_t _sum2 = 0.0
+ *     cdef DTYPE_t t = 0.0
+ */
+  __pyx_v__sum1 = 0.0;
+
+  /* "smoomacypy/compute.pyx":251
+ *     cdef Py_ssize_t j
+ *     cdef DTYPE_t _sum1 = 0.0
+ *     cdef DTYPE_t _sum2 = 0.0             # <<<<<<<<<<<<<<
+ *     cdef DTYPE_t t = 0.0
+ *     cdef Py_ssize_t ix = 0
+ */
+  __pyx_v__sum2 = 0.0;
+
+  /* "smoomacypy/compute.pyx":252
+ *     cdef DTYPE_t _sum1 = 0.0
+ *     cdef DTYPE_t _sum2 = 0.0
+ *     cdef DTYPE_t t = 0.0             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t ix = 0
+ *     cdef DTYPE_t dist
+ */
+  __pyx_v_t = 0.0;
+
+  /* "smoomacypy/compute.pyx":253
+ *     cdef DTYPE_t _sum2 = 0.0
+ *     cdef DTYPE_t t = 0.0
+ *     cdef Py_ssize_t ix = 0             # <<<<<<<<<<<<<<
+ *     cdef DTYPE_t dist
+ *     cdef np.double_t[:] point
+ */
+  __pyx_v_ix = 0;
+
+  /* "smoomacypy/compute.pyx":256
+ *     cdef DTYPE_t dist
+ *     cdef np.double_t[:] point
+ *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)             # <<<<<<<<<<<<<<
+ *     cdef Pt2Value *c_knownpts = <Pt2Value *>malloc(nb_pts * sizeof(Pt2Value))
+ *     if not c_knownpts:
+ */
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 256, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 256, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = PyInt_FromSsize_t(__pyx_v_nb_pot); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 256, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 256, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
+  __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 256, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_DTYPE); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 256, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_4) < 0) __PYX_ERR(0, 256, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 256, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 256, __pyx_L1_error)
+  __pyx_t_5 = ((PyArrayObject *)__pyx_t_4);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_res.rcbuffer->pybuffer, (PyObject*)__pyx_t_5, &__Pyx_TypeInfo_nn___pyx_t_10smoomacypy_7compute_DTYPE_t, PyBUF_FORMAT| PyBUF_C_CONTIGUOUS| PyBUF_WRITABLE, 1, 0, __pyx_stack) == -1)) {
+      __pyx_v_res = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_res.rcbuffer->pybuffer.buf = NULL;
+      __PYX_ERR(0, 256, __pyx_L1_error)
+    } else {__pyx_pybuffernd_res.diminfo[0].strides = __pyx_pybuffernd_res.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_res.diminfo[0].shape = __pyx_pybuffernd_res.rcbuffer->pybuffer.shape[0];
+    }
+  }
+  __pyx_t_5 = 0;
+  __pyx_v_res = ((PyArrayObject *)__pyx_t_4);
+  __pyx_t_4 = 0;
+
+  /* "smoomacypy/compute.pyx":257
+ *     cdef np.double_t[:] point
+ *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)
+ *     cdef Pt2Value *c_knownpts = <Pt2Value *>malloc(nb_pts * sizeof(Pt2Value))             # <<<<<<<<<<<<<<
+ *     if not c_knownpts:
+ *         raise MemoryError()
+ */
+  __pyx_v_c_knownpts = ((struct __pyx_t_10smoomacypy_7compute_Pt2Value *)malloc((__pyx_v_nb_pts * (sizeof(struct __pyx_t_10smoomacypy_7compute_Pt2Value)))));
+
+  /* "smoomacypy/compute.pyx":258
+ *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)
+ *     cdef Pt2Value *c_knownpts = <Pt2Value *>malloc(nb_pts * sizeof(Pt2Value))
+ *     if not c_knownpts:             # <<<<<<<<<<<<<<
+ *         raise MemoryError()
+ * 
+ */
+  __pyx_t_6 = ((!(__pyx_v_c_knownpts != 0)) != 0);
+  if (__pyx_t_6) {
+
+    /* "smoomacypy/compute.pyx":259
+ *     cdef Pt2Value *c_knownpts = <Pt2Value *>malloc(nb_pts * sizeof(Pt2Value))
+ *     if not c_knownpts:
+ *         raise MemoryError()             # <<<<<<<<<<<<<<
+ * 
+ *     with nogil:
+ */
+    PyErr_NoMemory(); __PYX_ERR(0, 259, __pyx_L1_error)
+
+    /* "smoomacypy/compute.pyx":258
+ *     cdef np.ndarray[DTYPE_t, ndim=1, mode='c'] res = np.zeros(nb_pot, dtype=DTYPE)
+ *     cdef Pt2Value *c_knownpts = <Pt2Value *>malloc(nb_pts * sizeof(Pt2Value))
+ *     if not c_knownpts:             # <<<<<<<<<<<<<<
+ *         raise MemoryError()
+ * 
+ */
+  }
+
+  /* "smoomacypy/compute.pyx":261
+ *         raise MemoryError()
+ * 
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]
+ */
+  {
+      #ifdef WITH_THREAD
+      PyThreadState *_save;
+      Py_UNBLOCK_THREADS
+      __Pyx_FastGIL_Remember();
+      #endif
+      /*try:*/ {
+
+        /* "smoomacypy/compute.pyx":262
+ * 
+ *     with nogil:
+ *         for j in range(nb_pts):             # <<<<<<<<<<<<<<
+ *             point = knownpts[j]
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
+ */
+        __pyx_t_7 = __pyx_v_nb_pts;
+        for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+          __pyx_v_j = __pyx_t_8;
+
+          /* "smoomacypy/compute.pyx":263
+ *     with nogil:
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]             # <<<<<<<<<<<<<<
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]
+ */
+          __pyx_t_9.data = __pyx_v_knownpts.data;
+          __pyx_t_9.memview = __pyx_v_knownpts.memview;
+          __PYX_INC_MEMVIEW(&__pyx_t_9, 0);
+          {
+    Py_ssize_t __pyx_tmp_idx = __pyx_v_j;
+    Py_ssize_t __pyx_tmp_shape = __pyx_v_knownpts.shape[0];
+    Py_ssize_t __pyx_tmp_stride = __pyx_v_knownpts.strides[0];
+    if (0 && (__pyx_tmp_idx < 0))
+        __pyx_tmp_idx += __pyx_tmp_shape;
+    if (0 && (__pyx_tmp_idx < 0 || __pyx_tmp_idx >= __pyx_tmp_shape)) {
+            #ifdef WITH_THREAD
+            PyGILState_STATE __pyx_gilstate_save = PyGILState_Ensure();
+            #endif
+        PyErr_SetString(PyExc_IndexError, "Index out of bounds (axis 0)");
+            #ifdef WITH_THREAD
+            PyGILState_Release(__pyx_gilstate_save);
+            #endif
+        __PYX_ERR(0, 263, __pyx_L5_error)
+    }
+        __pyx_t_9.data += __pyx_tmp_idx * __pyx_tmp_stride;
+}
+
+__pyx_t_9.shape[0] = __pyx_v_knownpts.shape[1];
+__pyx_t_9.strides[0] = __pyx_v_knownpts.strides[1];
+    __pyx_t_9.suboffsets[0] = -1;
+
+__PYX_XDEC_MEMVIEW(&__pyx_v_point, 0);
+          __pyx_v_point = __pyx_t_9;
+          __pyx_t_9.memview = NULL;
+          __pyx_t_9.data = NULL;
+
+          /* "smoomacypy/compute.pyx":264
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]             # <<<<<<<<<<<<<<
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]
+ *             c_knownpts[j].value1 = point[<Py_ssize_t>2]
+ */
+          __pyx_t_10 = ((Py_ssize_t)0);
+          (__pyx_v_c_knownpts[__pyx_v_j]).x = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_10 * __pyx_v_point.strides[0]) )));
+
+          /* "smoomacypy/compute.pyx":265
+ *             point = knownpts[j]
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]             # <<<<<<<<<<<<<<
+ *             c_knownpts[j].value1 = point[<Py_ssize_t>2]
+ *             c_knownpts[j].value2 = point[<Py_ssize_t>3]
+ */
+          __pyx_t_11 = ((Py_ssize_t)1);
+          (__pyx_v_c_knownpts[__pyx_v_j]).y = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_11 * __pyx_v_point.strides[0]) )));
+
+          /* "smoomacypy/compute.pyx":266
+ *             c_knownpts[j].x = point[<Py_ssize_t>0]
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]
+ *             c_knownpts[j].value1 = point[<Py_ssize_t>2]             # <<<<<<<<<<<<<<
+ *             c_knownpts[j].value2 = point[<Py_ssize_t>3]
+ * 
+ */
+          __pyx_t_12 = ((Py_ssize_t)2);
+          (__pyx_v_c_knownpts[__pyx_v_j]).value1 = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_12 * __pyx_v_point.strides[0]) )));
+
+          /* "smoomacypy/compute.pyx":267
+ *             c_knownpts[j].y = point[<Py_ssize_t>1]
+ *             c_knownpts[j].value1 = point[<Py_ssize_t>2]
+ *             c_knownpts[j].value2 = point[<Py_ssize_t>3]             # <<<<<<<<<<<<<<
+ * 
+ *         if expfunc:
+ */
+          __pyx_t_13 = ((Py_ssize_t)3);
+          (__pyx_v_c_knownpts[__pyx_v_j]).value2 = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ (__pyx_v_point.data + __pyx_t_13 * __pyx_v_point.strides[0]) )));
+        }
+
+        /* "smoomacypy/compute.pyx":269
+ *             c_knownpts[j].value2 = point[<Py_ssize_t>3]
+ * 
+ *         if expfunc:             # <<<<<<<<<<<<<<
+ *             smooth = exponential
+ *         else:
+ */
+        __pyx_t_6 = (__pyx_v_expfunc != 0);
+        if (__pyx_t_6) {
+
+          /* "smoomacypy/compute.pyx":270
+ * 
+ *         if expfunc:
+ *             smooth = exponential             # <<<<<<<<<<<<<<
+ *         else:
+ *             smooth = pareto
+ */
+          __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_exponential;
+
+          /* "smoomacypy/compute.pyx":269
+ *             c_knownpts[j].value2 = point[<Py_ssize_t>3]
+ * 
+ *         if expfunc:             # <<<<<<<<<<<<<<
+ *             smooth = exponential
+ *         else:
+ */
+          goto __pyx_L9;
+        }
+
+        /* "smoomacypy/compute.pyx":272
+ *             smooth = exponential
+ *         else:
+ *             smooth = pareto             # <<<<<<<<<<<<<<
+ * 
+ *         for ix_x in range(len_xi):
+ */
+        /*else*/ {
+          __pyx_v_smooth = __pyx_f_10smoomacypy_7compute_pareto;
+        }
+        __pyx_L9:;
+
+        /* "smoomacypy/compute.pyx":274
+ *             smooth = pareto
+ * 
+ *         for ix_x in range(len_xi):             # <<<<<<<<<<<<<<
+ *             x_cell = XI[ix_x]
+ *             for ix_y in range(len_yi):
+ */
+        __pyx_t_7 = __pyx_v_len_xi;
+        for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
+          __pyx_v_ix_x = __pyx_t_8;
+
+          /* "smoomacypy/compute.pyx":275
+ * 
+ *         for ix_x in range(len_xi):
+ *             x_cell = XI[ix_x]             # <<<<<<<<<<<<<<
+ *             for ix_y in range(len_yi):
+ *                 y_cell= YI[ix_y]
+ */
+          __pyx_t_14 = __pyx_v_ix_x;
+          __pyx_v_x_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_XI.data) + __pyx_t_14)) )));
+
+          /* "smoomacypy/compute.pyx":276
+ *         for ix_x in range(len_xi):
+ *             x_cell = XI[ix_x]
+ *             for ix_y in range(len_yi):             # <<<<<<<<<<<<<<
+ *                 y_cell= YI[ix_y]
+ *                 _sum1 = 0.0
+ */
+          __pyx_t_15 = __pyx_v_len_yi;
+          for (__pyx_t_16 = 0; __pyx_t_16 < __pyx_t_15; __pyx_t_16+=1) {
+            __pyx_v_ix_y = __pyx_t_16;
+
+            /* "smoomacypy/compute.pyx":277
+ *             x_cell = XI[ix_x]
+ *             for ix_y in range(len_yi):
+ *                 y_cell= YI[ix_y]             # <<<<<<<<<<<<<<
+ *                 _sum1 = 0.0
+ *                 _sum2 = 0.0
+ */
+            __pyx_t_17 = __pyx_v_ix_y;
+            __pyx_v_y_cell = (*((__pyx_t_5numpy_double_t *) ( /* dim=0 */ ((char *) (((__pyx_t_5numpy_double_t *) __pyx_v_YI.data) + __pyx_t_17)) )));
+
+            /* "smoomacypy/compute.pyx":278
+ *             for ix_y in range(len_yi):
+ *                 y_cell= YI[ix_y]
+ *                 _sum1 = 0.0             # <<<<<<<<<<<<<<
+ *                 _sum2 = 0.0
+ *                 for j in range(nb_pts):
+ */
+            __pyx_v__sum1 = 0.0;
+
+            /* "smoomacypy/compute.pyx":279
+ *                 y_cell= YI[ix_y]
+ *                 _sum1 = 0.0
+ *                 _sum2 = 0.0             # <<<<<<<<<<<<<<
+ *                 for j in range(nb_pts):
+ *                     dist = euclidian(x_cell, y_cell, c_knownpts[j].x, c_knownpts[j].y)
+ */
+            __pyx_v__sum2 = 0.0;
+
+            /* "smoomacypy/compute.pyx":280
+ *                 _sum1 = 0.0
+ *                 _sum2 = 0.0
+ *                 for j in range(nb_pts):             # <<<<<<<<<<<<<<
+ *                     dist = euclidian(x_cell, y_cell, c_knownpts[j].x, c_knownpts[j].y)
+ *                     t = smooth(alpha, beta, dist)
+ */
+            __pyx_t_18 = __pyx_v_nb_pts;
+            for (__pyx_t_19 = 0; __pyx_t_19 < __pyx_t_18; __pyx_t_19+=1) {
+              __pyx_v_j = __pyx_t_19;
+
+              /* "smoomacypy/compute.pyx":281
+ *                 _sum2 = 0.0
+ *                 for j in range(nb_pts):
+ *                     dist = euclidian(x_cell, y_cell, c_knownpts[j].x, c_knownpts[j].y)             # <<<<<<<<<<<<<<
+ *                     t = smooth(alpha, beta, dist)
+ *                     _sum1 += c_knownpts[j].value1 * t
+ */
+              __pyx_v_dist = __pyx_f_10smoomacypy_7compute_euclidian(__pyx_v_x_cell, __pyx_v_y_cell, (__pyx_v_c_knownpts[__pyx_v_j]).x, (__pyx_v_c_knownpts[__pyx_v_j]).y);
+
+              /* "smoomacypy/compute.pyx":282
+ *                 for j in range(nb_pts):
+ *                     dist = euclidian(x_cell, y_cell, c_knownpts[j].x, c_knownpts[j].y)
+ *                     t = smooth(alpha, beta, dist)             # <<<<<<<<<<<<<<
+ *                     _sum1 += c_knownpts[j].value1 * t
+ *                     _sum2 += c_knownpts[j].value2 * t
+ */
+              __pyx_v_t = __pyx_v_smooth(__pyx_v_alpha, __pyx_v_beta, __pyx_v_dist);
+
+              /* "smoomacypy/compute.pyx":283
+ *                     dist = euclidian(x_cell, y_cell, c_knownpts[j].x, c_knownpts[j].y)
+ *                     t = smooth(alpha, beta, dist)
+ *                     _sum1 += c_knownpts[j].value1 * t             # <<<<<<<<<<<<<<
+ *                     _sum2 += c_knownpts[j].value2 * t
+ *                 res[ix] = _sum1 / _sum2
+ */
+              __pyx_v__sum1 = (__pyx_v__sum1 + ((__pyx_v_c_knownpts[__pyx_v_j]).value1 * __pyx_v_t));
+
+              /* "smoomacypy/compute.pyx":284
+ *                     t = smooth(alpha, beta, dist)
+ *                     _sum1 += c_knownpts[j].value1 * t
+ *                     _sum2 += c_knownpts[j].value2 * t             # <<<<<<<<<<<<<<
+ *                 res[ix] = _sum1 / _sum2
+ *                 ix += 1
+ */
+              __pyx_v__sum2 = (__pyx_v__sum2 + ((__pyx_v_c_knownpts[__pyx_v_j]).value2 * __pyx_v_t));
+            }
+
+            /* "smoomacypy/compute.pyx":285
+ *                     _sum1 += c_knownpts[j].value1 * t
+ *                     _sum2 += c_knownpts[j].value2 * t
+ *                 res[ix] = _sum1 / _sum2             # <<<<<<<<<<<<<<
+ *                 ix += 1
+ *         free(c_knownpts)
+ */
+            __pyx_t_20 = __pyx_v_ix;
+            *__Pyx_BufPtrCContig1d(__pyx_t_10smoomacypy_7compute_DTYPE_t *, __pyx_pybuffernd_res.rcbuffer->pybuffer.buf, __pyx_t_20, __pyx_pybuffernd_res.diminfo[0].strides) = (__pyx_v__sum1 / __pyx_v__sum2);
+
+            /* "smoomacypy/compute.pyx":286
+ *                     _sum2 += c_knownpts[j].value2 * t
+ *                 res[ix] = _sum1 / _sum2
+ *                 ix += 1             # <<<<<<<<<<<<<<
+ *         free(c_knownpts)
+ *     return res
+ */
+            __pyx_v_ix = (__pyx_v_ix + 1);
+          }
+        }
+
+        /* "smoomacypy/compute.pyx":287
+ *                 res[ix] = _sum1 / _sum2
+ *                 ix += 1
+ *         free(c_knownpts)             # <<<<<<<<<<<<<<
+ *     return res
+ * 
+ */
+        free(__pyx_v_c_knownpts);
+      }
+
+      /* "smoomacypy/compute.pyx":261
+ *         raise MemoryError()
+ * 
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for j in range(nb_pts):
+ *             point = knownpts[j]
+ */
+      /*finally:*/ {
+        /*normal exit:*/{
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L6;
+        }
+        __pyx_L5_error: {
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L1_error;
+        }
+        __pyx_L6:;
+      }
+  }
+
+  /* "smoomacypy/compute.pyx":288
+ *                 ix += 1
+ *         free(c_knownpts)
+ *     return res             # <<<<<<<<<<<<<<
+ * 
+ * #cdef inline float haversine(float lon1, float lat1, float lon2, float lat2) nogil:
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_res));
+  __pyx_r = ((PyObject *)__pyx_v_res);
+  goto __pyx_L0;
+
+  /* "smoomacypy/compute.pyx":237
+ *     return res
+ * 
+ * cdef compute_2_var_euclidian(             # <<<<<<<<<<<<<<
+ *         np.double_t[:,::1] knownpts, np.double_t[::1] XI, np.double_t[::1] YI,
+ *         double span, double alpha, double beta, bint expfunc):
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __PYX_XDEC_MEMVIEW(&__pyx_t_9, 1);
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
+  __Pyx_AddTraceback("smoomacypy.compute.compute_2_var_euclidian", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = 0;
   goto __pyx_L2;
   __pyx_L0:;
@@ -20625,8 +21513,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(0, 80, __pyx_L1_error)
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 92, __pyx_L1_error)
+  __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(0, 104, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 107, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 235, __pyx_L1_error)
   __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(1, 823, __pyx_L1_error)
   __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(1, 1013, __pyx_L1_error)
@@ -20944,17 +21832,17 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__28);
   __Pyx_GIVEREF(__pyx_tuple__28);
 
-  /* "smoomacypy/compute.pyx":40
+  /* "smoomacypy/compute.pyx":61
  * 
  * 
  * def _compute_stewart(knownpts, XI, YI, nb_var, type_function, span, beta, lonlat):             # <<<<<<<<<<<<<<
  *     if type_function == 'exponential':
  *         alpha = 0.6931471805 / pow(span, beta)
  */
-  __pyx_tuple__29 = PyTuple_Pack(10, __pyx_n_s_knownpts, __pyx_n_s_XI, __pyx_n_s_YI, __pyx_n_s_nb_var, __pyx_n_s_type_function, __pyx_n_s_span, __pyx_n_s_beta, __pyx_n_s_lonlat, __pyx_n_s_alpha, __pyx_n_s_expfunc); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_tuple__29 = PyTuple_Pack(10, __pyx_n_s_knownpts, __pyx_n_s_XI, __pyx_n_s_YI, __pyx_n_s_nb_var, __pyx_n_s_type_function, __pyx_n_s_span, __pyx_n_s_beta, __pyx_n_s_lonlat, __pyx_n_s_alpha, __pyx_n_s_expfunc); if (unlikely(!__pyx_tuple__29)) __PYX_ERR(0, 61, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__29);
   __Pyx_GIVEREF(__pyx_tuple__29);
-  __pyx_codeobj__30 = (PyObject*)__Pyx_PyCode_New(8, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__29, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_smoomacypy_compute_pyx, __pyx_n_s_compute_stewart, 40, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__30)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_codeobj__30 = (PyObject*)__Pyx_PyCode_New(8, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__29, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_smoomacypy_compute_pyx, __pyx_n_s_compute_stewart, 61, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__30)) __PYX_ERR(0, 61, __pyx_L1_error)
 
   /* "View.MemoryView":284
  *         return self.name
@@ -21250,31 +22138,31 @@ static int __pyx_pymod_exec_compute(PyObject *__pyx_pyinit_module)
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 8, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "smoomacypy/compute.pyx":12
- * 
+  /* "smoomacypy/compute.pyx":11
+ * cimport numpy as np
  * 
  * DTYPE = np.double             # <<<<<<<<<<<<<<
  * ctypedef np.double_t DTYPE_t
- * ctypedef float (*DIST_FUNC)(float, float, float, float) nogil
+ * ctypedef float (*SMOOTH_FUNC)(float, float, float) nogil
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 11, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_double); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 12, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_double); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 11, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DTYPE, __pyx_t_2) < 0) __PYX_ERR(0, 12, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_DTYPE, __pyx_t_2) < 0) __PYX_ERR(0, 11, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "smoomacypy/compute.pyx":40
+  /* "smoomacypy/compute.pyx":61
  * 
  * 
  * def _compute_stewart(knownpts, XI, YI, nb_var, type_function, span, beta, lonlat):             # <<<<<<<<<<<<<<
  *     if type_function == 'exponential':
  *         alpha = 0.6931471805 / pow(span, beta)
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_10smoomacypy_7compute_1_compute_stewart, NULL, __pyx_n_s_smoomacypy_compute); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_10smoomacypy_7compute_1_compute_stewart, NULL, __pyx_n_s_smoomacypy_compute); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_compute_stewart, __pyx_t_2) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_compute_stewart, __pyx_t_2) < 0) __PYX_ERR(0, 61, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "smoomacypy/compute.pyx":1

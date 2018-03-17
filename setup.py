@@ -19,7 +19,7 @@ with open(path.join('smoomacypy', '__init__.py')) as f:
 
 exts = [Extension("smoomacypy.compute",
                   ["smoomacypy/compute.pyx"], ["."],
-                  extra_compile_args=["-O3"])]
+                  extra_compile_args=["-march=native", "-Ofast", "-fno-signed-zeros"])]
 
 setup(
     name='smoomacypy',
