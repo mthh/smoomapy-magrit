@@ -5,6 +5,8 @@ from distutils.core import setup
 from distutils.extension import Extension
 from ast import parse
 from os import path
+import numpy
+
 try:
     from future_builtins import filter
 except ImportError:
@@ -18,7 +20,7 @@ with open(path.join('smoomacypy', '__init__.py')) as f:
                                      f))).body[0].value.s
 
 exts = [Extension("smoomacypy.compute",
-                  ["smoomacypy/compute.pyx"], ["."],
+                  ["smoomacypy/compute.pyx"], [".", numpy.get_include()],
                   extra_compile_args=["-march=native", "-Ofast", "-fno-signed-zeros"])]
 
 setup(
