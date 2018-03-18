@@ -6,7 +6,7 @@ import random
 from geopandas import GeoDataFrame
 from smoomacypy import (
     quick_stewart, SmoothStewart,
-    head_tail_breaks, maximal_breaks, get_opt_nb_class)
+    head_tail_breaks, maximal_breaks)
 from smoomacypy.helpers_classif import _chain
 
 
@@ -124,7 +124,7 @@ class TestSmoothStewart(unittest.TestCase):
             output="geodataframe")         # ... and this is what we are testing here
 
         self.assertIsInstance(result, GeoDataFrame)
-        self.assertEqual(len(result), 7)
+        self.assertEqual(len(result), 8)
         # Assert these break values were actually used :
         for wanted_break, obtained_break in zip(my_breaks[1:-1], result["max"][:-1]):
             self.assertAlmostEqual(wanted_break, obtained_break)
@@ -342,10 +342,6 @@ class TestHelpers(unittest.TestCase):
         breaks = maximal_breaks(self.li, k=6)
         self.assertIsInstance(breaks, list)
         self.assertEqual(len(breaks), 7)
-
-    def test_get_opt_nb_class(self):
-        nb_class = get_opt_nb_class(len(self.li))
-        self.assertEqual(nb_class, 11)
 
     def test_chain_list(self):
         _list = [i for i in _chain([789, 45], [78, 96], [7878, 789, 36])]
