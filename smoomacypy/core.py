@@ -638,4 +638,16 @@ class SmoothStewart(BaseSmooth):
                     for ix, g in enumerate(centroids)])
                 nb_var = 2          
 
-        self.zi = _compute_stewart(knwpts_coords, self.XI, self.YI, nb_var, typefct, span, beta, self.longlat)
+        self.zi = _compute_stewart(knwpts_coords,
+                                   self.XI,
+                                   self.YI,
+                                   nb_var,
+                                   typefct,
+                                   span,
+                                   beta,
+                                   self.longlat)
+
+        # Replace NaN values by -1.0 :
+        self.zi[np.argwhere(np.isnan(self.zi)).reshape(-1)] = -1.0
+        # Replace inf values by -1.0 :
+        self.zi[np.argwhere(np.isinf(self.zi)).reshape(-1)] = -1.0
