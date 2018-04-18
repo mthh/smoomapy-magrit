@@ -306,14 +306,16 @@ class TestSmoothStewart(unittest.TestCase):
         # Test with a wrong discretization function name :
         with self.assertRaises(ValueError):
             StePot.render(9, "foo", output="Geodataframe")
-
-        # Test with a sizelimit and a high number of points
-        # (the nuts3 layer contains 1448 features)
-        with self.assertRaises(ValueError):
-            StePot = SmoothStewart(
-                    "misc/nuts3_data.geojson", "gdppps2008",
-                    span=65000, beta=2, typefct='pareto',
-                    nb_pts=100000, sizelimit=10000000)
+#
+# Actually we are currently lowering the number of points automaticaly
+# to fall behind the 'sizelimit':
+#        # Test with a sizelimit and a high number of points
+#        # (the nuts3 layer contains 1448 features)
+#        with self.assertRaises(ValueError):
+#            StePot = SmoothStewart(
+#                    "misc/nuts3_data.geojson", "gdppps2008",
+#                    span=65000, beta=2, typefct='pareto',
+#                    nb_pts=100000, sizelimit=10000000)
 
 class TestHelpers(unittest.TestCase):
     def setUp(self):

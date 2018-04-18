@@ -12,6 +12,7 @@ from shapely import speedups
 from shapely.ops import unary_union, transform
 from shapely.geometry import Polygon, MultiPolygon
 from geopandas import GeoDataFrame
+from fiona import _err as fiona_err
 try:
     from jenkspy import jenks_breaks
 except: jenks_breaks = None
@@ -281,6 +282,33 @@ def isopoly_to_gdf(collec_poly, levels, field_name="levels"):
                         data=data,
                         columns=[field_name])
 
+def replace_geojson_id_field(input_file, fb=False):
+    with open(input_file, 'rb') as f:
+        data = f.read()
+    nb_ft = data.count(b'"Feature"')
+    _nb_ft = data.count(b'"geometry"')
+    if not fb and data.count(b'"id"') == nb_ft and nb_ft == _nb_ft:
+        data = data.replace(b'"id"', b'"_id"')
+        with open(input_file, 'wb') as f:
+            f.write(data)
+    else:
+        import json
+        data = json.loads(data.decode())
+        for ix, ft in enumerate(data['features']):
+            ft['properties']['_id'] = ft['properties']['id']
+            del ft['properties']['id']
+        with open(input_file, 'wb') as f:
+            f.write(json.dumps(data).encode())
+
+def try_open_geojson(file_path):
+    try:
+        gdf = GeoDataFrame.from_file(file_path)
+    except fiona_err.CPLE_AppDefinedError as err:
+        replace_geojson_id_field(file_path)
+        gdf = GeoDataFrame.from_file(file_path)
+    return gdf
+
+
 class BaseSmooth:
     def __repr__(self):
         return self.info
@@ -299,6 +327,8 @@ class BaseSmooth:
         elif isinstance(mask, str) and isinstance(input_layer, str) \
                 and mask == input_layer:
             self.mask = self.gdf.copy()
+        elif isinstance(mask, str) and '.geojson' in mask.lower():
+            self.mask = try_open_geojson(mask)
         else:
             self.mask = GeoDataFrame.from_file(mask)
 
@@ -542,14 +572,26 @@ class SmoothStewart(BaseSmooth):
                  typefct='exponential', nb_pts=10000, sizelimit=36000000,
                  resolution=None, variable_name2=None, mask=None, **kwargs):
         self.sizelimit = int(sizelimit)
+        if not isinstance(typefct, str) :
+            raise ValueError(
+                "wrong 'typefct' argument, should be 'exponential' or 'pareto'"
+                )
+        _typefct = typefct.lower()
+        if not _typefct in ('exponential', 'pareto'):
+            raise ValueError(
+                "wrong 'typefct' argument, should be 'exponential' or 'pareto'"
+                )
         self.longlat = kwargs.get("distGeo", kwargs.get("longlat", True))
         self.proj_to_use = {'init': 'epsg:4326'} if self.longlat \
             else kwargs.get("projDistance", None) \
             or ("""+proj=robin +lon_0=0 +x_0=0 +y_0=0 """
                 """+ellps=WGS84 +datum=WGS84 +units=m +no_defs""")
-
-        self.gdf = input_layer.copy() if isinstance(input_layer, GeoDataFrame) \
-            else GeoDataFrame.from_file(input_layer)
+        if isinstance(input_layer, GeoDataFrame):
+            self.gdf = input_layer.copy()
+        elif isinstance(input_layer, str) and '.geojson' in input_layer.lower():
+            self.gdf = try_open_geojson(input_layer)
+        else:
+            self.gdf = GeoDataFrame.from_file(input_layer)
 
         if self.gdf.crs and self.gdf.crs is not self.proj_to_use:
             self.gdf.to_crs(self.proj_to_use, inplace=True)
@@ -576,7 +618,7 @@ class SmoothStewart(BaseSmooth):
                          variable_name2=variable_name2,
                          nb_pts=nb_pts,
                          resolution=resolution,
-                         typefct=typefct)
+                         typefct=_typefct)
 
     def compute_zi(self, variable_name, span, beta,
                    nb_pts, resolution=None, typefct="exponential",
