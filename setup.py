@@ -35,7 +35,7 @@ setup(
     license="MIT",
     test_suite="tests",
     install_requires=requirements,
-    setup_requires=['setuptools>=25.1', 'Cython>=0.24'],
+    setup_requires=['setuptools>=25.1', 'Cython>=0.24', "numpy>=1.11.0"],
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python",
