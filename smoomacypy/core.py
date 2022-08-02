@@ -229,8 +229,8 @@ def _compute_centroids(geometries):
     res = []
     for geom in geometries:
         if hasattr(geom, '__len__'):
-            ix_biggest = np.argmax([g.area for g in geom])
-            res.append(geom[ix_biggest].centroid)
+            ix_biggest = np.argmax([g.area for g in geom.geoms])
+            res.append(geom.geoms[ix_biggest].centroid)
         else:
             res.append(geom.centroid)
     return res
@@ -514,7 +514,7 @@ class BaseSmooth:
                  for geom in res.geometry]
 
         if "geojson" in output.lower():
-            return res.to_crs({"init": "epsg:4326"}).to_json().encode()
+            return res.to_crs("epsg:4326").to_json().encode()
         else:
             return res
 
@@ -582,7 +582,7 @@ class SmoothStewart(BaseSmooth):
                 "wrong 'typefct' argument, should be 'exponential' or 'pareto'"
                 )
         self.longlat = kwargs.get("distGeo", kwargs.get("longlat", True))
-        self.proj_to_use = {'init': 'epsg:4326'} if self.longlat \
+        self.proj_to_use = 'epsg:4326' if self.longlat \
             else kwargs.get("projDistance", None) \
             or ("""+proj=robin +lon_0=0 +x_0=0 +y_0=0 """
                 """+ellps=WGS84 +datum=WGS84 +units=m +no_defs""")

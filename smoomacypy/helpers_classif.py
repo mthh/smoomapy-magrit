@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Some helpers functions to try some (one dimension) data classification methods.
+Some helper functions to try some (one dimension) data classification methods.
 """
 import numpy as np
 from operator import gt, lt
@@ -53,8 +53,6 @@ class HeadTailBreaks:
 
         if "tail" in direction:
             self.bins = list(reversed(self.bins))
-
-        return None
 
 
 class MaximalBreaks:

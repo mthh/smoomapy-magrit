@@ -173,11 +173,11 @@ class TestSmoothStewart(unittest.TestCase):
                                variable_name2="pop2008",
                                mask="misc/nuts3_data.geojson",
                                distGeo=False,
-                               projDistance={"init": "epsg:3035"})
+                               projDistance="epsg:3035")
         result = StePot.render(8, "equal_interval", output="Geodataframe")
         self.assertIsInstance(result, GeoDataFrame)
         self.assertEqual(len(result), 8)
-        self.assertEqual(result.crs, {'init': 'epsg:3035'})
+        self.assertEqual(result.crs, 'epsg:3035')
 
     def test_from_gdf_with_new_mask(self):
         gdf = GeoDataFrame.from_file("misc/nuts3_data.geojson")
@@ -231,7 +231,7 @@ class TestSmoothStewart(unittest.TestCase):
         self.assertIsInstance(result, GeoDataFrame)
         self.assertEqual(len(result), 9)
 
-        gdf2 = GeoDataFrame.from_file('misc/nuts3_data.geojson').to_crs({"init": "epsg:3035"})
+        gdf2 = GeoDataFrame.from_file('misc/nuts3_data.geojson').to_crs("epsg:3035")
         gdf2.loc[:, 'gdppps2008'] = gdf2['gdppps2008'].astype(object)
         gdf2.loc[15:20, 'gdppps2008'] = ""
         gdf2.loc[75:78, 'gdppps2008'] = ""
@@ -261,7 +261,7 @@ class TestSmoothStewart(unittest.TestCase):
         self.assertEqual(len(result), 9)
 
     def test_from_point_layer_and_maximal_breaks(self):
-        gdf = GeoDataFrame.from_file("misc/nuts3_data.geojson").to_crs({"init": "epsg:4326"})
+        gdf = GeoDataFrame.from_file("misc/nuts3_data.geojson").to_crs("epsg:4326")
 
         # Convert the input layer to a point layer :
         gdf.geometry = gdf.geometry.centroid
