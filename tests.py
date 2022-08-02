@@ -23,7 +23,7 @@ class TestSmoothStewart(unittest.TestCase):
         self.assertIsInstance(res, bytes)
 
         # Exports correctly to `GeoDataFrame`
-        # and respects the choosen number of class:
+        # and respects the chosen number of class:
         res = quick_stewart(
             "misc/nuts3_data.geojson", "pop2008",
             span=65000, beta=2, nb_pts=8000, nb_class=8,
@@ -60,7 +60,7 @@ class TestSmoothStewart(unittest.TestCase):
             self.assertAlmostEqual(wanted_break, obtained_break)
 
         # Test with user defined breaks values
-        # (the maximum value is volontarily low, and the minimum volontarily high,
+        # (the maximum value is voluntarily low, and the minimum voluntarily high,
         #   two new class will be created,
         #   respectively between the minimum and the first break value
         #   and between the last break value and the maximum)
@@ -77,15 +77,15 @@ class TestSmoothStewart(unittest.TestCase):
             output="GeoDataFrame")
         self.assertIsInstance(res2, GeoDataFrame)
 
-        # We can test that there is no hole by comparing the area of theses polygons
-        # and the area of the previously computed resultat :
+        # We can test that there is no hole by comparing the area of these polygons
+        # and the area of the previously computed result :
         self.assertAlmostEqual(res2.area.sum(), res.area.sum(), 2)
         # And by the fact that there is two extra class compared to our break values :
         self.assertEqual(len(res2), nb_interval + 2)
 
-        # Test with break values non-unique (likely due to the discretization choosed):
+        # Test with break values non-unique (likely due to the discretization chosen):
         # + Not correctly ordered values
-        # They should be reorderer and duplicates should be removed ...
+        # They should be reordered and duplicates should be removed ...
         my_breaks = [0, 0, 197000, 1295000, 3091000, 2093000,
                      5888000, 10186000, 13500000]
         res3 = quick_stewart(
@@ -114,12 +114,12 @@ class TestSmoothStewart(unittest.TestCase):
         self.assertIsInstance(result, GeoDataFrame)
         self.assertEqual(len(result), 10)
 
-        # Test using somes already choosed break values :
+        # Test using some already chosen break values :
         my_breaks = [0, 197000, 1295000, 2093000, 3091000,
                      5888000, 10186000, 12000000]
         result = StePot.render(
             nb_class=48,  # bogus values as `nb_class` and
-            disc_func="foobar",  # ... disc_func should be overrided
+            disc_func="foobar",  # ... disc_func should be overridden
             user_defined_breaks=my_breaks,  # ... by the `user_defined_breaks` params
             output="geodataframe")         # ... and this is what we are testing here
 
@@ -154,7 +154,7 @@ class TestSmoothStewart(unittest.TestCase):
         self.assertEqual(len(result), 8)
 
     def test_distance_not_geo(self):
-        # First whith one variable :
+        # First with one variable :
         StePot = SmoothStewart("misc/nuts3_data.geojson",
                                "gdppps2008",
                                resolution=100000,

@@ -37,7 +37,7 @@ def quick_stewart(input_geojson_points, variable_name, span,
     ----------
     input_geojson_points : str
         Path to file to use as input (Points/Polygons) or GeoDataFrame object,
-        must contains a relevant numerical field.
+        must contain a relevant numerical field.
     variable_name : str
         The name of the variable to use (numerical field only).
     span : int
@@ -64,7 +64,7 @@ def quick_stewart(input_geojson_points, variable_name, span,
         (override `nb_class` value if any, default: None).
     variable_name2 : str, optionnal
         The name of the 2nd variable to use (numerical field only); values
-        computed from this variable will be will be used as to divide
+        computed from this variable will be used as to divide
         values computed from the first variable (default: None)
     output : string, optionnal
         The type of output expected (not case-sensitive)
@@ -115,7 +115,7 @@ def make_regular_points_with_no_res(bounds, nb_points=12000):
     ----------
     bounds : 4-floats tuple
         The bbox of the grid, as xmin, ymin, xmax, ymax.
-    nb_points : int, optionnal
+    nb_points : int, optional
         The desired number of points (default: 10000)
 
     Returns
@@ -146,7 +146,7 @@ def make_regular_points_with_no_res(bounds, nb_points=12000):
 def hav_dist(locs1, locs2):
     """
     Return a distance matrix between two set of coordinates
-    using haversine distance (coordinates are expercted in radians).
+    using haversine distance (coordinates are expected in radians).
 
     Parameters
     ----------
@@ -244,7 +244,7 @@ def isopoly_to_gdf(collec_poly, levels, field_name="levels"):
 
     Parameters
     ----------
-    collection_polygons : matplotlib.contour.QuadContourSet
+    collec_poly : matplotlib.contour.QuadContourSet
         The result of a grid interpolation from matplotlib.
     levels : array-like
         The value to use as attributes for the constructed GeoDataFrame.
@@ -408,20 +408,20 @@ class BaseSmooth:
         """
         Parameters
         ----------
-        nb_class : int, optionnal
+        nb_class : int, optional
             The number of class (default: 8).
-        disc_func : str, optionnal
-            The kind of data classification to be used (to be choosed in
+        disc_func : str, optional
+            The kind of data classification to be used (to be chosen in
             "equal_interval", "jenks", "percentiles, "head_tail_breaks"
             and "prog_geom"), default: None.
-        user_defined_breaks : list or tuple, optionnal
+        user_defined_breaks : list or tuple, optional
             A list of ordered break to use to construct the contours
             (override `nb_class` and `disc_func` values if any)
             (default: None).
-        output : string, optionnal
+        output : string, optional
             The type of output expected (not case-sensitive)
             in {"GeoJSON", "GeoDataFrame"} (default: "GeoJSON").
-        new_mask : str, optionnal
+        new_mask : str, optional
             Use a new mask by giving the path to the file (Polygons only)
             to use as clipping mask, can also be directly a GeoDataFrame
             (default: False).
@@ -445,7 +445,7 @@ class BaseSmooth:
             self.open_mask(new_mask, None)
 
         # We want levels with the first break value as the minimum of the
-        # interpolated values and the last break value as the maximum of theses
+        # interpolated values and the last break value as the maximum of these
         # values:
         if user_defined_breaks:
             levels = user_defined_breaks
@@ -529,28 +529,28 @@ class SmoothStewart(BaseSmooth):
     ----------
     input_layer : str
         Path to file to use as input (Points/Polygons) or GeoDataFrame object,
-        must contains a relevant numerical field.
+        must contain a relevant numerical field.
     variable_name : str
         The name of the variable to use (numerical field only).
     span : int
         The span!
     beta : float
         The beta!
-    typefct : str, optionnal
+    typefct : str, optional
         The type of function in {"exponential", "pareto"} (default: "exponential").
-    nb_pts: int, optionnal
-        The resolution to use (in number of points). Can be overrided by the
+    nb_pts: int, optional
+        The resolution to use (in number of points). Can be overridden by the
         'resolution' parameter if set.
-    resolution : int, optionnal
+    resolution : int, optional
         The resolution to use (in unit of the input file).
-    mask : str, optionnal
+    mask : str, optional
         Path to the file (Polygons only) to use as clipping mask (default: None).
-    variable_name2 : str, optionnal
+    variable_name2 : str, optional
         The name of the 2nd variable to use (numerical field only); values
-        computed from this variable will be will be used as to divide
+        computed from this variable will be used as to divide
         values computed from the first variable (default: None)
     sizelimit: int, optional
-        The size limit of the hypothetic matrix constructed to compute
+        The size limit of the hypothetical matrix constructed to compute
         the interpolation (number of grid point * number of input features)
         (default: 36000000)
 
@@ -563,8 +563,8 @@ class SmoothStewart(BaseSmooth):
     -------
     render(nb_class=8, disc_func=None, user_defined_breaks=None,
            output="GeoJSON", new_mask=False)
-        Render the contour polygon according to the choosen number of class and
-        the choosen classification method (or according to
+        Render the contour polygon according to the chosen number of class and
+        the chosen classification method (or according to
         `user_defined_breaks` which will overwrite these parameters)
     """
 
