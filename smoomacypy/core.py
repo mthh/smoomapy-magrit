@@ -449,10 +449,14 @@ class BaseSmooth:
         # values:
         if user_defined_breaks:
             levels = user_defined_breaks
-            if levels[len(levels) - 1] < np.nanmax(zi):
-                levels = levels + [np.nanmax(zi)]
-            if levels[0] > np.nanmin(zi):
-                levels = [np.nanmin(zi)] + levels
+            nanmin = np.nanmin(zi)
+            nanmax = np.nanmax(zi)
+            if levels[len(levels) - 1] < nanmax:
+                levels = levels + [nanmax]
+            if np.abs(levels[0] - nanmin) < 1:
+                levels = [nanmin] + levels[1:]
+            elif levels[0] > nanmin:
+                levels = [nanmin] + levels
         else:
             levels = self.define_levels(nb_class, disc_func)
 
