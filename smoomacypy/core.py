@@ -453,10 +453,19 @@ class BaseSmooth:
             nanmax = np.nanmax(zi)
             if levels[len(levels) - 1] < nanmax:
                 levels = levels + [nanmax]
-            if np.abs(levels[0] - nanmin) < 1:
+
+            if np.abs(levels[0] - nanmin) < 0.9:
+                # If the first bound is very too close to the minimum, replace the first bound by the minimum
                 levels = [nanmin] + levels[1:]
             elif levels[0] > nanmin:
+                # Otherwise, if the first bound is greater than the minimum, add the minimum as the first bound
                 levels = [nanmin] + levels
+
+            # We are being more careful than before to avoid empty classes,
+            # so if there is no value between the first and second bounds,
+            # collapse the second bound to the first bound:
+            if (zi[zi < levels[1]] > levels[0]).any():
+                levels = [levels[0]] + levels[2:]
         else:
             levels = self.define_levels(nb_class, disc_func)
 
