@@ -444,28 +444,37 @@ class BaseSmooth:
         else:
             self.open_mask(new_mask, None)
 
+        zi_min = np.nanmin(zi)
+        zi_max = np.nanmax(zi)
+
         # We want levels with the first break value as the minimum of the
         # interpolated values and the last break value as the maximum of these
         # values:
         if user_defined_breaks:
             levels = user_defined_breaks
-            nanmin = np.nanmin(zi)
-            nanmax = np.nanmax(zi)
-            if levels[len(levels) - 1] < nanmax:
-                levels = levels + [nanmax]
 
-            if np.abs(levels[0] - nanmin) < 0.9:
+            if levels[len(levels) - 1] < zi_max:
+                # If the last bound is less than the maximum, add the maximum as the last bound
+                levels = levels + [zi_max]
+
+            if np.abs(levels[0] - zi_min) < (zi_max - zi_min) * 0.01:
                 # If the first bound is very too close to the minimum, replace the first bound by the minimum
-                levels = [nanmin] + levels[1:]
-            elif levels[0] > nanmin:
-                # Otherwise, if the first bound is greater than the minimum, add the minimum as the first bound
-                levels = [nanmin] + levels
+                levels = [zi_min] + levels[1:]
+            elif levels[0] > zi_min:
+                # If the first bound is greater than the minimum, add the minimum as the first bound
+                # (we will remove the user defined first bound later if it is not needed)
+                levels = [zi_min] + levels
 
-            # We are being more careful than before to avoid empty classes,
+            # We are being more careful to avoid empty classes after modifying the user defined breaks,
             # so if there is no value between the first and second bounds,
-            # collapse the second bound to the first bound:
-            if (zi[zi < levels[1]] > levels[0]).any():
+            # collapse the second bound to the first bound.
+            if len(levels) > 2 and not np.where(np.logical_and(zi >= levels[0], zi < levels[1]))[0].size > 0:
                 levels = [levels[0]] + levels[2:]
+
+            # If the second to last bound is not needed, collapse it to the last bound.
+            if len(levels) > 2 and not np.where(np.logical_and(zi >= levels[-2], zi <= levels[-1]))[0].size > 0:
+                levels = levels[:-2] + [levels[-1]]
+
         else:
             levels = self.define_levels(nb_class, disc_func)
 
@@ -481,18 +490,18 @@ class BaseSmooth:
                 self.XI, self.YI,
                 zi.reshape(tuple(reversed(self.shape))).T,
                 levels,
-                vmax=abs(np.nanmax(zi)), vmin=-abs(np.nanmin(zi)))
+                vmax=abs(zi_max), vmin=-abs(zi_min))
         # Retry without setting the levels :
         except ValueError:
             collec_poly = contourf(
                 self.XI, self.YI,
                 zi.reshape(tuple(reversed(self.shape))).T,
-                vmax=abs(np.nanmax(zi)), vmin=-abs(np.nanmin(zi)))
+                vmax=abs(zi_max), vmin=-abs(zi_min))
 
         # Fetch the levels returned by contourf:
         levels = collec_poly.levels
         # Set the maximum value at the maximum value of the interpolated values:
-        levels[-1] = np.nanmax(zi)
+        levels[-1] = zi_max
         # Transform contourf contours into a GeoDataFrame of (Multi)Polygons:
         res = isopoly_to_gdf(collec_poly, levels=levels[1:], field_name="max")
 
@@ -505,7 +514,7 @@ class BaseSmooth:
         res.crs = self.proj_to_use
         # Set the min/max/center values of each class as properties
         # if this contour layer:
-        res["min"] = [np.nanmin(zi)] + res["max"][0:len(res)-1].tolist()
+        res["min"] = [zi_min] + res["max"][0:len(res)-1].tolist()
         res["center"] = (res["min"] + res["max"]) / 2
 
         # Compute the intersection between the contour layer and the mask layer:
